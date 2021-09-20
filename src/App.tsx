@@ -1,9 +1,29 @@
 import React from 'react';
 import './App.css';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
 
 function App() {
   return (
     <div className="App">
+        <Box sx={{ flexGrow: 1 }}>
+            <AppBar position="static">
+                <Toolbar>
+                    <Typography variant="h6" component="div" sx={{display: {xs: 'none', sm: 'block'}}}>
+                        Skyward Sword Randomizer
+                    </Typography>
+                    <Box sx={{ flexGrow: 1 }} />
+                    <Button color="inherit">Builds</Button>
+                    <Button color="inherit">Asyncs</Button>
+                    <Button color="inherit">Tracker</Button>
+                </Toolbar>
+            </AppBar>
+        </Box>
         <h1>Nightly Download Links</h1>
         <a href="https://nightly.link/ssrando/ssrando/workflows/build.yaml/master">Master (mostly stable)</a>
         <br />
