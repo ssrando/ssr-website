@@ -1,0 +1,22 @@
+[
+    {
+        "month": "June 2021",
+        "build": "https://nightly.link/ssrando/ssrando/actions/runs/896836207",
+        "sheet": "http://bombch.us/DQt-"
+    },
+    {
+        "month": "July 2021",
+        "build": "https://nightly.link/ssrando/ssrando/actions/runs/981921528",
+        "sheet": "http://bombch.us/DRF-"
+    },
+    {
+        "month": "August 2021",
+        "build": "https://nightly.link/lepelog/sslib/actions/runs/1086121520",
+        "sheet": "http://bombch.us/DQt-"
+    },
+    {
+        "month": "September 2021",
+        "build": "https://nightly.link/ssrando/ssrando/actions/runs/896836207",
+        "sheet": "http://bombch.us/DROk"
+    }
+]

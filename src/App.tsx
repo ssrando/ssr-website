@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
 import { BrowserRouter as Router, Switch, Route, Link as RRLink } from 'react-router-dom';
+import Asyncs from './routes/Asyncs';
 
 function App() {
   return (
@@ -40,23 +41,7 @@ function App() {
                 </Route>
 
                 <Route path="/asyncs">
-                    <h1>Asyncs</h1>
-                    <h2>June 2021</h2>
-                    <a href="https://nightly.link/ssrando/ssrando/actions/runs/896836207">Randomizer Build</a>
-                    <br />
-                    <a href="http://bombch.us/DQt-">Async Sheet</a>
-                    <h2>July 2021</h2>
-                    <a href="https://nightly.link/ssrando/ssrando/actions/runs/981921528">Randomizer Build</a>
-                    <br />
-                    <a href="http://bombch.us/DQ8J">Async Sheet</a>
-                    <h2>August 2021</h2>
-                    <a href="https://nightly.link/lepelog/sslib/actions/runs/1086121520">Randomizer Build</a>
-                    <br />
-                    <a href="http://bombch.us/DRF-">Async Sheet</a>
-                    <h2>September 2021</h2>
-                    <a href="#">Randomizer Build (TBA)</a>
-                    <br />
-                    <a href="http://bombch.us/DROk">Async Sheet</a>
+                    <Asyncs />
                 </Route>
             </Switch>
         </Router>
