@@ -8,6 +8,7 @@ import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
 import { BrowserRouter as Router, Switch, Route, Link as RRLink } from 'react-router-dom';
 import Asyncs from './routes/Asyncs';
+import Builds from './routes/Builds';
 
 function App() {
   return (
@@ -16,28 +17,19 @@ function App() {
             <Box sx={{ flexGrow: 1 }}>
                 <AppBar position="static">
                     <Toolbar>
-                        <Typography variant="h6" component="div" sx={{display: {xs: 'none', sm: 'block'}}}>
-                            Skyward Sword Randomizer
-                        </Typography>
+                        <Button component={RRLink} to="/" color="inherit">Skyward Sword Randomizer</Button>
                         <Box sx={{ flexGrow: 1 }} />
                         <Button component={RRLink} to="/builds" color="inherit">Builds</Button>
                         <Button component={RRLink} to="/asyncs" color="inherit">Asyncs</Button>
                         <Button color="inherit"><Link color="#FFFFFF" underline="none" href="https://tracker.ssrando.com">Tracker</Link></Button>
-                        <Button color="inherit"><Link color="#FFFFFF" underline="none" href="https://tracker.ssrando.com">Dev Tracker</Link></Button>
+                        <Button color="inherit"><Link color="#FFFFFF" underline="none" href="https://devtracker.ssrando.com">Dev Tracker</Link></Button>
                     </Toolbar>
                 </AppBar>
             </Box>
 
             <Switch>
                 <Route path="/builds">
-                    <h1>Nightly Download Links</h1>
-                    <a href="https://nightly.link/ssrando/ssrando/workflows/build.yaml/master">Master (mostly stable)</a>
-                    <br />
-                    <a href="https://nightly.link/ssrando/ssrando/workflows/build.yaml/gui-redesign">Dev</a>
-                    <br />
-                    <a href="https://nightly.link/battlecats59/sslib/workflows/build.yaml/gui-redesign">Closed AC and FS (Battlecats Dev Fork)</a>
-                    <br />
-                    <a href="https://nightly.link/battlecats59/sslib/workflows/build.yaml/temp-music-rando">Music Rando (Battlecats Dev Fork)</a>
+                    <Builds />
                 </Route>
 
                 <Route path="/asyncs">
