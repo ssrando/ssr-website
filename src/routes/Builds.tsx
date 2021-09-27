@@ -11,7 +11,7 @@ type BuildData = {
 
 class Asyncs extends React.Component {
     render() {
-        const buildComponents = builds.map((build: BuildData) => (
+        const buildComponents = _.map(builds, (build: BuildData) => (
             <div>
                 <a href={`https://nightly.link/${build.owner}/${build.repo}/workflows/build.yaml/${build.branch}`}>{build.name}</a>
             </div>
