@@ -12,7 +12,7 @@ class Footer extends React.Component {
                     Skyward Sword Randomizer
                 </Typography>
                 <Typography variant="body2">
-                    In-game imagery and system logos Copyright © Nintendo, 2011-2021 - The Skyward Sword Randomizer communnity does <b>not</b> share copyrighted material
+                    In-game imagery and system logos Copyright © Nintendo, 2011-2021 - The Skyward Sword Randomizer community does <b>not</b> share copyrighted material
                 </Typography>
                 <Box sx={{ flexGrow: 1 }}/>
             </Toolbar>
