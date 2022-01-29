@@ -18,5 +18,25 @@
         "month": "September 2021",
         "build": "https://nightly.link/ssrando/ssrando/actions/runs/896836207",
         "sheet": "http://bombch.us/DROk"
+    },
+    {
+        "month": "October 2021",
+        "build": "https://nightly.link/ssrando/ssrando/workflows/build.yaml/async-october-21",
+        "sheet": "http://bombch.us/DRWq"
+    },
+    {
+        "month": "Novmeber 2021",
+        "build": "https://nightly.link/ssrando/ssrando/actions/runs/896836207",
+        "sheet": "http://bombch.us/DRhH"
+    },
+    {
+        "month": "December 2021",
+        "build": "https://nightly.link/ssrando/ssrando/actions/runs/1521133088",
+        "sheet": "http://bombch.us/DRp-"
+    },
+    {
+        "month": "January 2022",
+        "build": "https://nightly.link/ssrando/ssrando/actions/runs/1521133088",
+        "sheet": "http://bombch.us/DRvn"
     }
 ]

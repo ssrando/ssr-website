@@ -6,21 +6,9 @@
         "branch": "master"
     },
     {
-        "name": "Dev",
+        "name": "Chest Sizes",
         "owner": "ssrando",
         "repo": "ssrando",
-        "branch": "gui-redesign"
-    },
-    {
-        "name": "Closed AC and FS (Battlecats Dev Fork)",
-        "owner": "battlecats59",
-        "repo": "sslib",
-        "branch": "gui-redesign"
-    },
-    {
-        "name": "Music Rando (Battlecats Dev Fork)",
-        "owner": "battlecats59",
-        "repo": "sslib",
-        "branch": "temp-music-rando"
+        "branch": "chest-sizes"
     }
 ]

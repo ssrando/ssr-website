@@ -13,7 +13,7 @@ import Footer from './Footer';
 
 function App() {
     return (
-        <Box className="App" sx={{ flexDirection: 'column' }}>
+        <div className="App">
             <Router>
                 <Box sx={{ flexGrow: 1 }}>
                     <AppBar position="static">
@@ -32,38 +32,28 @@ function App() {
                 </Box>
 
                 <Switch>
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            flexGrow: 1
-                        }}
-                    >
-                        <Route exact path="/">
-                            <Typography variant="h4" component="div" sx= {{ display: "block", padding: "1%" }}>
-                                Welcome to the Skyward Sword Randomizer!
-                            </Typography>
-                            <img src="./logo.png" alt="SSR logo" width="30%"/>
-                            <Typography component="div" sx= {{ display: "block", padding: "1%" }}>
-                                To get started, check out the latest builds on the <RRLink to="/builds">builds</RRLink> page.
-                            </Typography>
-                            <Typography component="div">
-                                To get help, share seeds, join races, and more, join the Skyward Sword Randomizer <Link href="https://discord.ssrando.com">Discord Server</Link>.
-                            </Typography>
-                        </Route>
-                        <Route path="/builds">
-                            <Builds />
-                        </Route>
-                        <Route path="/asyncs">
-                            <Asyncs />
-                        </Route>
-                    </Box>
+                    <Route exact path="/">
+                        <Typography variant="h4" component="div" sx= {{ display: "block", padding: "1%" }}>
+                            Welcome to the Skyward Sword Randomizer!
+                        </Typography>
+                        <img src="./logo.png" alt="SSR logo" width="30%"/>
+                        <Typography component="div" sx= {{ display: "block", padding: "1%" }}>
+                            To get started, check out the latest builds on the <RRLink to="/builds">builds</RRLink> page.
+                        </Typography>
+                        <Typography component="div">
+                            To get help, share seeds, join races, and more, join the Skyward Sword Randomizer <Link href="https://discord.ssrando.com">Discord Server</Link>.
+                        </Typography>
+                    </Route>
+                    <Route path="/builds">
+                        <Builds />
+                    </Route>
+                    <Route path="/asyncs">
+                        <Asyncs />
+                    </Route>
                 </Switch>
-                <Box sx={{ flexDirection: 'column', flexGrow: 1 }} />
                 <Footer />
             </Router>
-        </Box>
+        </div>
     );
 }
 
