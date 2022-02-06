@@ -56,8 +56,8 @@ export default function Rules() {
             <Accordion disabled>
                 <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
+                    aria-controls="panel2a-content"
+                    id="panel2a-header"
                 >
                     <Typography>Standard</Typography>
                 </AccordionSummary>
@@ -67,8 +67,8 @@ export default function Rules() {
             <Accordion disabled>
                 <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
+                    aria-controls="panel3a-content"
+                    id="panel3a-header"
                 >
                     <Typography>No-BiT</Typography>
                 </AccordionSummary>
@@ -78,8 +78,8 @@ export default function Rules() {
             <Accordion disabled>
                 <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
+                    aria-controls="panel4a-content"
+                    id="panel4a-header"
                 >
                     <Typography>Spoiler Log</Typography>
                 </AccordionSummary>
@@ -89,8 +89,8 @@ export default function Rules() {
             <Accordion disabled>
                 <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
+                    aria-controls="panel5a-content"
+                    id="panel5a-header"
                 >
                     <Typography>Cooperative Formats</Typography>
                 </AccordionSummary>
