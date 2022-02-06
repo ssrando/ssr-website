@@ -10,6 +10,7 @@ import { BrowserRouter as Router, Switch, Route, Link as RRLink } from 'react-ro
 import Asyncs from './routes/Asyncs';
 import Builds from './routes/Builds';
 import Footer from './Footer';
+import Rules from './routes/Rules';
 
 function App() {
     return (
@@ -24,6 +25,7 @@ function App() {
                             <Box sx={{ flexGrow: 1 }} />
                             <Button component={RRLink} to="/builds" color="inherit">Builds</Button>
                             <Button component={RRLink} to="/asyncs" color="inherit">Asyncs</Button>
+                            <Button component={RRLink} to="/rules" color="inherit">Rules</Button>
                             <Button color="inherit"><Link color="#FFFFFF" underline="none" href="https://tracker.ssrando.com">Tracker</Link></Button>
                             <Button color="inherit"><Link color="#FFFFFF" underline="none" href="https://devtracker.ssrando.com">Dev Tracker</Link></Button>
                             <Button color="inherit"><Link color="#FFFFFF" underline="none" href="https://discord.ssrando.com">Discord</Link></Button>
@@ -49,6 +51,9 @@ function App() {
                     </Route>
                     <Route path="/asyncs">
                         <Asyncs />
+                    </Route>
+                    <Route>
+                        <Rules />
                     </Route>
                 </Switch>
                 <Footer />
