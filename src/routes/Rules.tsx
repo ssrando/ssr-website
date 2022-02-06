@@ -53,6 +53,50 @@ export default function Rules() {
                         </ul>
                 </AccordionDetails>
             </Accordion>
+            <Accordion disabled>
+                <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                >
+                    <Typography>Standard</Typography>
+                </AccordionSummary>
+                <AccordionDetails style={{textAlign: 'left'}}>
+                </AccordionDetails>
+            </Accordion>
+            <Accordion disabled>
+                <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                >
+                    <Typography>No-BiT</Typography>
+                </AccordionSummary>
+                <AccordionDetails style={{textAlign: 'left'}}>
+                </AccordionDetails>
+            </Accordion>
+            <Accordion disabled>
+                <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                >
+                    <Typography>Spoiler Log</Typography>
+                </AccordionSummary>
+                <AccordionDetails style={{textAlign: 'left'}}>
+                </AccordionDetails>
+            </Accordion>
+            <Accordion disabled>
+                <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                >
+                    <Typography>Cooperative Formats</Typography>
+                </AccordionSummary>
+                <AccordionDetails style={{textAlign: 'left'}}>
+                </AccordionDetails>
+            </Accordion>
         </div>
     )
 }
