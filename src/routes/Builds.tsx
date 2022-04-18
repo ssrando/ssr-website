@@ -20,6 +20,10 @@ class Asyncs extends React.Component {
             <div>
                 <h1>Current Builds</h1>
                 {buildComponents}
+                <h1>Co-op S1 Tournament Build</h1>
+                <a href="http://72.167.35.117/dist%20windows-latest.zip" download>Windows</a>
+                <br />
+                <a href="http://72.167.35.117/dist%20ubuntu-latest.zip" download>Ubuntu</a>
             </div>
         )
     }
