@@ -10,5 +10,11 @@
         "owner": "ssrando",
         "repo": "ssrando",
         "branch": "chest-sizes"
+    },
+    {
+        "name": "No Logic Entrance Randomizer",
+        "owner": "lepelog",
+        "repo": "ssrando",
+        "branch": "no-logic-er"
     }
 ]
