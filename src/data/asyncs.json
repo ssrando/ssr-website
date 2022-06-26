@@ -43,5 +43,25 @@
         "month": "February 2022",
         "build": "https://nightly.link/ssrando/ssrando/actions/runs/1791143093",
         "sheet": "http://bombch.us/DR1O"
+    },
+     {
+        "month": "March 2022",
+        "build": "https://nightly.link/ssrando/ssrando/actions/runs/183772649",
+        "sheet": "http://bombch.us/DUEd"
+    },
+     {
+        "month": "April 2022",
+        "build": "https://nightly.link/cjs8487/ssrando/workflows/build.yaml/async-april-22/dist%20windows-latest",
+        "sheet": "http://bombch.us/DTPP"
+    },
+     {
+        "month": "May 2022",
+        "build": "https://nightly.link/ssrando/ssrando/workflows/build.yaml/async-may-22/dist%20windows-latest",
+        "sheet": "http://bombch.us/DUEe"
+    },
+     {
+        "month": "June 2022",
+        "build": "https://nightly.link/ssrando/ssrando/workflows/build.yaml/async-june-22/dist%20windows-latest",
+        "sheet": "http://bombch.us/DUEf"
     }
 ]
