@@ -6,7 +6,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
-import { BrowserRouter as Router, Switch, Route, Link as RRLink } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link as RRLink } from 'react-router-dom';
 import Asyncs from './routes/Asyncs';
 import Builds from './routes/Builds';
 import Footer from './Footer';
@@ -25,7 +25,7 @@ function App() {
                             <Box sx={{ flexGrow: 1 }} />
                             <Button component={RRLink} to="/builds" color="inherit">Builds</Button>
                             <Button component={RRLink} to="/asyncs" color="inherit">Asyncs</Button>
-                            <Button component={RRLink} to="/rules" color="inherit">Rules</Button>
+                            {/* <Button component={RRLink} to="/rules" color="inherit">Rules</Button> */}
                             <Button color="inherit"><Link color="#FFFFFF" underline="none" href="https://tracker.ssrando.com">Tracker</Link></Button>
                             <Button color="inherit"><Link color="#FFFFFF" underline="none" href="https://devtracker.ssrando.com">Dev Tracker</Link></Button>
                             <Button color="inherit"><Link color="#FFFFFF" underline="none" href="https://discord.ssrando.com">Discord</Link></Button>
@@ -33,33 +33,31 @@ function App() {
                     </AppBar>
                 </Box>
 
-                <Switch>
-                    <Route exact path="/">
-                        <Typography variant="h4" component="div" sx= {{ display: "block", padding: "1%" }}>
-                            Welcome to the Skyward Sword Randomizer!
-                        </Typography>
-                        <img src="./logo.png" alt="SSR logo" width="30%"/>
-                        <Typography component="div" sx= {{ display: "block", padding: "1%" }}>
-                            To get started, check out the latest builds on the <RRLink to="/builds">builds</RRLink> page.
-                        </Typography>
-                        <Typography component="div">
-                            To get help, share seeds, join races, and more, join the Skyward Sword Randomizer <Link href="https://discord.ssrando.com">Discord Server</Link>.
-                        </Typography>
-                    </Route>
-                    <Route path="/builds">
-                        <Builds />
-                    </Route>
-                    <Route path="/asyncs">
-                        <Asyncs />
-                    </Route>
-                    <Route>
-                        <Rules />
-                    </Route>
-                </Switch>
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/builds" element={<Builds />} />
+                    <Route path="/asyncs" element={<Asyncs />} />
+                    <Route element={<Rules />} />
+                </Routes>
                 <Footer />
             </Router>
         </div>
     );
 }
+
+const Home = () => (
+    <>
+        <Typography variant="h4" component="div" sx= {{ display: "block", padding: "1%" }}>
+            Welcome to the Skyward Sword Randomizer!
+        </Typography>
+        <img src="./logo.png" alt="SSR logo" width="30%"/>
+        <Typography component="div" sx= {{ display: "block", padding: "1%" }}>
+            To get started, check out the latest builds on the <RRLink to="/builds">builds</RRLink> page.
+        </Typography>
+        <Typography component="div">
+            To get help, share seeds, join races, and more, join the Skyward Sword Randomizer <Link href="https://discord.ssrando.com">Discord Server</Link>.
+        </Typography>
+    </>
+)
 
 export default App;
