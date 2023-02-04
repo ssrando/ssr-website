@@ -8,7 +8,7 @@ import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
 import { BrowserRouter as Router, Routes, Route, Link as RRLink } from 'react-router-dom';
 import Asyncs from './routes/Asyncs';
-import Builds from './routes/Builds';
+import { Builds } from './routes/Builds';
 import Footer from './Footer';
 import Rules from './routes/Rules';
 
