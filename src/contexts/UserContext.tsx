@@ -7,6 +7,7 @@ interface UserContextInterface {
         avatar?: string;
         id?: string;
         internalId: number;
+        isAdmin: boolean;
     };
 }
 
@@ -27,7 +28,5 @@ export const UserContext = createContext({
 
 export const UserContextProvider = (props: React.PropsWithChildren<{}>) => {
     const [state, update] = useState(initialUserContext);
-    // this disable is necessary to allow this to render correctly
-    // eslint-disable-next-line
     return <UserContext.Provider value={{ state, update }} {...props} />;
 }

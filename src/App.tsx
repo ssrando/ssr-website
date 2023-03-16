@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import './App.css';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
-import { BrowserRouter as Router, Routes, Route, Link as RRLink, useLocation, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link as RRLink, useLocation, useNavigate, Outlet } from 'react-router-dom';
 import Asyncs from './routes/Asyncs';
 import { Builds } from './routes/Builds';
 import Footer from './components/Footer';
@@ -11,12 +11,10 @@ import { CommunityHome } from './community/CommunityHome';
 import Header from './components/Header';
 import { UserContext, UserContextProvider } from './contexts/UserContext';
 import Login from './routes/Login';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
     const { update } = useContext(UserContext);
-    
-    const location = useLocation();
-    const navigate = useNavigate();
 
     useEffect(() => {
         const checkSession = async () => {
@@ -28,39 +26,24 @@ function App() {
                 update({ loggedIn: false, user: undefined })
             }
         }
-        const authorize = async (code: string) => {
-            await fetch('/api/auth/discord/authorized', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    code
-                })
-            });
-            navigate('/', {replace: true})
-        }
-        const token = new URLSearchParams(location.search);
-        const code = token.get('code');
-        const scope = token.get('scope');
-        const state = token.get('state');
-        if (code) {
-            authorize(code);
-        } else {
-            checkSession();
-        }
-    }, [location.search, navigate, update])
+        checkSession();
+    }, [update])
     return (
         <div className="App">
             <Header />
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/builds" element={<Builds />} />
-                <Route path="/asyncs" element={<Asyncs />} />
-                <Route path="community" element={<CommunityHome />} />
-                <Route path="/login" element={<Login />} />c
-                <Route element={<Rules />} />
-            </Routes>
+            <div style={{ paddingTop: "1em" }}>
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/builds" element={<Builds />} />
+                    <Route path="/asyncs" element={<Asyncs />} />
+                    <Route path="community" element={<CommunityHome />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/admin" element={<ProtectedRoute element={<Outlet />} adminOnly />}>
+                        <Route path="test" element={<ProtectedRoute element={<CommunityHome />} adminOnly/>} />
+                    </Route>
+                    <Route element={<Rules />} />
+                </Routes>
+            </div>
             <Footer />
         </div>
     );
