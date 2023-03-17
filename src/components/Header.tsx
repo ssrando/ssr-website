@@ -2,6 +2,7 @@ import React, { useContext } from'react';
 import { AppBar, Avatar, Box, Button, Link, Menu, MenuItem, Toolbar, Tooltip, Typography } from "@mui/material"
 import { Link as RRLink, useNavigate } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext';
+import { toast } from 'react-toastify';
 
 const Header = () => {
     return (
@@ -48,7 +49,7 @@ const UserMenu = () => {
                 // application state, so we can safely update client state to be in sync with server state
                 update({ loggedIn: false, user: undefined })
             } else {
-                console.log('error');
+                toast.error('Unable to process your logout request due to an error. Please refresh the page, and if you are still logged in, try again later.');
             }
         }
         closeUserMenu();

@@ -14,6 +14,9 @@ import Login from './routes/Login';
 import ProtectedRoute from './components/ProtectedRoute';
 import CookieConsent from 'react-cookie-consent';
 import { Button, createTheme, CssBaseline, ThemeProvider } from '@mui/material';
+import { ToastContainer } from 'react-toastify';
+
+import "react-toastify/dist/ReactToastify.css";
 
 const theme = createTheme({
     palette: {
@@ -38,6 +41,7 @@ function App() {
     }, [update])
     return (
         <div className="App">
+            <ToastContainer hideProgressBar theme="dark" />
             <Header />
             <div style={{ paddingTop: "1em" }}>
                 <Routes>
