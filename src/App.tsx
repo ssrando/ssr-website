@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import './App.css';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
-import { BrowserRouter as Router, Routes, Route, Link as RRLink, useLocation, useNavigate, Outlet } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link as RRLink, Outlet } from 'react-router-dom';
 import Asyncs from './routes/Asyncs';
 import { Builds } from './routes/Builds';
 import Footer from './components/Footer';
@@ -12,6 +12,14 @@ import Header from './components/Header';
 import { UserContext, UserContextProvider } from './contexts/UserContext';
 import Login from './routes/Login';
 import ProtectedRoute from './components/ProtectedRoute';
+import CookieConsent from 'react-cookie-consent';
+import { Button, createTheme, CssBaseline, ThemeProvider } from '@mui/material';
+
+const theme = createTheme({
+    palette: {
+      mode: 'light',
+    },
+  });
 
 function App() {
     const { update } = useContext(UserContext);
@@ -44,17 +52,23 @@ function App() {
                     <Route element={<Rules />} />
                 </Routes>
             </div>
+            <CookieConsent style={{ zIndex: 1200 }} ButtonComponent={Button} buttonStyle={{background: theme.palette.primary.main, color: "white"}}>
+                This site uses cookies to provide basic functionality.
+            </CookieConsent>
             <Footer />
         </div>
     );
 }
 
 const AppWrapper = () => (
-    <UserContextProvider>
-        <Router>
-            <App />
-        </Router>
-    </UserContextProvider>
+    <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <UserContextProvider>
+            <Router>
+                <App />
+            </Router>
+        </UserContextProvider>
+    </ThemeProvider>
 )
 
 const Home = () => (
