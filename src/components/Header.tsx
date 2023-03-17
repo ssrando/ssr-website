@@ -44,7 +44,7 @@ const UserMenu = () => {
         } else {
             if (logoutData.status === 401) {
                 // if we get a 401 it means we encounted a stale session or stale client data
-                // this could happen for a few reasons, but in this case it has no negtive consequence
+                // this could happen for a few reasons, but in all cases it has no negtive consequence on
                 // application state, so we can safely update client state to be in sync with server state
                 update({ loggedIn: false, user: undefined })
             } else {
@@ -63,7 +63,7 @@ const UserMenu = () => {
         if (!user) return ( <div />);
         return (
             <>
-                <Tooltip title="Open settings">
+                <Tooltip title="Open user menu">
                     <Button style={{ color: 'white' }} sx={{ flexGrow: 0}} onClick={handleOpenUserMenu}>
                         {user.username}
                         <Avatar alt={user.username} src={`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`} />
