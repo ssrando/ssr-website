@@ -7,7 +7,6 @@ import Asyncs from './routes/Asyncs';
 import { Builds } from './routes/Builds';
 import Footer from './components/Footer';
 import Rules from './routes/Rules';
-import { CommunityHome } from './community/CommunityHome';
 import Header from './components/Header';
 import { UserContext, UserContextProvider } from './contexts/UserContext';
 import Login from './routes/Login';
@@ -15,6 +14,8 @@ import ProtectedRoute from './components/ProtectedRoute';
 import CookieConsent from 'react-cookie-consent';
 import { Button, createTheme, CssBaseline, ThemeProvider } from '@mui/material';
 import { ToastContainer } from 'react-toastify';
+import TypeList from './routes/admin/dynamicdata/TypeList';
+import EditData from './routes/admin/dynamicdata/EditData';
 
 import "react-toastify/dist/ReactToastify.css";
 
@@ -48,10 +49,11 @@ function App() {
                     <Route path="/" element={<Home />} />
                     <Route path="/builds" element={<Builds />} />
                     <Route path="/asyncs" element={<Asyncs />} />
-                    <Route path="community" element={<CommunityHome />} />
+                    <Route path="/community" />
                     <Route path="/login" element={<Login />} />
                     <Route path="/admin" element={<ProtectedRoute element={<Outlet />} adminOnly />}>
-                        <Route path="test" element={<ProtectedRoute element={<CommunityHome />} adminOnly/>} />
+                        <Route path="dynamicdata" element={<ProtectedRoute element={<TypeList />} adminOnly/>} />
+                        <Route path="dynamicdata/:name" element={<ProtectedRoute element={<EditData />} adminOnly/>} />
                     </Route>
                     <Route element={<Rules />} />
                 </Routes>

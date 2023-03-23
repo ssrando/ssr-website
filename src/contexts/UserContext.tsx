@@ -1,14 +1,9 @@
 import { createContext, useState } from "react";
+import { User } from "../ApiTypes";
 
 interface UserContextInterface {
     loggedIn: boolean;
-    user?: {
-        username?: string;
-        avatar?: string;
-        id?: string;
-        internalId: number;
-        isAdmin: boolean;
-    };
+    user?: User;
 }
 
 export const initialUserContext: UserContextInterface = {

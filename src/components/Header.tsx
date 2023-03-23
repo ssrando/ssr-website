@@ -1,5 +1,5 @@
 import React, { useContext } from'react';
-import { AppBar, Avatar, Box, Button, Link, Menu, MenuItem, Toolbar, Tooltip, Typography } from "@mui/material"
+import { AppBar, Avatar, Box, Button, Divider, Link, ListSubheader, Menu, MenuItem, Toolbar, Tooltip, Typography } from "@mui/material"
 import { Link as RRLink, useNavigate } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext';
 import { toast } from 'react-toastify';
@@ -26,7 +26,12 @@ const Header = () => {
     );
 }
 
+const adminMenu = [
+    { name: 'Dynamic Data', path: '/admin/dynamicdata' },
+];
+
 const UserMenu = () => {
+    console.log('user menu render')
     const { state, update } = useContext(UserContext);
     const { loggedIn, user } = state;
 
@@ -37,6 +42,10 @@ const UserMenu = () => {
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElUser(event.currentTarget);
     };
+
+    const adminMenuItems = adminMenu.map((item) => {
+        return { name: item.name, onClick: () => navigate(item.path) }
+    })
 
     const logout = async () => {
         const logoutData = await fetch('/api/logout');
@@ -86,6 +95,15 @@ const UserMenu = () => {
                     open={Boolean(anchorElUser)}
                     onClose={closeUserMenu}
                 >
+                    <ListSubheader>Admin</ListSubheader>
+                    {
+                        adminMenuItems.map((item) => (
+                            <MenuItem key={item.name} onClick={item.onClick}>
+                                <Typography>{item.name}</Typography>
+                            </MenuItem>
+                        ))
+                    }
+                    <Divider />
                     <MenuItem onClick={logout}>
                         <Typography textAlign="center">Logout</Typography>
                     </MenuItem>
