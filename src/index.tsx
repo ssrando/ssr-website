@@ -4,7 +4,7 @@ import './index.css';
 import AppWrapper from './App';
 import reportWebVitals from './reportWebVitals';
 
-const root = document.getElementById('root')
+const root = document.getElementById('root');
 if (!root) {
     throw new Error('Could not find root element');
 }

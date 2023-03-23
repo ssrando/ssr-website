@@ -3,10 +3,10 @@ import _ from 'lodash';
 import asyncs from '../data/asyncs.json';
 
 type AsyncData = {
-    month: string,
-    build: string,
-    sheet: string,
-}
+    month: string;
+    build: string;
+    sheet: string;
+};
 
 class Asyncs extends React.Component {
     render() {
@@ -17,14 +17,14 @@ class Asyncs extends React.Component {
                 <br />
                 <a href={async.sheet}>Async Sheet</a>
             </div>
-        ))
+        ));
         _.reverse(asyncComponents);
         return (
             <div>
                 <h1>Asyncs</h1>
                 {asyncComponents}
             </div>
-        )
+        );
     }
 }
 

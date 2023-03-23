@@ -1,10 +1,10 @@
-export type ServerActionResult = ServerActionSuccess | ServerActionError; 
-
 export type ServerActionSuccess = {
-    success: true
-}
+    success: true;
+};
 
 export type ServerActionError = {
-    success: false,
+    success: false;
     error: string;
-}
+};
+
+export type ServerActionResult = ServerActionSuccess | ServerActionError;

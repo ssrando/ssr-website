@@ -1,5 +1,5 @@
-import { createContext, useState } from "react";
-import { User } from "../ApiTypes";
+import { createContext, useMemo, useState } from 'react';
+import { User } from '../ApiTypes';
 
 interface UserContextInterface {
     loggedIn: boolean;
@@ -11,9 +11,7 @@ export const initialUserContext: UserContextInterface = {
     user: undefined,
 };
 
-type UpdateType = React.Dispatch<
-    React.SetStateAction<UserContextInterface>
->;
+type UpdateType = React.Dispatch<React.SetStateAction<UserContextInterface>>;
 const defaultUpdate: UpdateType = () => initialUserContext;
 
 export const UserContext = createContext({
@@ -21,7 +19,12 @@ export const UserContext = createContext({
     update: defaultUpdate,
 });
 
-export const UserContextProvider = (props: React.PropsWithChildren<{}>) => {
+export const UserContextProvider = (props: React.PropsWithChildren) => {
     const [state, update] = useState(initialUserContext);
-    return <UserContext.Provider value={{ state, update }} {...props} />;
-}
+    const value = useMemo(() => ({ state, update }), []);
+    return (
+        <UserContext.Provider value={value}>
+            {props.children}
+        </UserContext.Provider>
+    );
+};
