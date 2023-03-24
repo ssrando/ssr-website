@@ -21,7 +21,7 @@ export const UserContext = createContext({
 
 export const UserContextProvider = (props: React.PropsWithChildren) => {
     const [state, update] = useState(initialUserContext);
-    const value = useMemo(() => ({ state, update }), []);
+    const value = useMemo(() => ({ state, update }), [state, update]);
     return (
         <UserContext.Provider value={value}>
             {props.children}
