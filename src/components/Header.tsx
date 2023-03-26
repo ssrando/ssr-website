@@ -93,13 +93,20 @@ const UserMenu = () => {
                     open={Boolean(anchorElUser)}
                     onClose={closeUserMenu}
                 >
-                    <ListSubheader>Admin</ListSubheader>
-                    {adminMenuItems.map((item) => (
-                        <MenuItem key={item.name} onClick={item.onClick}>
-                            <Typography>{item.name}</Typography>
-                        </MenuItem>
-                    ))}
-                    <Divider />
+                    {user.isAdmin && (
+                        <>
+                            <ListSubheader>Admin</ListSubheader>
+                            {adminMenuItems.map((item) => (
+                                <MenuItem
+                                    key={item.name}
+                                    onClick={item.onClick}
+                                >
+                                    <Typography>{item.name}</Typography>
+                                </MenuItem>
+                            ))}
+                            <Divider />
+                        </>
+                    )}
                     <MenuItem onClick={logout}>
                         <Typography textAlign="center">Logout</Typography>
                     </MenuItem>
