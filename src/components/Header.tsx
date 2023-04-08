@@ -94,7 +94,7 @@ const UserMenu = () => {
                     onClose={closeUserMenu}
                 >
                     {user.isAdmin && (
-                        <>
+                        <div>
                             <ListSubheader>Admin</ListSubheader>
                             {adminMenuItems.map((item) => (
                                 <MenuItem
@@ -105,7 +105,7 @@ const UserMenu = () => {
                                 </MenuItem>
                             ))}
                             <Divider />
-                        </>
+                        </div>
                     )}
                     <MenuItem onClick={logout}>
                         <Typography textAlign="center">Logout</Typography>
