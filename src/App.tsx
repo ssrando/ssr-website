@@ -12,7 +12,7 @@ import {
 import CookieConsent from 'react-cookie-consent';
 import { Button, createTheme, CssBaseline, ThemeProvider } from '@mui/material';
 import { ToastContainer } from 'react-toastify';
-import Asyncs from './routes/Asyncs';
+import AsyncList from './routes/community/racing/asyncs/AsyncList';
 import Builds from './routes/Builds';
 import Footer from './components/Footer';
 import Rules from './routes/Rules';
@@ -76,8 +76,13 @@ function App() {
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/builds" element={<Builds />} />
-                    <Route path="/asyncs" element={<Asyncs />} />
-                    <Route path="/community" />
+                    <Route path="/community" element={<Outlet />}>
+                        <Route path="races" element={<Outlet />}>
+                            <Route path="asyncs" element={<AsyncList />}>
+                                <Route path="new" />
+                            </Route>
+                        </Route>
+                    </Route>
                     <Route path="/login" element={<Login />} />
                     <Route
                         path="/admin"
