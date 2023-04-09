@@ -32,4 +32,25 @@ export const createAsync = async (
     };
 };
 
+export const deleteAsync = async (
+    id: number,
+): Promise<ServerActionResult> => {
+    const response = await fetch(`/api/asyncs/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    });
+
+    if (!response.ok) {
+        return {
+            success: false,
+            error: `${response.status} - ${response.statusText}`,
+        };
+    }
+    return {
+        success: true,
+    };
+};
+
 export default {};
