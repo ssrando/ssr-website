@@ -53,4 +53,30 @@ export const deleteAsync = async (
     };
 };
 
+export const createSubmission = async (
+    async: number,
+    time: string,
+    comment: string
+): Promise<ServerActionResult> => {
+    const response = await fetch(`/api/asyncs/${async}/submit`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            time, comment
+        })
+    });
+
+    if (!response.ok) {
+        return {
+            success: false,
+            error: `${response.status} - ${response.statusText}`,
+        };
+    }
+    return {
+        success: true,
+    };
+};
+
 export default {};

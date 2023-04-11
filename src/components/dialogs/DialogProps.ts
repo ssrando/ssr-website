@@ -1,4 +1,4 @@
-interface DialogProps {
+type DialogProps = {
     open: boolean;
     handleClose: () => void;
 }

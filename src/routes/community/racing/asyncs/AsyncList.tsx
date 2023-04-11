@@ -14,6 +14,7 @@ import {
 import { useContext, useState } from 'react';
 import { toast } from 'react-toastify';
 import { Async } from '../../../../ApiTypes';
+import AsyncSubmissionDialog from '../../../../components/dialogs/AsyncSubmissionDialog';
 import CreateAsyncDialog from '../../../../components/dialogs/CreateAsyncDialog';
 import { UserContext } from '../../../../contexts/UserContext';
 import { deleteAsync } from '../../../../controller/Async';
@@ -56,6 +57,8 @@ const AsyncList = () => {
     const { loggedIn, user } = state;
 
     const [createDialogOen, setCreateDialogOpen] = useState<boolean>(false);
+    const [submitDialogOpen, setSubmitDialogOpen] = useState<boolean>(false);
+    const [submissionAsync, setSubmissionAsync] = useState<number>(-1);
     const [activeStandings, setActiveStandings] = useState<number>(-1);
 
     const openCreateDialog = () => {
@@ -64,6 +67,16 @@ const AsyncList = () => {
 
     const closeCreateDialog = () => {
         setCreateDialogOpen(false);
+        mutate();
+    };
+
+    const openSubmitDialog = (async: number) => {
+        setSubmitDialogOpen(true);
+        setSubmissionAsync(async);
+    };
+
+    const closeSubmitDialog = () => {
+        setSubmitDialogOpen(false);
         mutate();
     };
 
@@ -126,7 +139,7 @@ const AsyncList = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {data.map((async) => (
+                        {data.map((async, index) => (
                             <>
                                 <TableRow>
                                     <TableCell>{async.name}</TableCell>
@@ -170,7 +183,12 @@ const AsyncList = () => {
                                     </TableCell>
                                     {loggedIn && (
                                         <TableCell>
-                                            <Button color="success">
+                                            <Button
+                                                color="success"
+                                                onClick={() =>
+                                                    openSubmitDialog(index)
+                                                }
+                                            >
                                                 Submit
                                             </Button>
                                         </TableCell>
@@ -203,6 +221,11 @@ const AsyncList = () => {
             <CreateAsyncDialog
                 open={createDialogOen}
                 handleClose={closeCreateDialog}
+            />
+            <AsyncSubmissionDialog
+                open={submitDialogOpen}
+                handleClose={closeSubmitDialog}
+                async={data[submissionAsync]}
             />
         </>
     );
