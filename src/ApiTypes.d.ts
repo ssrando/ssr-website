@@ -18,9 +18,15 @@ export type DynamicDataType = {
     name: string;
 };
 
+export type DisplayUser = {
+    username: string;
+    avatar: string;
+    discordId: string;
+}
+
 export type AsyncSubmission = {
     id: number;
-    user: string;
+    user: DisplayUser;
     time: string;
     comment: string;
 }
@@ -30,6 +36,6 @@ export type Async = {
     name: string;
     permalink: string;
     hash: string;
-    creator: string;
+    creator: DisplayUser;
     submissions: AsyncSubmission[];
 }

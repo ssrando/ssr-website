@@ -1,4 +1,5 @@
 import {
+    Avatar,
     Box,
     Button,
     Skeleton,
@@ -13,7 +14,7 @@ import {
 } from '@mui/material';
 import { useContext, useState } from 'react';
 import { toast } from 'react-toastify';
-import { Async } from '../../../../ApiTypes';
+import { Async, AsyncSubmission } from '../../../../ApiTypes';
 import AsyncSubmissionDialog from '../../../../components/dialogs/AsyncSubmissionDialog';
 import CreateAsyncDialog from '../../../../components/dialogs/CreateAsyncDialog';
 import { UserContext } from '../../../../contexts/UserContext';
@@ -24,26 +25,47 @@ interface StandingsProps {
     async: Async;
 }
 
+const durationSort = (a: AsyncSubmission, b: AsyncSubmission) => {
+    const aDur = a.time.split(':');
+    const bDur = b.time.split(':');
+
+    if (aDur.length > bDur.length) {
+        return 1;
+    }
+    if (bDur.length > aDur.length) {
+        return -1;
+    }
+    for (let i = 0; i < aDur.length; i++) {
+        const aNum = Number(aDur[i]);
+        const bNum = Number(bDur[i]);
+        if (aNum !== bNum) return aNum - bNum;
+    }
+    return 0;
+};
+
 const Standings = ({ async }: StandingsProps) => (
     <TableContainer>
         <Table>
-            <TableHead>
-                <TableRow>
-                    <TableCell>Place</TableCell>
-                    <TableCell>Racer</TableCell>
-                    <TableCell>Time</TableCell>
-                    <TableCell>Commment</TableCell>
-                </TableRow>
-            </TableHead>
             <TableBody>
-                {async.submissions.map((submission, index) => (
-                    <TableRow>
-                        <TableCell>{index + 1}</TableCell>
-                        <TableCell>{submission.user}</TableCell>
-                        <TableCell>{submission.time}</TableCell>
-                        <TableCell>{submission.comment}</TableCell>
-                    </TableRow>
-                ))}
+                {async.submissions
+                    .sort(durationSort)
+                    .map((submission, index) => (
+                        <TableRow>
+                            <TableCell>{index + 1}</TableCell>
+                            <TableCell
+                                sx={{ display: 'flex', alignItems: 'center' }}
+                            >
+                                <Avatar
+                                    alt={submission.user.username}
+                                    src={`https://cdn.discordapp.com/avatars/${submission.user.discordId}/${submission.user.avatar}.png`}
+                                    sx={{ marginRight: '15px' }}
+                                />
+                                {submission.user.username}
+                            </TableCell>
+                            <TableCell>{submission.time}</TableCell>
+                            <TableCell>{submission.comment}</TableCell>
+                        </TableRow>
+                    ))}
             </TableBody>
         </Table>
     </TableContainer>
