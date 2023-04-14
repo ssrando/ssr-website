@@ -14,11 +14,12 @@ import {
 } from '@mui/material';
 import { useContext, useState } from 'react';
 import { toast } from 'react-toastify';
+import { mutate as mutateGlobal } from 'swr';
 import { Async, AsyncSubmission } from '../../../../ApiTypes';
 import AsyncSubmissionDialog from '../../../../components/dialogs/AsyncSubmissionDialog';
 import CreateAsyncDialog from '../../../../components/dialogs/CreateAsyncDialog';
 import { UserContext } from '../../../../contexts/UserContext';
-import { deleteAsync } from '../../../../controller/Async';
+import { deleteAsync, deleteSubmission } from '../../../../controller/Async';
 import { useGetApi } from '../../../../controller/Hooks';
 
 interface StandingsProps {
@@ -43,33 +44,60 @@ const durationSort = (a: AsyncSubmission, b: AsyncSubmission) => {
     return 0;
 };
 
-const Standings = ({ async }: StandingsProps) => (
-    <TableContainer>
-        <Table>
-            <TableBody>
-                {async.submissions
-                    .sort(durationSort)
-                    .map((submission, index) => (
-                        <TableRow>
-                            <TableCell>{index + 1}</TableCell>
-                            <TableCell
-                                sx={{ display: 'flex', alignItems: 'center' }}
-                            >
-                                <Avatar
-                                    alt={submission.user.username}
-                                    src={`https://cdn.discordapp.com/avatars/${submission.user.discordId}/${submission.user.avatar}.png`}
-                                    sx={{ marginRight: '15px' }}
-                                />
-                                {submission.user.username}
-                            </TableCell>
-                            <TableCell>{submission.time}</TableCell>
-                            <TableCell>{submission.comment}</TableCell>
-                        </TableRow>
-                    ))}
-            </TableBody>
-        </Table>
-    </TableContainer>
-);
+const Standings = ({ async }: StandingsProps) => {
+    const { state } = useContext(UserContext);
+    const { user } = state;
+
+    const deleteHandler = (id: number) => {
+        deleteSubmission(id);
+        mutateGlobal('/api/asyncs');
+    };
+
+    return (
+        <TableContainer>
+            <Table>
+                <TableBody>
+                    {async.submissions
+                        .sort(durationSort)
+                        .map((submission, index) => (
+                            <TableRow>
+                                <TableCell>{index + 1}</TableCell>
+                                <TableCell
+                                    sx={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                    }}
+                                >
+                                    <Avatar
+                                        alt={submission.user.username}
+                                        src={`https://cdn.discordapp.com/avatars/${submission.user.discordId}/${submission.user.avatar}.png`}
+                                        sx={{ marginRight: '15px' }}
+                                    />
+                                    {submission.user.username}
+                                </TableCell>
+                                <TableCell>{submission.time}</TableCell>
+                                <TableCell>{submission.comment}</TableCell>
+                                {(user?.isAdmin ||
+                                    user?.id === submission.user.discordId) && (
+                                    <TableCell>
+                                        <Button
+                                            variant="contained"
+                                            color="error"
+                                            onClick={() =>
+                                                deleteHandler(submission.id)
+                                            }
+                                        >
+                                            Delete
+                                        </Button>
+                                    </TableCell>
+                                )}
+                            </TableRow>
+                        ))}
+                </TableBody>
+            </Table>
+        </TableContainer>
+    );
+};
 
 const AsyncList = () => {
     const { data, isLoading, error, mutate } =
@@ -142,7 +170,6 @@ const AsyncList = () => {
             </Box>
             <TableContainer
                 sx={{
-                    width: 'max-content',
                     marginLeft: 'auto',
                     marginRight: 'auto',
                 }}
