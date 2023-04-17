@@ -12,7 +12,7 @@ import {
     Tooltip,
     Typography,
 } from '@mui/material';
-import { useContext, useState } from 'react';
+import { Fragment, useContext, useState } from 'react';
 import { toast } from 'react-toastify';
 import { mutate as mutateGlobal } from 'swr';
 import { Async, AsyncSubmission } from '../../../../ApiTypes';
@@ -53,6 +53,14 @@ const Standings = ({ async }: StandingsProps) => {
         mutateGlobal('/api/asyncs');
     };
 
+    if (async.submissions.length === 0) {
+        return (
+            <Typography variant="caption">
+                No submissions for this async.
+            </Typography>
+        );
+    }
+
     return (
         <TableContainer>
             <Table>
@@ -60,7 +68,7 @@ const Standings = ({ async }: StandingsProps) => {
                     {async.submissions
                         .sort(durationSort)
                         .map((submission, index) => (
-                            <TableRow>
+                            <TableRow key={submission.id}>
                                 <TableCell>{index + 1}</TableCell>
                                 <TableCell
                                     sx={{
@@ -148,6 +156,20 @@ const AsyncList = () => {
         mutate();
     };
 
+    const hasSubmittedToAsync = (async: Async) => {
+        if (!user) {
+            return false;
+        }
+
+        if (!user.id) {
+            return false;
+        }
+
+        return async.submissions
+            .map((submission) => submission.user.discordId)
+            .includes(user.id);
+    };
+
     if (isLoading) return <Skeleton />;
 
     if (error) return <>Unable to load data</>;
@@ -189,7 +211,7 @@ const AsyncList = () => {
                     </TableHead>
                     <TableBody>
                         {data.map((async, index) => (
-                            <>
+                            <Fragment key={async.id}>
                                 <TableRow>
                                     <TableCell>{async.name}</TableCell>
                                     <TableCell>
@@ -237,6 +259,9 @@ const AsyncList = () => {
                                                 onClick={() =>
                                                     openSubmitDialog(index)
                                                 }
+                                                disabled={hasSubmittedToAsync(
+                                                    async,
+                                                )}
                                             >
                                                 Submit
                                             </Button>
@@ -262,7 +287,7 @@ const AsyncList = () => {
                                         </TableCell>
                                     </TableRow>
                                 )}
-                            </>
+                            </Fragment>
                         ))}
                     </TableBody>
                 </Table>
