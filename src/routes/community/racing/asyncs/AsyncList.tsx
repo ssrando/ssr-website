@@ -22,6 +22,8 @@ import { UserContext } from '../../../../contexts/UserContext';
 import { deleteAsync, deleteSubmission } from '../../../../controller/Async';
 import { useGetApi } from '../../../../controller/Hooks';
 
+import './AsyncList.css';
+
 interface StandingsProps {
     async: Async;
 }
@@ -62,48 +64,49 @@ const Standings = ({ async }: StandingsProps) => {
     }
 
     return (
-        <TableContainer>
-            <Table>
-                <TableBody>
-                    {async.submissions
-                        .sort(durationSort)
-                        .map((submission, index) => (
-                            <TableRow key={submission.id}>
-                                <TableCell>{index + 1}</TableCell>
-                                <TableCell
-                                    sx={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                    }}
-                                >
-                                    <Avatar
-                                        alt={submission.user.username}
-                                        src={`https://cdn.discordapp.com/avatars/${submission.user.discordId}/${submission.user.avatar}.png`}
-                                        sx={{ marginRight: '15px' }}
-                                    />
-                                    {submission.user.username}
-                                </TableCell>
-                                <TableCell>{submission.time}</TableCell>
-                                <TableCell>{submission.comment}</TableCell>
-                                {(user?.isAdmin ||
-                                    user?.id === submission.user.discordId) && (
-                                    <TableCell>
-                                        <Button
-                                            variant="contained"
-                                            color="error"
-                                            onClick={() =>
-                                                deleteHandler(submission.id)
-                                            }
-                                        >
-                                            Delete
-                                        </Button>
-                                    </TableCell>
-                                )}
-                            </TableRow>
-                        ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
+        <>
+            {async.submissions.sort(durationSort).map((submission, index) => (
+                <Box
+                    key={submission.id}
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                    }}
+                >
+                    <Box className="standingsRowItem">{index + 1}</Box>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                        }}
+                        className="standingsRowItem"
+                    >
+                        <Avatar
+                            alt={submission.user.username}
+                            src={`https://cdn.discordapp.com/avatars/${submission.user.discordId}/${submission.user.avatar}.png`}
+                            sx={{ marginRight: '15px' }}
+                        />
+                        {submission.user.username}
+                    </Box>
+                    <Box className="standingsRowItem">{submission.time}</Box>
+                    <Box className="standingsRowItem" sx={{ flexGrow: 1 }}>
+                        {submission.comment}
+                    </Box>
+                    {(user?.isAdmin ||
+                        user?.id === submission.user.discordId) && (
+                        <Box className="standingsRowItem">
+                            <Button
+                                variant="contained"
+                                color="error"
+                                onClick={() => deleteHandler(submission.id)}
+                            >
+                                Delete
+                            </Button>
+                        </Box>
+                    )}
+                </Box>
+            ))}
+        </>
     );
 };
 
