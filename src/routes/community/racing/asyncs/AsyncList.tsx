@@ -1,5 +1,4 @@
 import {
-    Avatar,
     Box,
     Button,
     Collapse,
@@ -11,106 +10,157 @@ import {
     TableContainer,
     TableHead,
     TableRow,
-    Tooltip,
     Typography,
+    styled,
 } from '@mui/material';
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
-import { Fragment, useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import { toast } from 'react-toastify';
 import { mutate as mutateGlobal } from 'swr';
-import { Async, AsyncSubmission } from '../../../../ApiTypes';
+import { Async, User } from '../../../../ApiTypes';
 import AsyncSubmissionDialog from '../../../../components/dialogs/AsyncSubmissionDialog';
 import CreateAsyncDialog from '../../../../components/dialogs/CreateAsyncDialog';
 import { UserContext } from '../../../../contexts/UserContext';
-import { deleteAsync, deleteSubmission } from '../../../../controller/Async';
+import { deleteAsync } from '../../../../controller/Async';
 import { useGetApi } from '../../../../controller/Hooks';
 
 import './AsyncList.css';
+import AsyncStandings from '../../../../components/asyncs/AsyncStandings';
 
-interface StandingsProps {
-    async: Async;
-}
+const StyledTableRow = styled(TableRow)`
+    &:nth-child(4n + 1) {
+        background-color: ${({ theme }) => theme.palette.action.hover};
+    }
+`;
 
-const durationSort = (a: AsyncSubmission, b: AsyncSubmission) => {
-    const aDur = a.time.split(':');
-    const bDur = b.time.split(':');
+const hasSubmittedToAsync = (async: Async, user?: User) => {
+    if (!user) {
+        return false;
+    }
 
-    if (aDur.length > bDur.length) {
-        return 1;
+    if (!user.id) {
+        return false;
     }
-    if (bDur.length > aDur.length) {
-        return -1;
-    }
-    for (let i = 0; i < aDur.length; i++) {
-        const aNum = Number(aDur[i]);
-        const bNum = Number(bDur[i]);
-        if (aNum !== bNum) return aNum - bNum;
-    }
-    return 0;
+
+    return async.submissions
+        .map((submission) => submission.user.discordId)
+        .includes(user.id);
 };
 
-const Standings = ({ async }: StandingsProps) => {
-    const { state } = useContext(UserContext);
-    const { user } = state;
+interface AsyncListRowProps {
+    async: Async;
+    index: number;
+    openSubmitDialog: (index: number) => void;
+}
 
-    const deleteHandler = (id: number) => {
-        deleteSubmission(id);
+const AsyncListRow = ({
+    async,
+    index,
+    openSubmitDialog,
+}: AsyncListRowProps) => {
+    const { state } = useContext(UserContext);
+    const { loggedIn, user } = state;
+
+    const [expanded, setExpanded] = useState<boolean>(false);
+
+    const copySettings = (settings: string) => {
+        navigator.clipboard.writeText(settings);
+        toast.success('Copied to clipboard');
+    };
+
+    const handleDelete = (id: number) => {
+        deleteAsync(id);
         mutateGlobal('/api/asyncs');
     };
 
-    if (async.submissions.length === 0) {
-        return (
-            <Typography variant="caption">
-                No submissions for this async.
-            </Typography>
-        );
-    }
-
     return (
-        <Table size="small">
-            <TableBody sx={{ 'tr:last-child > *': { borderBottom: 'unset' } }}>
-                {async.submissions
-                    .sort(durationSort)
-                    .map((submission, index) => (
-                        <TableRow>
-                            <TableCell>{index + 1}</TableCell>
-                            <TableCell>
-                                <Box
-                                    sx={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                    }}
-                                >
-                                    <Avatar
-                                        alt={submission.user.username}
-                                        src={`https://cdn.discordapp.com/avatars/${submission.user.discordId}/${submission.user.avatar}.png`}
-                                        sx={{ marginRight: '10px' }}
-                                    />
-                                    {submission.user.username}
-                                </Box>
-                            </TableCell>
-                            <TableCell>{submission.time}</TableCell>
-                            <TableCell sx={{ wordBreak: 'break-word' }}>
-                                {submission.comment}
-                            </TableCell>
-                            {(user?.isAdmin ||
-                                user?.id === submission.user.discordId) && (
-                                <TableCell>
+        <>
+            <StyledTableRow
+                className=""
+                sx={{ '& > *': { borderBottom: 'unset' } }}
+            >
+                <TableCell>
+                    <IconButton
+                        aria-label="expand row"
+                        size="small"
+                        onClick={() => setExpanded(!expanded)}
+                    >
+                        {expanded ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
+                    </IconButton>
+                </TableCell>
+                <TableCell>{async.name}</TableCell>
+                <TableCell>{async.submissions.length}</TableCell>
+                <TableCell>
+                    {async.submissions.length > 0
+                        ? async.submissions[0].time
+                        : 'N/A'}
+                </TableCell>
+                <TableCell>{async.version}</TableCell>
+                <TableCell>{async.hash}</TableCell>
+            </StyledTableRow>
+            <StyledTableRow>
+                <TableCell
+                    style={{
+                        paddingBottom: 0,
+                        paddingTop: 0,
+                    }}
+                    colSpan={6}
+                >
+                    <Collapse in={expanded} timeout="auto">
+                        <Box sx={{ margin: 1 }}>
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    borderBottom:
+                                        '1px solid rgba(224, 224, 224, 1)',
+                                    paddingTop: '4px',
+                                    paddingBottom: '4px',
+                                }}
+                            >
+                                <Box>
+                                    Settings String: {async.permalink}
                                     <Button
-                                        variant="contained"
-                                        color="error"
                                         onClick={() =>
-                                            deleteHandler(submission.id)
+                                            copySettings(async.permalink)
                                         }
                                     >
-                                        Delete
+                                        Copy
                                     </Button>
-                                </TableCell>
-                            )}
-                        </TableRow>
-                    ))}
-            </TableBody>
-        </Table>
+                                </Box>
+                                <Box sx={{ flexGrow: 1 }} />
+                                <Box>
+                                    {loggedIn && (
+                                        <Button
+                                            color="success"
+                                            onClick={() =>
+                                                openSubmitDialog(index)
+                                            }
+                                            disabled={hasSubmittedToAsync(
+                                                async,
+                                                user,
+                                            )}
+                                        >
+                                            Submit
+                                        </Button>
+                                    )}
+                                    {user?.isAdmin && (
+                                        <Button
+                                            color="error"
+                                            onClick={() =>
+                                                handleDelete(async.id)
+                                            }
+                                        >
+                                            Delete
+                                        </Button>
+                                    )}
+                                </Box>
+                            </Box>
+                            <AsyncStandings async={async} />
+                        </Box>
+                    </Collapse>
+                </TableCell>
+            </StyledTableRow>
+        </>
     );
 };
 
@@ -118,13 +168,9 @@ const AsyncList = () => {
     const { data, isLoading, error, mutate } =
         useGetApi<Async[]>('/api/asyncs');
 
-    const { state } = useContext(UserContext);
-    const { loggedIn, user } = state;
-
     const [createDialogOen, setCreateDialogOpen] = useState<boolean>(false);
     const [submitDialogOpen, setSubmitDialogOpen] = useState<boolean>(false);
     const [submissionAsync, setSubmissionAsync] = useState<number>(-1);
-    const [activeStandings, setActiveStandings] = useState<number>(-1);
 
     const openCreateDialog = () => {
         setCreateDialogOpen(true);
@@ -143,46 +189,6 @@ const AsyncList = () => {
     const closeSubmitDialog = () => {
         setSubmitDialogOpen(false);
         mutate();
-    };
-
-    const copySettings = (settings: string) => {
-        navigator.clipboard.writeText(settings);
-        toast.success('Copied to clipboard');
-    };
-
-    const openStandings = (id: number) => {
-        setActiveStandings(id);
-    };
-
-    const closeStandings = () => {
-        setActiveStandings(-1);
-    };
-
-    const toggleStandings = (id: number) => {
-        if (activeStandings === id) {
-            closeStandings();
-        } else {
-            openStandings(id);
-        }
-    };
-
-    const handleDelete = (id: number) => {
-        deleteAsync(id);
-        mutate();
-    };
-
-    const hasSubmittedToAsync = (async: Async) => {
-        if (!user) {
-            return false;
-        }
-
-        if (!user.id) {
-            return false;
-        }
-
-        return async.submissions
-            .map((submission) => submission.user.discordId)
-            .includes(user.id);
     };
 
     if (isLoading) return <Skeleton />;
@@ -225,109 +231,12 @@ const AsyncList = () => {
                     </TableHead>
                     <TableBody>
                         {data.map((async, index) => (
-                            <Fragment key={async.id}>
-                                <TableRow
-                                    sx={{ '& > *': { borderBottom: 'unset' } }}
-                                >
-                                    <TableCell>
-                                        <IconButton
-                                            aria-label="expand row"
-                                            size="small"
-                                            onClick={() =>
-                                                toggleStandings(async.id)
-                                            }
-                                        >
-                                            {activeStandings === async.id ? (
-                                                <KeyboardArrowUp />
-                                            ) : (
-                                                <KeyboardArrowDown />
-                                            )}
-                                        </IconButton>
-                                    </TableCell>
-                                    <TableCell>{async.name}</TableCell>
-                                    <TableCell>
-                                        {async.submissions.length}
-                                    </TableCell>
-                                    <TableCell>
-                                        {async.submissions.length > 0
-                                            ? async.submissions[0].time
-                                            : 'N/A'}
-                                    </TableCell>
-                                    <TableCell>{async.version}</TableCell>
-                                    <TableCell>{async.hash}</TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell
-                                        style={{
-                                            paddingBottom: 0,
-                                            paddingTop: 0,
-                                        }}
-                                        colSpan={6}
-                                    >
-                                        <Collapse
-                                            in={activeStandings === async.id}
-                                            timeout="auto"
-                                        >
-                                            <Box sx={{ margin: 1 }}>
-                                                <Box
-                                                    sx={{
-                                                        display: 'flex',
-                                                        borderBottom:
-                                                            '1px solid rgba(224, 224, 224, 1)',
-                                                        paddingTop: '4px',
-                                                        paddingBottom: '4px',
-                                                    }}
-                                                >
-                                                    <Box>
-                                                        Settings String:{' '}
-                                                        {async.permalink}
-                                                        <Button
-                                                            onClick={() =>
-                                                                copySettings(
-                                                                    async.permalink,
-                                                                )
-                                                            }
-                                                        >
-                                                            Copy
-                                                        </Button>
-                                                    </Box>
-                                                    <Box sx={{ flexGrow: 1 }} />
-                                                    <Box>
-                                                        {loggedIn && (
-                                                            <Button
-                                                                color="success"
-                                                                onClick={() =>
-                                                                    openSubmitDialog(
-                                                                        index,
-                                                                    )
-                                                                }
-                                                                disabled={hasSubmittedToAsync(
-                                                                    async,
-                                                                )}
-                                                            >
-                                                                Submit
-                                                            </Button>
-                                                        )}
-                                                        {user?.isAdmin && (
-                                                            <Button
-                                                                color="error"
-                                                                onClick={() =>
-                                                                    handleDelete(
-                                                                        async.id,
-                                                                    )
-                                                                }
-                                                            >
-                                                                Delete
-                                                            </Button>
-                                                        )}
-                                                    </Box>
-                                                </Box>
-                                                <Standings async={async} />
-                                            </Box>
-                                        </Collapse>
-                                    </TableCell>
-                                </TableRow>
-                            </Fragment>
+                            <AsyncListRow
+                                key={async.id}
+                                async={async}
+                                index={index}
+                                openSubmitDialog={openSubmitDialog}
+                            />
                         ))}
                     </TableBody>
                 </Table>
