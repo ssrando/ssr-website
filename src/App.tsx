@@ -10,7 +10,7 @@ import {
     Outlet,
 } from 'react-router-dom';
 import CookieConsent from 'react-cookie-consent';
-import { Button, createTheme, CssBaseline, ThemeProvider } from '@mui/material';
+import { Button, CssBaseline, ThemeProvider } from '@mui/material';
 import { ToastContainer } from 'react-toastify';
 import AsyncList from './routes/community/racing/asyncs/AsyncList';
 import Builds from './routes/Builds';
@@ -24,12 +24,7 @@ import TypeList from './routes/admin/dynamicdata/TypeList';
 import EditData from './routes/admin/dynamicdata/EditData';
 
 import 'react-toastify/dist/ReactToastify.css';
-
-const theme = createTheme({
-    palette: {
-        mode: 'light',
-    },
-});
+import { ThemeContext, ThemeContextProvider } from './contexts/ThemeContext';
 
 const Home = () => (
     <>
@@ -55,6 +50,7 @@ const Home = () => (
 
 function App() {
     const { update } = useContext(UserContext);
+    const { theme } = useContext(ThemeContext);
 
     useEffect(() => {
         const checkSession = async () => {
@@ -127,15 +123,24 @@ function App() {
     );
 }
 
-const AppWrapper = () => (
-    <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <UserContextProvider>
-            <Router>
-                <App />
-            </Router>
-        </UserContextProvider>
-    </ThemeProvider>
+const AppWrapper = () => {
+    const { theme } = useContext(ThemeContext);
+    return (
+        <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <UserContextProvider>
+                <Router>
+                    <App />
+                </Router>
+            </UserContextProvider>
+        </ThemeProvider>
+    );
+};
+
+const ThemeWrapper = () => (
+    <ThemeContextProvider>
+        <AppWrapper />
+    </ThemeContextProvider>
 );
 
-export default AppWrapper;
+export default ThemeWrapper;

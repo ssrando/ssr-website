@@ -5,10 +5,13 @@ import {
     Box,
     Button,
     Divider,
+    FormControlLabel,
+    FormGroup,
     Link,
     ListSubheader,
     Menu,
     MenuItem,
+    Switch,
     Toolbar,
     Tooltip,
     Typography,
@@ -16,12 +19,15 @@ import {
 import { Link as RRLink, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { UserContext } from '../contexts/UserContext';
+import { ThemeContext } from '../contexts/ThemeContext';
 
 const adminMenu = [{ name: 'Dynamic Data', path: '/admin/dynamicdata' }];
 
 const UserMenu = () => {
     const { state, update } = useContext(UserContext);
     const { loggedIn, user } = state;
+
+    const { theme, toggleTheme } = useContext(ThemeContext);
 
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
         null,
@@ -107,6 +113,19 @@ const UserMenu = () => {
                             <Divider />
                         </div>
                     )}
+                    <MenuItem>
+                        <FormGroup>
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        onChange={toggleTheme}
+                                        checked={theme.palette.mode === 'dark'}
+                                    />
+                                }
+                                label="Dark Mode"
+                            />
+                        </FormGroup>
+                    </MenuItem>
                     <MenuItem onClick={logout}>
                         <Typography textAlign="center">Logout</Typography>
                     </MenuItem>
