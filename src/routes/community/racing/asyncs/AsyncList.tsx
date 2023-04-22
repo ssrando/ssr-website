@@ -3,6 +3,7 @@ import {
     Button,
     Collapse,
     IconButton,
+    Link,
     Skeleton,
     Table,
     TableBody,
@@ -105,49 +106,63 @@ const AsyncListRow = ({
                         <Box sx={{ margin: 1 }}>
                             <Box
                                 sx={{
-                                    display: 'flex',
                                     borderBottom:
                                         '1px solid rgba(224, 224, 224, 1)',
                                     paddingTop: '4px',
                                     paddingBottom: '4px',
                                 }}
                             >
-                                <Box>
-                                    Settings String: {async.permalink}
-                                    <Button
-                                        onClick={() =>
-                                            copySettings(async.permalink)
-                                        }
-                                    >
-                                        Copy
-                                    </Button>
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                    }}
+                                >
+                                    <Box>
+                                        Settings String: {async.permalink}
+                                        <Button
+                                            onClick={() =>
+                                                copySettings(async.permalink)
+                                            }
+                                        >
+                                            Copy
+                                        </Button>
+                                    </Box>
+                                    <Box sx={{ flexGrow: 1 }} />
+                                    <Box>
+                                        {loggedIn && (
+                                            <Button
+                                                color="success"
+                                                onClick={() =>
+                                                    openSubmitDialog(index)
+                                                }
+                                                disabled={hasSubmittedToAsync(
+                                                    async,
+                                                    user,
+                                                )}
+                                            >
+                                                Submit
+                                            </Button>
+                                        )}
+                                        {user?.isAdmin && (
+                                            <Button
+                                                color="error"
+                                                onClick={() =>
+                                                    handleDelete(async.id)
+                                                }
+                                            >
+                                                Delete
+                                            </Button>
+                                        )}
+                                    </Box>
                                 </Box>
-                                <Box sx={{ flexGrow: 1 }} />
                                 <Box>
-                                    {loggedIn && (
-                                        <Button
-                                            color="success"
-                                            onClick={() =>
-                                                openSubmitDialog(index)
-                                            }
-                                            disabled={hasSubmittedToAsync(
-                                                async,
-                                                user,
-                                            )}
-                                        >
-                                            Submit
-                                        </Button>
-                                    )}
-                                    {user?.isAdmin && (
-                                        <Button
-                                            color="error"
-                                            onClick={() =>
-                                                handleDelete(async.id)
-                                            }
-                                        >
-                                            Delete
-                                        </Button>
-                                    )}
+                                    Version{' '}
+                                    <Link
+                                        href={async.versionLink}
+                                        target="_blank"
+                                    >
+                                        {async.version}
+                                    </Link>
                                 </Box>
                             </Box>
                             <AsyncStandings async={async} />

@@ -25,13 +25,22 @@ const CreateAsyncDialog = ({ open, handleClose }: DialogProps) => {
     const [permalink, setPermalink] = useState<string>('');
     const [hash, setHash] = useState<string>('');
     const [version, setVersion] = useState<string>('');
+    const [versionLink, setVersionLink] = useState<string>('');
     const [time, setTime] = useState<string>('');
     const [comment, setComment] = useState<string>('');
 
     const submit = () => {
         const timeSubmit = time === '' ? undefined : time;
         const commentSubmit = comment === '' ? undefined : comment;
-        createAsync(name, permalink, hash, version, timeSubmit, commentSubmit);
+        createAsync(
+            name,
+            permalink,
+            hash,
+            version,
+            versionLink,
+            timeSubmit,
+            commentSubmit,
+        );
         handleClose();
     };
 
@@ -107,6 +116,17 @@ const CreateAsyncDialog = ({ open, handleClose }: DialogProps) => {
                     required
                     value={version}
                     onChange={(event) => setVersion(event.target.value)}
+                />
+                <TextField
+                    autoFocus
+                    margin="dense"
+                    id="versionLink"
+                    label="Version Link"
+                    fullWidth
+                    variant="standard"
+                    required
+                    value={version}
+                    onChange={(event) => setVersionLink(event.target.value)}
                 />
                 {makeSubmission && (
                     <>

@@ -5,6 +5,7 @@ export const createAsync = async (
     permalink: string,
     hash: string,
     version: string,
+    versionLink: string,
     time?: string,
     comment?: string,
 ): Promise<ServerActionResult> => {
@@ -18,6 +19,7 @@ export const createAsync = async (
             permalink,
             hash,
             version,
+            versionLink,
             time,
             comment,
         }),

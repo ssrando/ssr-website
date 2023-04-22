@@ -36,6 +36,7 @@ export type Async = {
     name: string;
     permalink: string;
     version: string;
+    versionLink: string;
     hash: string;
     creator: DisplayUser;
     submissions: AsyncSubmission[];
