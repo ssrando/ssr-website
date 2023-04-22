@@ -15,6 +15,8 @@ import { Async } from '../../ApiTypes';
 import { UserContext } from '../../contexts/UserContext';
 import { deleteSubmission } from '../../controller/Async';
 import { durationSort } from '../../util/Sort';
+import SpoilerBlock from '../SpoilerBlock';
+import { hasSubmittedToAsync } from '../../util/AsyncUtils';
 
 const StyledTableRow = styled(TableRow)`
     &:nth-of-type(odd) {
@@ -43,6 +45,8 @@ const AsyncStandings = ({ async }: AsyncStandingsProps) => {
         );
     }
 
+    const showSpoilers = hasSubmittedToAsync(async, user);
+
     return (
         <Table size="small">
             <TableBody sx={{ 'tr:last-child > *': { borderBottom: 'unset' } }}>
@@ -66,9 +70,19 @@ const AsyncStandings = ({ async }: AsyncStandingsProps) => {
                                     {submission.user.username}
                                 </Box>
                             </TableCell>
-                            <TableCell>{submission.time}</TableCell>
+                            <TableCell>
+                                <SpoilerBlock
+                                    text={submission.time}
+                                    alwaysShow={showSpoilers}
+                                />
+                            </TableCell>
                             <TableCell sx={{ wordBreak: 'break-word' }}>
-                                {submission.comment}
+                                <SpoilerBlock
+                                    text={submission.comment}
+                                    alwaysShow={
+                                        showSpoilers || !submission.comment
+                                    }
+                                />
                             </TableCell>
                             {(user?.isAdmin ||
                                 user?.id === submission.user.discordId) && (

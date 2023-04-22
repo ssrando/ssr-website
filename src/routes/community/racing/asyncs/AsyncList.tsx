@@ -17,33 +17,21 @@ import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
 import { useContext, useState } from 'react';
 import { toast } from 'react-toastify';
 import { mutate as mutateGlobal } from 'swr';
-import { Async, User } from '../../../../ApiTypes';
+import { Async } from '../../../../ApiTypes';
 import AsyncSubmissionDialog from '../../../../components/dialogs/AsyncSubmissionDialog';
 import CreateAsyncDialog from '../../../../components/dialogs/CreateAsyncDialog';
 import { UserContext } from '../../../../contexts/UserContext';
 import { deleteAsync } from '../../../../controller/Async';
 import { useGetApi } from '../../../../controller/Hooks';
 import AsyncStandings from '../../../../components/asyncs/AsyncStandings';
+import SpoilerBlock from '../../../../components/SpoilerBlock';
+import { hasSubmittedToAsync } from '../../../../util/AsyncUtils';
 
 const StyledTableRow = styled(TableRow)`
     &:nth-child(4n + 1) {
         background-color: ${({ theme }) => theme.palette.action.hover};
     }
 `;
-
-const hasSubmittedToAsync = (async: Async, user?: User) => {
-    if (!user) {
-        return false;
-    }
-
-    if (!user.id) {
-        return false;
-    }
-
-    return async.submissions
-        .map((submission) => submission.user.discordId)
-        .includes(user.id);
-};
 
 interface AsyncListRowProps {
     async: Async;
@@ -71,6 +59,8 @@ const AsyncListRow = ({
         mutateGlobal('/api/asyncs');
     };
 
+    const showSpoilers = hasSubmittedToAsync(async, user);
+
     return (
         <>
             <StyledTableRow
@@ -89,9 +79,16 @@ const AsyncListRow = ({
                 <TableCell>{async.name}</TableCell>
                 <TableCell>{async.submissions.length}</TableCell>
                 <TableCell>
-                    {async.submissions.length > 0
-                        ? async.submissions[0].time
-                        : 'N/A'}
+                    <SpoilerBlock
+                        text={
+                            async.submissions.length > 0
+                                ? async.submissions[0].time
+                                : 'N/A'
+                        }
+                        alwaysShow={
+                            showSpoilers || async.submissions.length === 0
+                        }
+                    />
                 </TableCell>
                 <TableCell>{async.version}</TableCell>
                 <TableCell>{async.hash}</TableCell>
