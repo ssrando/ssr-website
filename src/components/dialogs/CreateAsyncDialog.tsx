@@ -31,7 +31,7 @@ const CreateAsyncDialog = ({ open, handleClose }: DialogProps) => {
     const submit = () => {
         const timeSubmit = time === '' ? undefined : time;
         const commentSubmit = comment === '' ? undefined : comment;
-        createAsync(name, permalink, hash, timeSubmit, commentSubmit);
+        createAsync(name, permalink, hash, version, timeSubmit, commentSubmit);
         handleClose();
     };
 
