@@ -4,26 +4,66 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
+    FormControlLabel,
+    FormGroup,
+    Switch,
     TextField,
 } from '@mui/material';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { createAsync } from '../../controller/Async';
 import DialogProps from './DialogProps';
+import { UserContext } from '../../contexts/UserContext';
 
 const CreateAsyncDialog = ({ open, handleClose }: DialogProps) => {
+    const { state } = useContext(UserContext);
+    const { loggedIn, user } = state;
+
+    const [makeSubmission, setMakeSubmission] = useState<boolean>(
+        user ? !user.isAdmin : true,
+    );
     const [name, setName] = useState<string>('');
     const [permalink, setPermalink] = useState<string>('');
     const [hash, setHash] = useState<string>('');
+    const [version, setVersion] = useState<string>('');
+    const [time, setTime] = useState<string>('');
+    const [comment, setComment] = useState<string>('');
 
     const submit = () => {
-        createAsync(name, permalink, hash);
+        const timeSubmit = time === '' ? undefined : time;
+        const commentSubmit = comment === '' ? undefined : comment;
+        createAsync(name, permalink, hash, timeSubmit, commentSubmit);
         handleClose();
     };
+
+    if (!loggedIn) {
+        return (
+            <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>Create Async</DialogTitle>
+                <DialogContent>
+                    You must be logged in to create an async.
+                </DialogContent>
+            </Dialog>
+        );
+    }
 
     return (
         <Dialog open={open} onClose={handleClose}>
             <DialogTitle>Create Async</DialogTitle>
             <DialogContent>
+                {user?.isAdmin && (
+                    <FormGroup>
+                        <FormControlLabel
+                            control={
+                                <Switch
+                                    onChange={(event) =>
+                                        setMakeSubmission(event.target.checked)
+                                    }
+                                />
+                            }
+                            label="Make Submission"
+                        />
+                    </FormGroup>
+                )}
                 <TextField
                     autoFocus
                     margin="dense"
@@ -57,6 +97,43 @@ const CreateAsyncDialog = ({ open, handleClose }: DialogProps) => {
                     value={hash}
                     onChange={(event) => setHash(event.target.value)}
                 />
+                <TextField
+                    autoFocus
+                    margin="dense"
+                    id="version"
+                    label="Version"
+                    fullWidth
+                    variant="standard"
+                    required
+                    value={version}
+                    onChange={(event) => setVersion(event.target.value)}
+                />
+                {makeSubmission && (
+                    <>
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="time"
+                            label="Time"
+                            fullWidth
+                            variant="standard"
+                            required
+                            value={time}
+                            onChange={(event) => setTime(event.target.value)}
+                        />
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="comment"
+                            label="Comment"
+                            fullWidth
+                            variant="standard"
+                            required
+                            value={comment}
+                            onChange={(event) => setComment(event.target.value)}
+                        />
+                    </>
+                )}
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose}>Cancel</Button>

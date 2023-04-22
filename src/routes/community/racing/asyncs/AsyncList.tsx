@@ -23,8 +23,6 @@ import CreateAsyncDialog from '../../../../components/dialogs/CreateAsyncDialog'
 import { UserContext } from '../../../../contexts/UserContext';
 import { deleteAsync } from '../../../../controller/Async';
 import { useGetApi } from '../../../../controller/Hooks';
-
-import './AsyncList.css';
 import AsyncStandings from '../../../../components/asyncs/AsyncStandings';
 
 const StyledTableRow = styled(TableRow)`
@@ -165,6 +163,10 @@ const AsyncListRow = ({
 };
 
 const AsyncList = () => {
+    const {
+        state: { loggedIn },
+    } = useContext(UserContext);
+
     const { data, isLoading, error, mutate } =
         useGetApi<Async[]>('/api/asyncs');
 
@@ -203,13 +205,15 @@ const AsyncList = () => {
                 <Typography variant="h4" sx={{ flexGrow: 1 }}>
                     Asyncs
                 </Typography>
-                <Button
-                    variant="contained"
-                    sx={{ position: 'absolute', right: '1%' }}
-                    onClick={openCreateDialog}
-                >
-                    Create Async
-                </Button>
+                {loggedIn && (
+                    <Button
+                        variant="contained"
+                        sx={{ position: 'absolute', right: '1%' }}
+                        onClick={openCreateDialog}
+                    >
+                        Create Async
+                    </Button>
+                )}
             </Box>
             <TableContainer
                 sx={{
