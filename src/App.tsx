@@ -16,7 +16,7 @@ import AsyncList from './routes/community/racing/asyncs/AsyncList';
 import Builds from './routes/Builds';
 import Footer from './components/Footer';
 import Rules from './routes/Rules';
-import Header from './components/Header';
+import Header from './components/header/Header';
 import { UserContext, UserContextProvider } from './contexts/UserContext';
 import Login from './routes/Login';
 import ProtectedRoute from './components/ProtectedRoute';

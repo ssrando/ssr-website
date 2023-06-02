@@ -1,25 +1,26 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import {
-    AppBar,
     Avatar,
-    Box,
     Button,
     Divider,
     FormControlLabel,
     FormGroup,
-    Link,
     ListSubheader,
     Menu,
     MenuItem,
     Switch,
-    Toolbar,
     Tooltip,
     Typography,
 } from '@mui/material';
-import { Link as RRLink, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { UserContext } from '../contexts/UserContext';
-import { ThemeContext } from '../contexts/ThemeContext';
+import {
+    bindMenu,
+    bindTrigger,
+    usePopupState,
+} from 'material-ui-popup-state/hooks';
+import { UserContext } from '../../contexts/UserContext';
+import { ThemeContext } from '../../contexts/ThemeContext';
 
 const adminMenu = [{ name: 'Dynamic Data', path: '/admin/dynamicdata' }];
 
@@ -29,24 +30,17 @@ const UserMenu = () => {
 
     const { theme, toggleTheme } = useContext(ThemeContext);
 
-    const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-        null,
-    );
-
     const navigate = useNavigate();
 
-    const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorElUser(event.currentTarget);
-    };
+    const menuState = usePopupState({
+        variant: 'popover',
+        popupId: 'userMenu',
+    });
 
     const adminMenuItems = adminMenu.map((item) => ({
         name: item.name,
         onClick: () => navigate(item.path),
     }));
-
-    const closeUserMenu = () => {
-        setAnchorElUser(null);
-    };
 
     const logout = async () => {
         const logoutData = await fetch('/api/logout');
@@ -62,7 +56,7 @@ const UserMenu = () => {
                 'Unable to process your logout request due to an error. Please refresh the page, and if you are still logged in, try again later.',
             );
         }
-        closeUserMenu();
+        menuState.close();
         navigate('/');
     };
 
@@ -74,7 +68,7 @@ const UserMenu = () => {
                     <Button
                         style={{ color: 'white' }}
                         sx={{ flexGrow: 0 }}
-                        onClick={handleOpenUserMenu}
+                        {...bindTrigger(menuState)}
                     >
                         {user.username}
                         <Avatar
@@ -84,11 +78,9 @@ const UserMenu = () => {
                     </Button>
                 </Tooltip>
                 <Menu
-                    sx={{ mt: '45px' }}
-                    id="menu-appbar"
-                    anchorEl={anchorElUser}
+                    {...bindMenu(menuState)}
                     anchorOrigin={{
-                        vertical: 'top',
+                        vertical: 'bottom',
                         horizontal: 'right',
                     }}
                     keepMounted
@@ -96,8 +88,6 @@ const UserMenu = () => {
                         vertical: 'top',
                         horizontal: 'right',
                     }}
-                    open={Boolean(anchorElUser)}
-                    onClose={closeUserMenu}
                 >
                     {user.isAdmin && (
                         <div>
@@ -134,64 +124,10 @@ const UserMenu = () => {
         );
     }
     return (
-        <Button component={RRLink} to="/login" color="inherit">
+        <Button component={Link} to="/login" color="inherit">
             Log In
         </Button>
     );
 };
 
-const Header = () => (
-    <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="static">
-            <Toolbar>
-                <Typography
-                    variant="h6"
-                    component="div"
-                    sx={{ display: { xs: 'none', sm: 'block' } }}
-                >
-                    <Button component={RRLink} to="/" color="inherit">
-                        Skyward Sword Randomizer
-                    </Button>
-                </Typography>
-                <Box sx={{ flexGrow: 1 }} />
-                <Button component={RRLink} to="/builds" color="inherit">
-                    Builds
-                </Button>
-                <Button component={RRLink} to="/asyncs" color="inherit">
-                    Asyncs
-                </Button>
-                {/* <Button component={RRLink} to="/rules" color="inherit">Rules</Button> */}
-                <Button color="inherit">
-                    <Link
-                        color="#FFFFFF"
-                        underline="none"
-                        href="https://tracker.ssrando.com"
-                    >
-                        Tracker
-                    </Link>
-                </Button>
-                <Button color="inherit">
-                    <Link
-                        color="#FFFFFF"
-                        underline="none"
-                        href="https://devtracker.ssrando.com"
-                    >
-                        Dev Tracker
-                    </Link>
-                </Button>
-                <Button color="inherit">
-                    <Link
-                        color="#FFFFFF"
-                        underline="none"
-                        href="https://discord.ssrando.com"
-                    >
-                        Discord
-                    </Link>
-                </Button>
-                <UserMenu />
-            </Toolbar>
-        </AppBar>
-    </Box>
-);
-
-export default Header;
+export default UserMenu;
