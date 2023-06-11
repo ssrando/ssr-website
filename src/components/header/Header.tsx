@@ -16,6 +16,13 @@ const communityMenu = [
     },
 ];
 
+const resourcesMenu = [
+    {
+        itemText: 'Setup Guide',
+        to: '/resources/setup',
+    },
+];
+
 const Header = () => (
     <Box sx={{ flexGrow: 1 }}>
         <AppBar position="static">
@@ -33,6 +40,11 @@ const Header = () => (
                 <Button component={RRLink} to="/builds" color="inherit">
                     Downloads
                 </Button>
+                <HeaderMenu
+                    menuText="Resources"
+                    items={resourcesMenu}
+                    to="/resources"
+                />
                 <HeaderMenu
                     menuText="Community"
                     items={communityMenu}

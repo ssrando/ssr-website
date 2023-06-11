@@ -22,9 +22,9 @@ import Login from './routes/Login';
 import ProtectedRoute from './components/ProtectedRoute';
 import TypeList from './routes/admin/dynamicdata/TypeList';
 import EditData from './routes/admin/dynamicdata/EditData';
-
 import 'react-toastify/dist/ReactToastify.css';
 import { ThemeContext, ThemeContextProvider } from './contexts/ThemeContext';
+import SetupGuide from './routes/resources/setup/SetupGuide';
 
 const Home = () => (
     <>
@@ -72,6 +72,9 @@ function App() {
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/builds" element={<Builds />} />
+                    <Route path="/resources" element={<Outlet />}>
+                        <Route path="setup" element={<SetupGuide />} />
+                    </Route>
                     <Route path="/community" element={<Outlet />}>
                         <Route path="races" element={<Outlet />}>
                             <Route path="asyncs" element={<AsyncList />}>
