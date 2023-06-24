@@ -7,6 +7,7 @@ import {
 } from '@mui/material';
 import { ChangeEvent, useState } from 'react';
 import SourceSetup from '../install/SourceSetup';
+import DownloadSetup from '../install/DownloadSetup';
 
 const WindowsSetup = () => {
     const [source, setSource] = useState(false);
@@ -39,6 +40,7 @@ const WindowsSetup = () => {
                 </RadioGroup>
             </FormControl>
             {source && <SourceSetup />}
+            {!source && <DownloadSetup />}
         </>
     );
 };

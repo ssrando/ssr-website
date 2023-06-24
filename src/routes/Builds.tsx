@@ -92,6 +92,11 @@ const Builds = () => {
                     <Typography variant="h5">Latest Build</Typography>
                 </a>
             </div>
+            <div>
+                <a href="https://nightly.link/ssrando/ssrando/workflows/build.yaml/beta-features">
+                    <Typography variant="h5">Beta Channel</Typography>
+                </a>
+            </div>
             <Typography variant="h3" style={{ marginTop: '2%' }}>
                 Beta Builds
             </Typography>

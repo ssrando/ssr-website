@@ -76,6 +76,12 @@ const SourceSetup = () => (
                     Run the randomizer:
                     <Code>python randoscript.py</Code>
                 </li>
+                <li>
+                    You will be prompted to provide the location of your base
+                    game file. This must be a clean dump of NTSC-U (North
+                    American) version 1.0. Other versions and dumps from other
+                    regions will not work.
+                </li>
             </Typography>
         </Box>
     </Box>
