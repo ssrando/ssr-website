@@ -11,7 +11,6 @@ import WindowsSetup from './os/WindowsSetup';
 import MacSetup from './os/MacSetup';
 import OtherSetup from './os/OtherSetup';
 import LinuxSetup from './os/LinuxSetup';
-import './SetupGuide.css';
 
 type OSName = 'windows' | 'mac' | 'linux' | 'other';
 
@@ -46,7 +45,18 @@ const SetupGuide = () => {
         setSelectedOs(event.target.value as OSName);
     };
     return (
-        <Box sx={{ paddingLeft: '2em', paddingRight: '2em' }}>
+        <Box
+            sx={{
+                paddingLeft: {
+                    sm: '5%',
+                    md: '5%',
+                },
+                paddingRight: {
+                    sm: '5%',
+                    md: '5%',
+                },
+            }}
+        >
             <Typography variant="h4" sx={{ flexGrow: 1 }}>
                 Setup Guide
             </Typography>
