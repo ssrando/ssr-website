@@ -11,6 +11,8 @@ import WindowsSetup from './os/WindowsSetup';
 import MacSetup from './os/MacSetup';
 import OtherSetup from './os/OtherSetup';
 import LinuxSetup from './os/LinuxSetup';
+import PlayWii from './play/PlayWii';
+import PlayDolphin from './play/PlayDolphin';
 
 type OSName = 'windows' | 'mac' | 'linux' | 'other';
 
@@ -40,19 +42,21 @@ const availableOs: OS[] = [
 
 const SetupGuide = () => {
     const [selectedOs, setSelectedOs] = useState<OSName>();
+    const [selectedSystem, setSelectedSystem] = useState<string>();
 
     const changeOSSelection = (event: ChangeEvent<HTMLInputElement>) => {
         setSelectedOs(event.target.value as OSName);
+    };
+    const changeSystemSelection = (event: ChangeEvent<HTMLInputElement>) => {
+        setSelectedSystem(event.target.value);
     };
     return (
         <Box
             sx={{
                 paddingLeft: {
-                    sm: '5%',
                     md: '5%',
                 },
                 paddingRight: {
-                    sm: '5%',
                     md: '5%',
                 },
             }}
@@ -72,6 +76,7 @@ const SetupGuide = () => {
                                 value={os.name}
                                 control={<Radio />}
                                 label={os.display}
+                                key={os.name}
                             />
                         ))}
                     </RadioGroup>
@@ -91,7 +96,7 @@ const SetupGuide = () => {
                     I will be playing the randomized game on:
                 </Typography>
                 <FormControl>
-                    <RadioGroup row>
+                    <RadioGroup row onChange={changeSystemSelection}>
                         <FormControlLabel
                             value="wii"
                             control={<Radio />}
@@ -104,6 +109,10 @@ const SetupGuide = () => {
                         />
                     </RadioGroup>
                 </FormControl>
+            </Box>
+            <Box>
+                {selectedSystem === 'wii' && <PlayWii />}
+                {selectedSystem === 'dolphin' && <PlayDolphin />}
             </Box>
         </Box>
     );
