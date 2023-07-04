@@ -60,7 +60,7 @@ const PlayDolphin = () => (
                 <ol>
                     <li>
                         Generate a randomized game. You can put the outputted
-                        file anywhere. [SOUE01]&quot;
+                        file anywhere.
                     </li>
                     <li>Open Dolphin</li>
                     <li>Connect your controller</li>
