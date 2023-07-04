@@ -8,7 +8,7 @@ import {
 import { Link } from 'react-router-dom';
 import LinkButton from '../LinkButton';
 
-type HeaderMenuItem = {
+export type HeaderMenuItem = {
     itemText: string;
     to: string;
     subitems?: HeaderMenuItem[];
@@ -50,11 +50,12 @@ const Submenu = ({ menuText, items, to }: HeaderMenuProps) => {
                                 menuText={item.itemText}
                                 items={item.subitems}
                                 to={item.to}
+                                key={item.itemText + item.to}
                             />
                         );
                     }
                     return (
-                        <MenuItem>
+                        <MenuItem key={item.itemText + item.to}>
                             <Link to={item.to} color="inherit">
                                 {item.itemText}
                             </Link>
@@ -95,11 +96,12 @@ const HeaderMenu = ({ menuText, items, to }: HeaderMenuProps) => {
                                 menuText={item.itemText}
                                 items={item.subitems}
                                 to={item.to}
+                                key={item.itemText + item.to}
                             />
                         );
                     }
                     return (
-                        <MenuItem>
+                        <MenuItem key={item.itemText + item.to}>
                             <Link to={item.to} color="inherit">
                                 {item.itemText}
                             </Link>
