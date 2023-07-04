@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useGetApi } from '../../controller/Hooks';
-import { DynamicData, DynamicDataTyped } from '../../ApiTypes';
+import { DynamicDataTyped } from '../../ApiTypes';
 
 type Question = {
     category: string;
@@ -22,11 +22,24 @@ const FAQ = () => {
     );
     if (isLoading) return <Skeleton />;
 
-    if (!data) {
+    if (error) {
         return (
             <Box>
                 <Typography variant="h4">Frequently Asked Questions</Typography>
-                No questions found.
+                <Typography sx={{ paddingTop: '1em' }}>
+                    An error occurred while loading question data
+                </Typography>
+            </Box>
+        );
+    }
+
+    if (!data || data.length === 0) {
+        return (
+            <Box>
+                <Typography variant="h4">Frequently Asked Questions</Typography>
+                <Typography sx={{ paddingTop: '1em' }}>
+                    No questions found
+                </Typography>
             </Box>
         );
     }
