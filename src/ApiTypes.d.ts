@@ -13,6 +13,11 @@ export type DynamicData = {
     data: JSONValue;
 };
 
+export type DynamicDataTyped<T> = {
+    id: number;
+    data: T;
+};
+
 export type DynamicDataType = {
     id: number;
     name: string;
@@ -22,14 +27,14 @@ export type DisplayUser = {
     username: string;
     avatar: string;
     discordId: string;
-}
+};
 
 export type AsyncSubmission = {
     id: number;
     user: DisplayUser;
     time: string;
     comment: string;
-}
+};
 
 export type Async = {
     id: number;
@@ -40,4 +45,4 @@ export type Async = {
     hash: string;
     creator: DisplayUser;
     submissions: AsyncSubmission[];
-}
+};

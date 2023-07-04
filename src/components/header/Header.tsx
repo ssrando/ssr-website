@@ -1,9 +1,9 @@
 import { AppBar, Box, Button, Link, Toolbar, Typography } from '@mui/material';
 import { Link as RRLink } from 'react-router-dom';
 import UserMenu from './UserMenu';
-import HeaderMenu from './HeaderMenu';
+import HeaderMenu, { HeaderMenuItem } from './HeaderMenu';
 
-const communityMenu = [
+const communityMenu: HeaderMenuItem[] = [
     {
         itemText: 'Races',
         to: '/community/races',
@@ -16,10 +16,14 @@ const communityMenu = [
     },
 ];
 
-const resourcesMenu = [
+const resourcesMenu: HeaderMenuItem[] = [
     {
         itemText: 'Setup Guide',
         to: '/resources/setup',
+    },
+    {
+        itemText: 'FAQ',
+        to: 'resources/faq',
     },
 ];
 

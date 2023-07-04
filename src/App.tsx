@@ -25,6 +25,7 @@ import EditData from './routes/admin/dynamicdata/EditData';
 import 'react-toastify/dist/ReactToastify.css';
 import { ThemeContext, ThemeContextProvider } from './contexts/ThemeContext';
 import SetupGuide from './routes/resources/setup/SetupGuide';
+import FAQ from './routes/resources/FAQ';
 
 const Home = () => (
     <>
@@ -74,6 +75,7 @@ function App() {
                     <Route path="/builds" element={<Builds />} />
                     <Route path="/resources" element={<Outlet />}>
                         <Route path="setup" element={<SetupGuide />} />
+                        <Route path="faq" element={<FAQ />} />
                     </Route>
                     <Route path="/community" element={<Outlet />}>
                         <Route path="races" element={<Outlet />}>
