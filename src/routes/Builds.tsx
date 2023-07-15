@@ -14,6 +14,8 @@ import {
     TableRow,
     Typography,
 } from '@mui/material';
+import { useGetApi } from '../controller/Hooks';
+import { DynamicDataTyped } from '../ApiTypes';
 
 type PR = {
     html_url: string;
@@ -32,6 +34,11 @@ type PR = {
     };
 };
 
+type BuildData = {
+    name: string;
+    link: string;
+};
+
 const Builds = () => {
     const [prList, setPRList] = useState<PR[]>([]);
     const [shownPRs, setShownPRs] = useState<PR[]>([]);
@@ -42,6 +49,10 @@ const Builds = () => {
             setShowDrafts(event.target.checked);
         },
         [],
+    );
+
+    const { data, isLoading, error } = useGetApi<DynamicDataTyped<BuildData>[]>(
+        '/api/dynamicdata/builds',
     );
 
     useEffect(() => {
@@ -74,35 +85,46 @@ const Builds = () => {
         </TableRow>
     ));
 
+    let staticBuildData;
+    if (error) {
+        staticBuildData = (
+            <Typography sx={{ paddingTop: '1em' }}>
+                An error occurred while loading data for current builds.
+            </Typography>
+        );
+    } else if (!data || data.length === 0) {
+        staticBuildData = (
+            <Typography sx={{ paddingTop: '1em' }}>
+                No current builds available.
+            </Typography>
+        );
+    } else {
+        data.map((build) => (
+            <div key={build.id}>
+                <a href={build.data.link}>
+                    <Typography variant="h5">{build.data.name}</Typography>
+                </a>
+            </div>
+        ));
+    }
+
     return (
         <div>
             <Typography
                 variant="h3"
                 style={{ marginTop: '1%', marginBottom: '1%' }}
             >
-                Current Builds
+                Current
             </Typography>
-            <div>
-                <a href="https://github.com/ssrando/ssrando/releases/latest">
-                    <Typography variant="h5">Stable Release</Typography>
-                </a>
-            </div>
-            <div>
-                <a href="https://nightly.link/ssrando/ssrando/workflows/build.yaml/master">
-                    <Typography variant="h5">Latest Build</Typography>
-                </a>
-            </div>
-            <div>
-                <a href="https://nightly.link/ssrando/ssrando/workflows/build.yaml/beta-features">
-                    <Typography variant="h5">Beta Channel</Typography>
-                </a>
-            </div>
+            {staticBuildData}
             <Typography variant="h3" style={{ marginTop: '2%' }}>
-                Beta Builds
+                Beta
             </Typography>
             <Typography variant="caption">
-                Beta builds contain features that are currently under testing.
-                These builds are not guaranteed to be stable.
+                Beta downloads below contain features that are currently under
+                testing. These builds are not guaranteed to be stable. Drafts
+                are generally semi-complete, but not quite ready for review one
+                reason or another.
             </Typography>
             <div>
                 <FormGroup>
