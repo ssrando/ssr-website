@@ -51,7 +51,7 @@ const Builds = () => {
         [],
     );
 
-    const { data, isLoading, error } = useGetApi<DynamicDataTyped<BuildData>[]>(
+    const { data, error } = useGetApi<DynamicDataTyped<BuildData>[]>(
         '/api/dynamicdata/builds',
     );
 
