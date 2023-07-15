@@ -3,14 +3,16 @@ import { Link as RRLink } from 'react-router-dom';
 import HeaderMenu from './HeaderMenu';
 import { communityMenu, resourcesMenu } from './HeaderData';
 import UserMenu from './UserMenu';
+import logo from './icon.ico';
 
 const DesktopMenu = () => (
     <>
         <Typography
             variant="h6"
             component="div"
-            sx={{ display: { xs: 'none', sm: 'flex' } }}
+            sx={{ display: 'flex', alignItems: 'center' }}
         >
+            <img src={logo} alt="icon" height={32} />
             <Button component={RRLink} to="/" color="inherit">
                 Skyward Sword Randomizer
             </Button>
