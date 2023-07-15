@@ -1,6 +1,6 @@
 import { AppBar, Box, Button, Link, Toolbar, Typography } from '@mui/material';
-import DesktopMenu from './DesktopMenu';
-import MobileMenu from './MobileMenu';
+import DesktopMenu from './desktop/DesktopMenu';
+import MobileMenu from './mobile/MobileMenu';
 
 const Header = () => (
     <Box sx={{ flexGrow: 1 }}>

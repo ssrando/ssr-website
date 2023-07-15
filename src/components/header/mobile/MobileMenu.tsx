@@ -10,10 +10,10 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Link as RRLink } from 'react-router-dom';
-import HeaderMenu from './HeaderMenu';
-import { communityMenu, resourcesMenu } from './HeaderData';
-import UserMenu from './UserMenu';
-import logo from './icon.ico';
+import HeaderMenu from '../desktop/HeaderMenu';
+import { communityMenu, resourcesMenu } from '../HeaderData';
+import UserMenu from '../UserMenu';
+import logo from '../icon.ico';
 
 const MobileMenu = () => {
     const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);

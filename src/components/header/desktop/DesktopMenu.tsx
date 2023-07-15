@@ -1,9 +1,9 @@
 import { Box, Button, Link, Typography } from '@mui/material';
 import { Link as RRLink } from 'react-router-dom';
 import HeaderMenu from './HeaderMenu';
-import { communityMenu, resourcesMenu } from './HeaderData';
-import UserMenu from './UserMenu';
-import logo from './icon.ico';
+import { communityMenu, resourcesMenu } from '../HeaderData';
+import UserMenu from '../UserMenu';
+import logo from '../icon.ico';
 
 const DesktopMenu = () => (
     <>

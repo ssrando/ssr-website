@@ -1,4 +1,4 @@
-import { HeaderMenuItem } from './HeaderMenu';
+import { HeaderMenuItem } from './desktop/HeaderMenu';
 
 export const communityMenu: HeaderMenuItem[] = [
     {

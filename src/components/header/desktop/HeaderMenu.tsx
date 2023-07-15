@@ -6,7 +6,7 @@ import {
     usePopupState,
 } from 'material-ui-popup-state/hooks';
 import { Link } from 'react-router-dom';
-import LinkButton from '../LinkButton';
+import LinkButton from '../../LinkButton';
 
 export type HeaderMenuItem = {
     itemText: string;
