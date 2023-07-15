@@ -99,7 +99,7 @@ const Builds = () => {
             </Typography>
         );
     } else {
-        data.map((build) => (
+        staticBuildData = data.map((build) => (
             <div key={build.id}>
                 <a href={build.data.link}>
                     <Typography variant="h5">{build.data.name}</Typography>
