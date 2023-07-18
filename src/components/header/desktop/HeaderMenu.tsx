@@ -7,20 +7,7 @@ import {
 } from 'material-ui-popup-state/hooks';
 import { Link } from 'react-router-dom';
 import LinkButton from '../../LinkButton';
-
-export type HeaderMenuItem = {
-    itemText: string;
-    to: string;
-    subitems?: HeaderMenuItem[];
-    external?: boolean;
-};
-
-export interface HeaderMenuProps {
-    menuText: string;
-    to: string;
-    items: HeaderMenuItem[];
-    external?: boolean;
-}
+import { HeaderMenuProps } from '../HeaderData';
 
 const Submenu = ({
     menuText,

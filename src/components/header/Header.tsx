@@ -1,4 +1,4 @@
-import { AppBar, Box, Button, Link, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Toolbar } from '@mui/material';
 import DesktopMenu from './desktop/DesktopMenu';
 import MobileMenu from './mobile/MobileMenu';
 
@@ -9,7 +9,9 @@ const Header = () => (
                 <Box sx={{ display: { xs: 'none', md: 'flex' }, flexGrow: 1 }}>
                     <DesktopMenu />
                 </Box>
-                <Box sx={{ display: { xs: 'flex', md: 'none' }, flexGrow: 1 }}>
+                <Box
+                    sx={{ display: { xs: 'block', md: 'none' }, width: '100%' }}
+                >
                     <MobileMenu />
                 </Box>
             </Toolbar>

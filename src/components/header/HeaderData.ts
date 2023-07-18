@@ -1,5 +1,16 @@
-import { HeaderMenuItem } from './desktop/HeaderMenu';
+export type HeaderMenuItem = {
+    itemText: string;
+    to: string;
+    subitems?: HeaderMenuItem[];
+    external?: boolean;
+};
 
+export interface HeaderMenuProps {
+    menuText: string;
+    to: string;
+    items: HeaderMenuItem[];
+    external?: boolean;
+}
 export const communityMenu: HeaderMenuItem[] = [
     {
         itemText: 'Races',
@@ -37,5 +48,27 @@ export const resourcesMenu: HeaderMenuItem[] = [
                 external: true,
             },
         ],
+    },
+];
+
+export const fullMenuMobile: HeaderMenuItem[] = [
+    {
+        itemText: 'Downloads',
+        to: '/builds',
+    },
+    {
+        itemText: 'Community',
+        to: '/community',
+        subitems: communityMenu,
+    },
+    {
+        itemText: 'Resources',
+        to: '/resources',
+        subitems: resourcesMenu,
+    },
+    {
+        itemText: 'Discord',
+        to: 'https://discord.ssrando.com',
+        external: true,
     },
 ];
