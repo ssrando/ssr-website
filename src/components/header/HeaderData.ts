@@ -57,14 +57,14 @@ export const fullMenu: HeaderMenuItem[] = [
         to: '/builds',
     },
     {
-        itemText: 'Community',
-        to: '/community',
-        subitems: communityMenu,
-    },
-    {
         itemText: 'Resources',
         to: '/resources',
         subitems: resourcesMenu,
+    },
+    {
+        itemText: 'Community',
+        to: '/community',
+        subitems: communityMenu,
     },
     {
         itemText: 'Discord',
