@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { Box, Button, IconButton, Typography } from '@mui/material';
+import { Box, IconButton } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import { Link as RRLink } from 'react-router-dom';
-import { fullMenuMobile } from '../HeaderData';
+import { fullMenu } from '../HeaderData';
 import UserMenu from '../UserMenu';
 import logo from '../icon.ico';
 import MobileMenuItem from './MobileHeaderMenu';
+import LinkButton from '../../LinkButton';
 
 const MobileMenu = () => {
     const [expanded, setExpanded] = useState(false);
@@ -17,16 +17,10 @@ const MobileMenu = () => {
     return (
         <Box sx={{ width: '100%' }}>
             <Box sx={{ display: 'flex', flexGrow: 1 }}>
-                <Typography
-                    variant="h6"
-                    component="div"
-                    sx={{ display: 'flex', alignItems: 'center' }}
-                >
+                <LinkButton to="/">
                     <img src={logo} alt="icon" height={32} />
-                    <Button component={RRLink} to="/" color="inherit">
-                        Skyward Sword Randomizer
-                    </Button>
-                </Typography>
+                    <Box sx={{ pl: '0.8em' }}>Skyward Sword Randomizer</Box>
+                </LinkButton>
                 <Box sx={{ flexGrow: 1 }} />
                 <IconButton
                     size="large"
@@ -39,7 +33,7 @@ const MobileMenu = () => {
 
             {expanded && (
                 <>
-                    {fullMenuMobile.map((menu) => (
+                    {fullMenu.map((menu) => (
                         <MobileMenuItem
                             menuText={menu.itemText}
                             to={menu.to}

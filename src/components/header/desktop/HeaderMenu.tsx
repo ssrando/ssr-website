@@ -1,4 +1,4 @@
-import { Menu, MenuItem, Typography } from '@mui/material';
+import { MenuItem, Typography, styled } from '@mui/material';
 import HoverMenu from 'material-ui-popup-state/HoverMenu';
 import {
     bindHover,
@@ -9,12 +9,12 @@ import { Link } from 'react-router-dom';
 import LinkButton from '../../LinkButton';
 import { HeaderMenuProps } from '../HeaderData';
 
-const Submenu = ({
-    menuText,
-    items,
-    to,
-    external = false,
-}: HeaderMenuProps) => {
+const StyledLink = styled(Link)(({ theme }) => ({
+    color: theme.palette.primary.light,
+    textDecoration: 'none',
+}));
+
+const Submenu = ({ menuText, items, to, external }: HeaderMenuProps) => {
     const menu = usePopupState({
         variant: 'popover',
         popupId: `menu-${menuText}-${to}-${items.length}`,
@@ -23,54 +23,54 @@ const Submenu = ({
     return (
         <MenuItem {...bindHover(menu)}>
             {to && (
-                <Link
+                <StyledLink
                     to={to}
                     target={external ? '_blank' : '_self'}
                     rel="noopener noreferrer"
-                    color="inherit"
                 >
                     {menuText}
-                </Link>
+                </StyledLink>
             )}
             {!to && <Typography color="inherit">{menuText}</Typography>}
-            <HoverMenu
-                {...bindMenu(menu)}
-                anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                }}
-                transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'left',
-                }}
-                keepMounted
-            >
-                {items.map((item) => {
-                    if (item.subitems) {
+            {items.length > 0 && (
+                <HoverMenu
+                    {...bindMenu(menu)}
+                    anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                    }}
+                    transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'left',
+                    }}
+                    keepMounted
+                >
+                    {items.map((item) => {
+                        if (item.subitems) {
+                            return (
+                                <Submenu
+                                    menuText={item.itemText}
+                                    items={item.subitems}
+                                    to={item.to}
+                                    external={item.external}
+                                    key={item.itemText + item.to}
+                                />
+                            );
+                        }
                         return (
-                            <Submenu
-                                menuText={item.itemText}
-                                items={item.subitems}
-                                to={item.to}
-                                external={item.external}
-                                key={item.itemText + item.to}
-                            />
+                            <MenuItem key={item.itemText + item.to}>
+                                <StyledLink
+                                    to={item.to}
+                                    target={item.external ? '_blank' : '_self'}
+                                    rel="noopener noreferrer"
+                                >
+                                    {item.itemText}
+                                </StyledLink>
+                            </MenuItem>
                         );
-                    }
-                    return (
-                        <MenuItem key={item.itemText + item.to}>
-                            <Link
-                                to={item.to}
-                                target={external ? '_blank' : '_self'}
-                                rel="noopener noreferrer"
-                                color="inherit"
-                            >
-                                {item.itemText}
-                            </Link>
-                        </MenuItem>
-                    );
-                })}
-            </HoverMenu>
+                    })}
+                </HoverMenu>
+            )}
         </MenuItem>
     );
 };
@@ -80,6 +80,7 @@ const HeaderMenu = ({ menuText, items, to, external }: HeaderMenuProps) => {
         variant: 'popover',
         popupId: `menu-${menuText}-${to}-${items.length}`,
     });
+
     const menuContents = items.map((item) => {
         if (item.subitems) {
             return (
@@ -94,14 +95,13 @@ const HeaderMenu = ({ menuText, items, to, external }: HeaderMenuProps) => {
         }
         return (
             <MenuItem key={item.itemText + item.to}>
-                <Link
-                    to={item.to}
-                    target={item.external ? '_blank' : '_self'}
+                <StyledLink
+                    to={to}
+                    target={external ? '_blank' : '_self'}
                     rel="noopener noreferrer"
-                    color="inherit"
                 >
                     {item.itemText}
-                </Link>
+                </StyledLink>
             </MenuItem>
         );
     });
@@ -117,37 +117,28 @@ const HeaderMenu = ({ menuText, items, to, external }: HeaderMenuProps) => {
                     {menuText}
                 </LinkButton>
             )}
-            {!to && <Typography color="inherit">{menuText}</Typography>}
-            <HoverMenu
-                {...bindMenu(menu)}
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'right',
-                }}
-                transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                }}
-                keepMounted
-                sx={{ display: { sm: 'none', md: 'flex' } }}
-            >
-                {menuContents}
-            </HoverMenu>
-            <Menu
-                {...bindMenu(menu)}
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'right',
-                }}
-                transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                }}
-                keepMounted
-                sx={{ display: { sm: 'flex', md: 'none' } }}
-            >
-                {menuContents}
-            </Menu>
+            {!to && (
+                <Typography color={(theme) => theme.palette.text.primary}>
+                    {menuText}
+                </Typography>
+            )}
+            {items.length > 0 && (
+                <HoverMenu
+                    {...bindMenu(menu)}
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'right',
+                    }}
+                    transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                    }}
+                    keepMounted
+                    sx={{ display: { sm: 'none', md: 'flex' } }}
+                >
+                    {menuContents}
+                </HoverMenu>
+            )}
         </>
     );
 };

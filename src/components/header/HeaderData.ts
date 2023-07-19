@@ -51,7 +51,7 @@ export const resourcesMenu: HeaderMenuItem[] = [
     },
 ];
 
-export const fullMenuMobile: HeaderMenuItem[] = [
+export const fullMenu: HeaderMenuItem[] = [
     {
         itemText: 'Downloads',
         to: '/builds',
