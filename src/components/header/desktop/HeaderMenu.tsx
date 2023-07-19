@@ -10,7 +10,7 @@ import LinkButton from '../../LinkButton';
 import { HeaderMenuProps } from '../HeaderData';
 
 const StyledLink = styled(Link)(({ theme }) => ({
-    color: theme.palette.primary.light,
+    color: theme.palette.text.primary,
     textDecoration: 'none',
 }));
 
