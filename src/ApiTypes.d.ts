@@ -2,6 +2,7 @@ import { JSONValue } from 'vanilla-jsoneditor';
 
 export type User = {
     username?: string;
+    displayName?: string;
     avatar?: string;
     id?: string;
     internalId: number;

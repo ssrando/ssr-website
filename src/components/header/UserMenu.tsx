@@ -70,7 +70,7 @@ const UserMenu = () => {
                         sx={{ flexGrow: 0 }}
                         {...bindTrigger(menuState)}
                     >
-                        {user.username}
+                        {user.displayName}
                         <Avatar
                             alt={user.username}
                             src={`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`}
