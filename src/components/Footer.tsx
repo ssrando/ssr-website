@@ -1,6 +1,14 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDiscord, faGithub } from '@fortawesome/free-brands-svg-icons';
 import Typography from '@mui/material/Typography';
-import { AppBar, Box, Toolbar } from '@mui/material';
+import { AppBar, Box, IconButton, Toolbar, styled } from '@mui/material';
+import { Link } from 'react-router-dom';
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+
+const StyledLink = styled(Link)(({ theme }) => ({
+    color: theme.palette.text.primary,
+}));
 
 class Footer extends React.Component {
     render() {
@@ -16,7 +24,28 @@ class Footer extends React.Component {
                         <Typography variant="h6">
                             Skyward Sword Randomizer
                         </Typography>
-                        <Typography variant="body2">
+                        <Box sx={{ display: 'flex' }}>
+                            <IconButton
+                                href="https://github.com/ssrando/ssrando"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                <FontAwesomeIcon icon={faGithub} />
+                            </IconButton>
+                            <IconButton
+                                href="https://discord.ssrando.com"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                <FontAwesomeIcon icon={faDiscord} />
+                            </IconButton>
+                            <IconButton>
+                                <StyledLink to="/about" color="inherit">
+                                    <FontAwesomeIcon icon={faInfoCircle} />
+                                </StyledLink>
+                            </IconButton>
+                        </Box>
+                        <Typography variant="caption">
                             In-game imagery and system logos Copyright ©
                             Nintendo, 2011-2023 - The Skyward Sword Randomizer
                             community does <b>not</b> share copyrighted material

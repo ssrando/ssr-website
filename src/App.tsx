@@ -26,6 +26,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ThemeContext, ThemeContextProvider } from './contexts/ThemeContext';
 import SetupGuide from './routes/resources/setup/SetupGuide';
 import FAQ from './routes/resources/FAQ';
+import About from './routes/About';
 
 const Home = () => (
     <>
@@ -85,6 +86,7 @@ function App() {
                         </Route>
                     </Route>
                     <Route path="/login" element={<Login />} />
+                    <Route path="/about" element={<About />} />
                     <Route
                         path="/admin"
                         element={
