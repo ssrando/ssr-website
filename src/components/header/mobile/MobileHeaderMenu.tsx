@@ -1,4 +1,4 @@
-import { Box, IconButton } from '@mui/material';
+import { Box, Button, IconButton } from '@mui/material';
 import { ExpandMore } from '@mui/icons-material';
 import { useState } from 'react';
 import { HeaderMenuProps } from '../HeaderData';
@@ -24,14 +24,17 @@ const MobileMenuItem = ({ menuText, items, to, external }: HeaderMenuProps) => {
         }
         return (
             <Box sx={{ textAlign: 'left', pl: '1em' }}>
-                <LinkButton
-                    to={item.to}
-                    target={item.external ? '_blank' : '_self'}
-                    rel="noopener noreferrer"
-                    sx={{ justifyContent: 'flex-start' }}
-                >
-                    {item.itemText}
-                </LinkButton>
+                {to && (
+                    <LinkButton
+                        to={item.to}
+                        target={item.external ? '_blank' : '_self'}
+                        rel="noopener noreferrer"
+                        sx={{ justifyContent: 'flex-start' }}
+                    >
+                        {item.itemText}
+                    </LinkButton>
+                )}
+                {!to && <Button color="inherit">{item.itemText}</Button>}
             </Box>
         );
     });
@@ -44,14 +47,17 @@ const MobileMenuItem = ({ menuText, items, to, external }: HeaderMenuProps) => {
                     alignItems: 'center',
                 }}
             >
-                <LinkButton
-                    to={to}
-                    target={external ? '_blank' : '_self'}
-                    rel="noopener noreferrer"
-                    sx={{ justifyContent: 'flex-start' }}
-                >
-                    {menuText}
-                </LinkButton>
+                {to && (
+                    <LinkButton
+                        to={to}
+                        target={external ? '_blank' : '_self'}
+                        rel="noopener noreferrer"
+                        sx={{ justifyContent: 'flex-start' }}
+                    >
+                        {menuText}
+                    </LinkButton>
+                )}
+                {!to && <Button color="inherit">{menuText}</Button>}
                 {items.length > 0 && (
                     <>
                         <Box sx={{ flexGrow: 1 }} />

@@ -1,4 +1,4 @@
-import { MenuItem, Typography, styled } from '@mui/material';
+import { Button, MenuItem, Typography, styled } from '@mui/material';
 import HoverMenu from 'material-ui-popup-state/HoverMenu';
 import {
     bindHover,
@@ -6,6 +6,7 @@ import {
     usePopupState,
 } from 'material-ui-popup-state/hooks';
 import { Link } from 'react-router-dom';
+import { ArrowRight } from '@mui/icons-material';
 import LinkButton from '../../LinkButton';
 import { HeaderMenuProps } from '../HeaderData';
 
@@ -27,11 +28,21 @@ const Submenu = ({ menuText, items, to, external }: HeaderMenuProps) => {
                     to={to}
                     target={external ? '_blank' : '_self'}
                     rel="noopener noreferrer"
+                    sx={{ display: 'flex', alignItems: 'center' }}
                 >
                     {menuText}
+                    <ArrowRight fontSize="small" />
                 </StyledLink>
             )}
-            {!to && <Typography color="inherit">{menuText}</Typography>}
+            {!to && (
+                <Typography
+                    color="inherit"
+                    sx={{ display: 'flex', alignItems: 'center' }}
+                >
+                    {menuText}
+                    <ArrowRight fontSize="small" />
+                </Typography>
+            )}
             {items.length > 0 && (
                 <HoverMenu
                     {...bindMenu(menu)}
@@ -118,9 +129,9 @@ const HeaderMenu = ({ menuText, items, to, external }: HeaderMenuProps) => {
                 </LinkButton>
             )}
             {!to && (
-                <Typography color={(theme) => theme.palette.text.primary}>
+                <Button color="inherit" {...bindHover(menu)}>
                     {menuText}
-                </Typography>
+                </Button>
             )}
             {items.length > 0 && (
                 <HoverMenu

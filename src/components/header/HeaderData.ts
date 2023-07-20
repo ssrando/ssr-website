@@ -14,7 +14,8 @@ export interface HeaderMenuProps {
 export const communityMenu: HeaderMenuItem[] = [
     {
         itemText: 'Races',
-        to: '/community/races',
+        // to: '/community/races',
+        to: '',
         subitems: [
             {
                 itemText: 'Asyncs',
@@ -63,7 +64,8 @@ export const fullMenu: HeaderMenuItem[] = [
     },
     {
         itemText: 'Community',
-        to: '/community',
+        // to: '/community',
+        to: '',
         subitems: communityMenu,
     },
     {
