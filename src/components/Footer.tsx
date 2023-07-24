@@ -1,14 +1,9 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDiscord, faGithub } from '@fortawesome/free-brands-svg-icons';
-import Typography from '@mui/material/Typography';
-import { AppBar, Box, IconButton, Toolbar, styled } from '@mui/material';
+import { AppBar, Box, IconButton, Toolbar, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
-
-const StyledLink = styled(Link)(({ theme }) => ({
-    color: theme.palette.text.primary,
-}));
 
 class Footer extends React.Component {
     render() {
@@ -39,11 +34,12 @@ class Footer extends React.Component {
                             >
                                 <FontAwesomeIcon icon={faDiscord} />
                             </IconButton>
-                            <IconButton>
-                                <StyledLink to="/about" color="inherit">
+
+                            <Link to="/about" style={{ color: 'inherit' }}>
+                                <IconButton>
                                     <FontAwesomeIcon icon={faInfoCircle} />
-                                </StyledLink>
-                            </IconButton>
+                                </IconButton>
+                            </Link>
                         </Box>
                         <Typography variant="caption">
                             In-game imagery and system logos Copyright ©

@@ -12,6 +12,8 @@ import {
 import CookieConsent from 'react-cookie-consent';
 import { Button, CssBaseline, ThemeProvider } from '@mui/material';
 import { ToastContainer } from 'react-toastify';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fab } from '@fortawesome/free-brands-svg-icons';
 import AsyncList from './routes/community/racing/asyncs/AsyncList';
 import Builds from './routes/Builds';
 import Footer from './components/Footer';
@@ -27,6 +29,8 @@ import { ThemeContext, ThemeContextProvider } from './contexts/ThemeContext';
 import SetupGuide from './routes/resources/setup/SetupGuide';
 import FAQ from './routes/resources/FAQ';
 import About from './routes/About';
+
+library.add(fab);
 
 const Home = () => (
     <>
