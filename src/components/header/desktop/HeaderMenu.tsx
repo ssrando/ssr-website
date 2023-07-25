@@ -21,10 +21,52 @@ const Submenu = ({ menuText, items, to, external }: HeaderMenuProps) => {
         popupId: `menu-${menuText}-${to}-${items.length}`,
     });
 
+    const menuComponent = (
+        <HoverMenu
+            {...bindMenu(menu)}
+            anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+            }}
+            transformOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+            }}
+            keepMounted
+        >
+            {items.map((item) => {
+                if (item.subitems) {
+                    return (
+                        <Submenu
+                            menuText={item.itemText}
+                            items={item.subitems}
+                            to={item.to}
+                            external={item.external}
+                            key={item.itemText + item.to}
+                        />
+                    );
+                }
+                return (
+                    <MenuItem
+                        key={item.itemText + item.to}
+                        component={Link}
+                        to={item.to}
+                        target={item.external ? '_blank' : '_self'}
+                        rel="noopener noreferrer"
+                    >
+                        {item.itemText}
+                    </MenuItem>
+                );
+            })}
+        </HoverMenu>
+    );
+
     return (
-        <MenuItem {...bindHover(menu)}>
+        <>
             {to && (
-                <StyledLink
+                <MenuItem
+                    {...bindHover(menu)}
+                    component={Link}
                     to={to}
                     target={external ? '_blank' : '_self'}
                     rel="noopener noreferrer"
@@ -32,57 +74,22 @@ const Submenu = ({ menuText, items, to, external }: HeaderMenuProps) => {
                 >
                     {menuText}
                     <ArrowRight fontSize="small" />
-                </StyledLink>
+                    {items.length > 0 && menuComponent}
+                </MenuItem>
             )}
             {!to && (
-                <Typography
-                    color="inherit"
-                    sx={{ display: 'flex', alignItems: 'center' }}
-                >
-                    {menuText}
-                    <ArrowRight fontSize="small" />
-                </Typography>
+                <MenuItem {...bindHover(menu)}>
+                    <Typography
+                        color="inherit"
+                        sx={{ display: 'flex', alignItems: 'center' }}
+                    >
+                        {menuText}
+                        <ArrowRight fontSize="small" />
+                    </Typography>
+                    {items.length > 0 && menuComponent}
+                </MenuItem>
             )}
-            {items.length > 0 && (
-                <HoverMenu
-                    {...bindMenu(menu)}
-                    anchorOrigin={{
-                        vertical: 'top',
-                        horizontal: 'right',
-                    }}
-                    transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'left',
-                    }}
-                    keepMounted
-                >
-                    {items.map((item) => {
-                        if (item.subitems) {
-                            return (
-                                <Submenu
-                                    menuText={item.itemText}
-                                    items={item.subitems}
-                                    to={item.to}
-                                    external={item.external}
-                                    key={item.itemText + item.to}
-                                />
-                            );
-                        }
-                        return (
-                            <MenuItem key={item.itemText + item.to}>
-                                <StyledLink
-                                    to={item.to}
-                                    target={item.external ? '_blank' : '_self'}
-                                    rel="noopener noreferrer"
-                                >
-                                    {item.itemText}
-                                </StyledLink>
-                            </MenuItem>
-                        );
-                    })}
-                </HoverMenu>
-            )}
-        </MenuItem>
+        </>
     );
 };
 
@@ -105,14 +112,14 @@ const HeaderMenu = ({ menuText, items, to, external }: HeaderMenuProps) => {
             );
         }
         return (
-            <MenuItem key={item.itemText + item.to}>
-                <StyledLink
-                    to={to}
-                    target={external ? '_blank' : '_self'}
-                    rel="noopener noreferrer"
-                >
-                    {item.itemText}
-                </StyledLink>
+            <MenuItem
+                key={item.itemText + item.to}
+                to={item.to}
+                component={Link}
+                target={external ? '_blank' : '_self'}
+                rel="noopener noreferrer"
+            >
+                {item.itemText}
             </MenuItem>
         );
     });

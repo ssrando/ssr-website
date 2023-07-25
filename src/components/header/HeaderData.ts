@@ -32,7 +32,7 @@ export const resourcesMenu: HeaderMenuItem[] = [
     },
     {
         itemText: 'FAQ',
-        to: 'resources/faq',
+        to: '/resources/faq',
     },
     {
         itemText: 'Trackers',
@@ -59,7 +59,8 @@ export const fullMenu: HeaderMenuItem[] = [
     },
     {
         itemText: 'Resources',
-        to: '/resources',
+        // to: '/resources',
+        to: '',
         subitems: resourcesMenu,
     },
     {

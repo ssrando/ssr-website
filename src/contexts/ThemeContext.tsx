@@ -1,18 +1,48 @@
 import { Theme, createTheme } from '@mui/material';
-import { createContext, useMemo, useState } from 'react';
+import React, { createContext, useMemo, useState } from 'react';
+import {
+    Link as RouterLink,
+    LinkProps as RouterLinkProps,
+} from 'react-router-dom';
+
+const LinkBehavior = React.forwardRef<
+    HTMLAnchorElement,
+    Omit<RouterLinkProps, 'to'> & { href: RouterLinkProps['to'] }
+>((props, ref) => {
+    const { href, ...other } = props;
+    // Map href (Material UI) -> to (react-router)
+    return <RouterLink ref={ref} to={href} {...other} />;
+});
 
 const storageKey = 'ssrwebTheme';
+
+const allThemeElements = {
+    components: {
+        MuiLink: {
+            defaultProps: {
+                component: LinkBehavior,
+            },
+        },
+        MuiButtonBase: {
+            defaultProps: {
+                LinkComponent: LinkBehavior,
+            },
+        },
+    },
+};
 
 const lightTheme = createTheme({
     palette: {
         mode: 'light',
     },
+    ...allThemeElements,
 });
 
 const darkTheme = createTheme({
     palette: {
         mode: 'dark',
     },
+    ...allThemeElements,
 });
 
 const getSavedTheme = (): Theme =>
