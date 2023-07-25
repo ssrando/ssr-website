@@ -1,4 +1,4 @@
-import { Button, MenuItem, Typography, styled } from '@mui/material';
+import { Button, MenuItem, Typography } from '@mui/material';
 import HoverMenu from 'material-ui-popup-state/HoverMenu';
 import {
     bindHover,
@@ -9,11 +9,6 @@ import { Link } from 'react-router-dom';
 import { ArrowRight } from '@mui/icons-material';
 import LinkButton from '../../LinkButton';
 import { HeaderMenuProps } from '../HeaderData';
-
-const StyledLink = styled(Link)(({ theme }) => ({
-    color: theme.palette.text.primary,
-    textDecoration: 'none',
-}));
 
 const Submenu = ({ menuText, items, to, external }: HeaderMenuProps) => {
     const menu = usePopupState({
