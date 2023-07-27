@@ -19,6 +19,71 @@ import {
     ServerActionError,
     ServerActionResult,
 } from '../../../controller/ServerAction';
+import {
+    ShapeElement,
+    fieldForType,
+} from '../../../components/DynamicDataFields';
+
+const typeData: ShapeElement[] = [
+    {
+        name: 'String Key',
+        type: 'string',
+    },
+    {
+        name: 'String Key 2',
+        type: 'string',
+    },
+    {
+        name: 'Boolean Key',
+        type: 'boolean',
+    },
+    {
+        name: 'Number Key',
+        type: 'number',
+    },
+    {
+        name: 'Object Key',
+        type: 'object',
+        children: [
+            {
+                name: 'Child String Key 1',
+                type: 'string',
+            },
+            {
+                name: 'Child String Key 2',
+                type: 'string',
+            },
+            {
+                name: 'Child Boolean Key',
+                type: 'boolean',
+            },
+            {
+                name: 'Child Object Key',
+                type: 'object',
+                children: [
+                    {
+                        name: 'Sub-sub String Key',
+                        type: 'string',
+                    },
+                    {
+                        name: 'Sub-sub Number Key',
+                        type: 'number',
+                    },
+                    {
+                        name: 'Sub-sub Array Key',
+                        type: 'array',
+                        elementType: 'number',
+                    },
+                ],
+            },
+        ],
+    },
+    {
+        name: 'Array Key',
+        type: 'array',
+        elementType: 'string',
+    },
+];
 
 const EditData = () => {
     const { name } = useParams();
@@ -33,6 +98,10 @@ const EditData = () => {
         null,
     );
     const [isNew, setIsNew] = useState<boolean>(false);
+    const [formData, setFormData] = useState<Record<string, unknown>>({});
+    const syncFormData = (key: string, value: unknown) => {
+        setFormData({ ...formData, [key]: value });
+    };
 
     const navigate = useNavigate();
 
@@ -196,10 +265,18 @@ const EditData = () => {
                 <Typography variant="h4">Edit</Typography>
                 {showEditor && (
                     <Box sx={{ padding: '1%' }}>
-                        <JSONEditorComponent
+                        {/* <JSONEditorComponent
                             content={content}
                             onChange={setContent}
-                        />
+                        /> */}
+                        {typeData.map((type) =>
+                            fieldForType(
+                                type,
+                                formData[type.name],
+                                syncFormData,
+                            ),
+                        )}
+                        {JSON.stringify(formData)}
                         <Box
                             sx={{
                                 display: 'flex',
