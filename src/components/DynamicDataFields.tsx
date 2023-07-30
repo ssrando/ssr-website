@@ -1,4 +1,11 @@
-import { Box, Checkbox, FormControlLabel, TextField } from '@mui/material';
+import {
+    Autocomplete,
+    Box,
+    Checkbox,
+    FormControlLabel,
+    TextField,
+} from '@mui/material';
+import NumberEntryField from './NumberField';
 
 type StringElement = {
     name: string;
@@ -16,6 +23,12 @@ type NumberElement = {
     type: 'number';
     min?: number;
     max?: number;
+};
+
+type SelectElement = {
+    name: string;
+    type: 'select';
+    choices: string[];
 };
 
 type ArrayElement = {
@@ -37,6 +50,7 @@ export type ShapeElement =
     | StringElement
     | BooleanElement
     | NumberElement
+    | SelectElement
     | ArrayElement
     | ObjectElement;
 
@@ -68,16 +82,18 @@ const StringField = ({
     value,
     sync,
 }: FieldProps<StringElement, string>) => (
-    <TextField
-        margin="dense"
-        id="versionLink"
-        label={type.name}
-        fullWidth
-        variant="standard"
-        required
-        value={value}
-        onChange={(event) => sync(type.name, event.target.value)}
-    />
+    <Box>
+        <TextField
+            margin="dense"
+            id="versionLink"
+            label={type.name}
+            fullWidth
+            variant="standard"
+            required
+            value={value}
+            onChange={(event) => sync(type.name, event.target.value)}
+        />
+    </Box>
 );
 
 const BooleanField = ({
@@ -85,7 +101,7 @@ const BooleanField = ({
     value,
     sync,
 }: FieldProps<BooleanElement, boolean>) => (
-    <Box sx={{ textAlign: 'left' }}>
+    <Box>
         <FormControlLabel
             control={
                 <Checkbox
@@ -103,16 +119,37 @@ const NumberField = ({
     value,
     sync,
 }: FieldProps<NumberElement, number>) => (
-    <TextField
-        margin="dense"
-        id="versionLink"
-        label={type.name}
-        fullWidth
-        variant="standard"
-        required
-        value={value}
-        onChange={(event) => sync(type.name, Number(event.target.value))}
-    />
+    <Box>
+        <NumberEntryField
+            margin="dense"
+            id="versionLink"
+            label={type.name}
+            variant="standard"
+            value={value}
+            onChange={(event) => sync(type.name, Number(event.target.value))}
+            min={type.min}
+            max={type.max}
+        />
+    </Box>
+);
+
+const SelectField = ({
+    type,
+    value,
+    sync,
+}: FieldProps<SelectElement, string>) => (
+    <Box>
+        <Autocomplete
+            disablePortal
+            options={type.choices}
+            sx={{ width: 300 }}
+            renderInput={(params) => (
+                <TextField {...params} label={type.name} />
+            )}
+            value={value}
+            onChange={(event, newValue) => sync(type.name, newValue ?? '')}
+        />
+    </Box>
 );
 
 const ArrayField = ({
@@ -140,8 +177,8 @@ const ArrayField = ({
             (key: string, newValue: unknown) => syncChild(index, newValue),
         );
     return (
-        <>
-            <Box sx={{ textAlign: 'left' }}>{type.name}</Box>
+        <Box>
+            {type.name}
             <Box sx={{ ml: '1em' }}>
                 {value.map((entry, index) => createField(entry, index))}
                 {createField(
@@ -149,7 +186,7 @@ const ArrayField = ({
                     value.length,
                 )}
             </Box>
-        </>
+        </Box>
     );
 };
 
@@ -163,15 +200,15 @@ const ObjectField = ({
         sync(type.name, value);
     };
     return (
-        <>
-            <Box sx={{ textAlign: 'left' }}>{type.name}</Box>
+        <Box>
+            {type.name}
             <Box sx={{ ml: '1em' }}>
                 {type.children.map((child) =>
                     // eslint-disable-next-line no-use-before-define
                     fieldForType(child, value[child.name], syncChild),
                 )}
             </Box>
-        </>
+        </Box>
     );
 };
 
@@ -196,6 +233,10 @@ export const fieldForType = (
         case 'number':
             return (
                 <NumberField type={type} value={value as number} sync={sync} />
+            );
+        case 'select':
+            return (
+                <SelectField type={type} value={value as string} sync={sync} />
             );
         case 'array':
             return (

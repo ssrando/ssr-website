@@ -40,6 +40,13 @@ const typeData: ShapeElement[] = [
     {
         name: 'Number Key',
         type: 'number',
+        min: -2,
+        max: 7,
+    },
+    {
+        name: 'Select Key',
+        type: 'select',
+        choices: ['hello', 'there', 'General', 'Kenobi'],
     },
     {
         name: 'Object Key',
@@ -269,13 +276,15 @@ const EditData = () => {
                             content={content}
                             onChange={setContent}
                         /> */}
-                        {typeData.map((type) =>
-                            fieldForType(
-                                type,
-                                formData[type.name],
-                                syncFormData,
-                            ),
-                        )}
+                        <Box sx={{ textAlign: 'left' }}>
+                            {typeData.map((type) =>
+                                fieldForType(
+                                    type,
+                                    formData[type.name],
+                                    syncFormData,
+                                ),
+                            )}
+                        </Box>
                         {JSON.stringify(formData)}
                         <Box
                             sx={{
