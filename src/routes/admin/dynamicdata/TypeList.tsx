@@ -1,24 +1,20 @@
 import {
     Box,
     Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
     Table,
     TableBody,
     TableCell,
     TableContainer,
     TableRow,
-    TextField,
     Typography,
 } from '@mui/material';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { DynamicDataType } from '../../../ApiTypes';
-import { deleteType, newType } from '../../../controller/DynamicData';
+import { deleteType } from '../../../controller/DynamicData';
 import { useGetApi } from '../../../controller/Hooks';
+import CreateDataTypeDialog from '../../../components/dialogs/CreateDataTypeDialog';
 
 const TypeList = () => {
     const { data, error, isLoading, mutate } = useGetApi<DynamicDataType[]>(
@@ -28,31 +24,14 @@ const TypeList = () => {
     const navigate = useNavigate();
 
     const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-    const [newTypeName, setNewTypeName] = useState<string>('');
-    const [typeError, setTypeError] = useState<string>('');
 
     const handleClose = () => {
         setDialogOpen(false);
-        setNewTypeName('');
-        setTypeError('');
+        mutate();
     };
 
     const newDataTypeFlowStart = () => {
         setDialogOpen(true);
-    };
-
-    const submitNewDataType = () => {
-        if (!newTypeName) {
-            setTypeError('Type cannot be empty');
-            return;
-        }
-        if (newTypeName === 'types') {
-            setTypeError('"types" is a reserved name');
-            return;
-        }
-        newType(newTypeName);
-        handleClose();
-        mutate();
     };
 
     const handleDeleteType = async (type: string) => {
@@ -120,28 +99,7 @@ const TypeList = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
-            <Dialog open={dialogOpen} onClose={handleClose}>
-                <DialogTitle>New Data Type</DialogTitle>
-                <DialogContent>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="name"
-                        label="Type Name"
-                        type="text"
-                        fullWidth
-                        variant="standard"
-                        value={newTypeName}
-                        onChange={(event) => setNewTypeName(event.target.value)}
-                        error={typeError !== ''}
-                        helperText={typeError}
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={submitNewDataType}>Create</Button>
-                </DialogActions>
-            </Dialog>
+            <CreateDataTypeDialog open={dialogOpen} handleClose={handleClose} />
         </>
     );
 };

@@ -1,6 +1,7 @@
 import {
     Autocomplete,
     Box,
+    Button,
     Checkbox,
     FormControlLabel,
     TextField,
@@ -10,7 +11,8 @@ import NumberEntryField from './NumberField';
 type StringElement = {
     name: string;
     type: 'string';
-    length?: number;
+    minLength?: number;
+    maxLength?: number;
 };
 
 type BooleanElement = {
@@ -25,13 +27,13 @@ type NumberElement = {
     max?: number;
 };
 
-type SelectElement = {
+export type SelectElement = {
     name: string;
     type: 'select';
     choices: string[];
 };
 
-type ArrayElement = {
+export type ArrayElement = {
     name: string;
     type: 'array';
     elementType: 'string' | 'number' | 'boolean' | 'array' | 'object';
@@ -39,12 +41,29 @@ type ArrayElement = {
     maxSize?: number;
 };
 
-type ObjectElement = {
+export type ObjectElement = {
     name: string;
     type: 'object';
     // eslint-disable-next-line no-use-before-define
     children: ShapeElement[];
 };
+
+export const arrayTypeNames = [
+    'string',
+    'number',
+    'boolean',
+    'array',
+    'object',
+];
+
+export const typeNames = [
+    'string',
+    'number',
+    'boolean',
+    'select',
+    'array',
+    'object',
+];
 
 export type ShapeElement =
     | StringElement
@@ -54,7 +73,12 @@ export type ShapeElement =
     | ArrayElement
     | ObjectElement;
 
-const defaultValueForType = (type: string): unknown => {
+export const defaultValueForType = (
+    type: string,
+    choices?: string[],
+    children?: ShapeElement[],
+): unknown => {
+    const childVals: Record<string, unknown> = {};
     switch (type) {
         case 'string':
             return '';
@@ -62,10 +86,19 @@ const defaultValueForType = (type: string): unknown => {
             return false;
         case 'number':
             return 0;
+        case 'select':
+            return choices ? choices[0] : '';
         case 'array':
             return [];
         case 'object':
-            return {};
+            children?.forEach((child) => {
+                childVals[child.name] = defaultValueForType(
+                    child.type,
+                    child.type === 'select' ? child.choices : undefined,
+                    child.type === 'object' ? child.children : undefined,
+                );
+            });
+            return childVals;
         default:
             return '';
     }
@@ -126,7 +159,7 @@ const NumberField = ({
             label={type.name}
             variant="standard"
             value={value}
-            onChange={(event) => sync(type.name, Number(event.target.value))}
+            onChange={(newValue: number) => sync(type.name, newValue)}
             min={type.min}
             max={type.max}
         />
@@ -157,15 +190,17 @@ const ArrayField = ({
     value,
     sync,
 }: FieldProps<ArrayElement, unknown[]>) => {
-    const syncChild = (index: number, newValue: unknown) => {
+    const syncChild = (index: string, newValue: unknown) => {
         const updated = [...value];
-        if (newValue === '') {
-            updated.splice(index, 1);
-        } else {
-            updated[index] = newValue;
-        }
+        updated[Number(index)] = newValue;
         sync(type.name, updated);
     };
+    const addChild = () => {
+        const updated = [...value];
+        updated.push(defaultValueForType(type.elementType));
+        sync(type.name, updated);
+    };
+
     const createField = (entry: unknown, index: number) =>
         // eslint-disable-next-line no-use-before-define
         fieldForType(
@@ -174,17 +209,19 @@ const ArrayField = ({
                 type: type.elementType,
             } as StringElement, // this cast is only to satisfy ts, it's functionally meaningless
             entry,
-            (key: string, newValue: unknown) => syncChild(index, newValue),
+            syncChild,
         );
     return (
         <Box>
             {type.name}
             <Box sx={{ ml: '1em' }}>
-                {value.map((entry, index) => createField(entry, index))}
-                {createField(
-                    defaultValueForType(type.elementType),
-                    value.length,
-                )}
+                {value.map((entry, index) => (
+                    // eslint-disable-next-line react/no-array-index-key
+                    <span key={`${type.name}-entry-${entry}-${index}`}>
+                        {createField(entry, index)}
+                    </span>
+                ))}
+                <Button onClick={addChild}>Add Item``</Button>
             </Box>
         </Box>
     );
@@ -203,10 +240,16 @@ const ObjectField = ({
         <Box>
             {type.name}
             <Box sx={{ ml: '1em' }}>
-                {type.children.map((child) =>
-                    // eslint-disable-next-line no-use-before-define
-                    fieldForType(child, value[child.name], syncChild),
-                )}
+                {type.children.map((child) => (
+                    <span
+                        key={`${type.name}-child-${child.name}-${child.type}`}
+                    >
+                        {
+                            // eslint-disable-next-line no-use-before-define
+                            fieldForType(child, value[child.name], syncChild)
+                        }
+                    </span>
+                ))}
             </Box>
         </Box>
     );

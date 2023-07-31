@@ -7,7 +7,7 @@ import {
     Skeleton,
     Typography,
 } from '@mui/material';
-import { useCallback, useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Content, toJSONContent } from 'vanilla-jsoneditor';
@@ -21,6 +21,7 @@ import {
 } from '../../../controller/ServerAction';
 import {
     ShapeElement,
+    defaultValueForType,
     fieldForType,
 } from '../../../components/DynamicDataFields';
 
@@ -105,11 +106,20 @@ const EditData = () => {
         null,
     );
     const [isNew, setIsNew] = useState<boolean>(false);
-    const [formData, setFormData] = useState<Record<string, unknown>>({});
+    const [formData, setFormData] = useState<Record<string, unknown>>(() => {
+        const initialData: Record<string, unknown> = {};
+        typeData.forEach((type) => {
+            initialData[type.name] = defaultValueForType(
+                type.type,
+                type.type === 'select' ? type.choices : undefined,
+                type.type === 'object' ? type.children : undefined,
+            );
+        });
+        return initialData;
+    });
     const syncFormData = (key: string, value: unknown) => {
-        setFormData({ ...formData, [key]: value });
+        setFormData((curr) => ({ ...curr, [key]: value }));
     };
-
     const navigate = useNavigate();
 
     const discard = useCallback(() => {
@@ -277,13 +287,15 @@ const EditData = () => {
                             onChange={setContent}
                         /> */}
                         <Box sx={{ textAlign: 'left' }}>
-                            {typeData.map((type) =>
-                                fieldForType(
-                                    type,
-                                    formData[type.name],
-                                    syncFormData,
-                                ),
-                            )}
+                            {typeData.map((type) => (
+                                <span key={type.name}>
+                                    {fieldForType(
+                                        type,
+                                        formData[type.name],
+                                        syncFormData,
+                                    )}
+                                </span>
+                            ))}
                         </Box>
                         {JSON.stringify(formData)}
                         <Box

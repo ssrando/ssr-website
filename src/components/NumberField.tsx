@@ -1,11 +1,13 @@
 import { Add, Remove } from '@mui/icons-material';
 import { IconButton, Paper, TextField, TextFieldProps } from '@mui/material';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent } from 'react';
 
 type NumberFieldProps = {
     min?: number;
     max?: number;
-} & TextFieldProps;
+    value: number;
+    onChange: (newValue: number) => void;
+} & Omit<TextFieldProps, 'onChange'>;
 
 const NumberEntryField = ({
     min,
@@ -16,10 +18,10 @@ const NumberEntryField = ({
     fullWidth,
     id,
     margin,
+    value,
 }: NumberFieldProps) => {
-    const [value, setValue] = useState(0);
     const changed = (
-        event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
+        event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     ) => {
         const newVal = Number(event.target.value);
         if (Number.isNaN(newVal)) {
@@ -28,17 +30,14 @@ const NumberEntryField = ({
         if ((min && newVal < min) || (max && newVal > max)) {
             return;
         }
-        setValue(newVal);
-        if (onChange) {
-            onChange(event);
-        }
+        onChange(newVal);
     };
 
     const increment = () => {
-        setValue((curr) => (curr === max ? curr : curr + 1));
+        onChange(value === max ? value : value + 1);
     };
     const decrement = () => {
-        setValue((curr) => (curr === min ? min : curr - 1));
+        onChange(value === min ? min : value - 1);
     };
     return (
         <Paper
