@@ -20,7 +20,7 @@ const PlayWii = () => (
                         it over after generation. Depending on your loader of
                         choice, you may need to place the file in a specific
                         folder. For example, for USB loader GX, the randomized
-                        WBFS file needs to be in a folder with the path
+                        game file needs to be in a folder with the path
                         &quot;wbfs/The Legend of Zelda Skyward Sword
                         [SOUE01]&quot;
                     </li>

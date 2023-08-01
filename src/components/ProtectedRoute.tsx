@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+import { Link } from '@mui/material';
 import { UserContext } from '../contexts/UserContext';
 
 interface ProtectedRouteProps {
@@ -9,7 +10,7 @@ interface ProtectedRouteProps {
 const NotLoggedIn = () => (
     <>
         You are not logged in. You must have a valid account in good standing to
-        access this page. Click <a href="/login">here to login</a>
+        access this page. Click <Link href="/login">here to login</Link>
     </>
 );
 
