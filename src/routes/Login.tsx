@@ -13,18 +13,16 @@ const Login = () => {
                 you must log in with one of the below methods.
             </div>
             <div style={style}>
-                <Button style={{ background: '#5865F2' }}>
-                    <Link
-                        color="#FFFFFF"
-                        underline="none"
-                        href="/api/auth/discord/doauth"
-                    >
-                        <FontAwesomeIcon
-                            icon={faDiscord}
-                            style={{ paddingRight: '0.5em' }}
-                        />
-                        Log In with Discord
-                    </Link>
+                <Button
+                    style={{ background: '#5865F2', color: '#FFFFFF' }}
+                    component="a"
+                    href="/api/auth/discord/doauth"
+                >
+                    <FontAwesomeIcon
+                        icon={faDiscord}
+                        style={{ paddingRight: '0.5em' }}
+                    />
+                    Log In with Discord
                 </Button>
             </div>
         </>
