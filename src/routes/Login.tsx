@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDiscord } from '@fortawesome/free-brands-svg-icons';
-import { Button, Link } from '@mui/material';
+import { Button } from '@mui/material';
 
 const Login = () => {
     const style = {
