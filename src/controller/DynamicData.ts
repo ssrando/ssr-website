@@ -24,13 +24,16 @@ export const saveData = async (
     };
 };
 
-export const newType = async (name: string): Promise<ServerActionResult> => {
+export const newType = async (
+    name: string,
+    shape: string,
+): Promise<ServerActionResult> => {
     const response = await fetch('/api/dynamicdata/types', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name }),
+        body: JSON.stringify({ name, shape }),
     });
 
     if (!response.ok) {

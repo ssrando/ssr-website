@@ -313,7 +313,6 @@ const ShapeEditor = ({ shape, update }: ShapeEditorProps) => {
                 </Box>
             ))}
             <Button onClick={addShapeItem}>New Property</Button>
-            {JSON.stringify(shape)}
         </>
     );
 };
@@ -339,7 +338,7 @@ const CreateDataTypeDialog = ({ open, handleClose }: DialogProps) => {
             setTypeError('"types" is a reserved name');
             return;
         }
-        newType(newTypeName);
+        newType(newTypeName, JSON.stringify(shape));
         close();
     };
 
