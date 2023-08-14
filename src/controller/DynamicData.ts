@@ -1,9 +1,9 @@
-import { JSONValue } from 'vanilla-jsoneditor';
 import { ServerActionResult } from './ServerAction';
+import { ShapeElement } from '../components/DynamicDataFields';
 
 export const saveData = async (
     id: number,
-    data: JSONValue,
+    data: Record<string, unknown>,
 ): Promise<ServerActionResult> => {
     const response = await fetch(`/api/dynamicdata/edit/${id}`, {
         method: 'POST',
@@ -26,7 +26,7 @@ export const saveData = async (
 
 export const newType = async (
     name: string,
-    shape: string,
+    shape: ShapeElement[],
 ): Promise<ServerActionResult> => {
     const response = await fetch('/api/dynamicdata/types', {
         method: 'POST',
@@ -65,7 +65,7 @@ export const deleteType = async (name: string): Promise<ServerActionResult> => {
 
 export const newData = async (
     type: string | undefined,
-    content: JSONValue,
+    content: Record<string, unknown>,
 ): Promise<ServerActionResult> => {
     if (!type) {
         return {

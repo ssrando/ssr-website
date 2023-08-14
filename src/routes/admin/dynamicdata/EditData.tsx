@@ -10,9 +10,7 @@ import {
 import { useState, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Content, toJSONContent } from 'vanilla-jsoneditor';
-import { DynamicData } from '../../../ApiTypes';
-import JSONEditorComponent from '../../../components/JSONEditor';
+import { DynamicDataList } from '../../../ApiTypes';
 import { deleteData, newData, saveData } from '../../../controller/DynamicData';
 import { useGetApi } from '../../../controller/Hooks';
 import {
@@ -20,87 +18,17 @@ import {
     ServerActionResult,
 } from '../../../controller/ServerAction';
 import {
-    ShapeElement,
     defaultValueForType,
     fieldForType,
 } from '../../../components/DynamicDataFields';
 
-const typeData: ShapeElement[] = [
-    {
-        name: 'String Key',
-        type: 'string',
-    },
-    {
-        name: 'String Key 2',
-        type: 'string',
-    },
-    {
-        name: 'Boolean Key',
-        type: 'boolean',
-    },
-    {
-        name: 'Number Key',
-        type: 'number',
-        min: -2,
-        max: 7,
-    },
-    {
-        name: 'Select Key',
-        type: 'select',
-        choices: ['hello', 'there', 'General', 'Kenobi'],
-    },
-    {
-        name: 'Object Key',
-        type: 'object',
-        children: [
-            {
-                name: 'Child String Key 1',
-                type: 'string',
-            },
-            {
-                name: 'Child String Key 2',
-                type: 'string',
-            },
-            {
-                name: 'Child Boolean Key',
-                type: 'boolean',
-            },
-            {
-                name: 'Child Object Key',
-                type: 'object',
-                children: [
-                    {
-                        name: 'Sub-sub String Key',
-                        type: 'string',
-                    },
-                    {
-                        name: 'Sub-sub Number Key',
-                        type: 'number',
-                    },
-                    {
-                        name: 'Sub-sub Array Key',
-                        type: 'array',
-                        elementType: 'number',
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        name: 'Array Key',
-        type: 'array',
-        elementType: 'string',
-    },
-];
-
 const EditData = () => {
     const { name } = useParams();
 
-    const { data, error, isLoading, mutate } = useGetApi<DynamicData[]>(
+    const { data, error, isLoading, mutate } = useGetApi<DynamicDataList>(
         `/api/dynamicdata/${name}`,
     );
 
-    const [content, setContent] = useState<Content>({ json: '' });
     const [showEditor, setShowEditor] = useState(false);
     const [selectedDataIndex, setSelectedDataIndex] = useState<number | null>(
         null,
@@ -108,7 +36,7 @@ const EditData = () => {
     const [isNew, setIsNew] = useState<boolean>(false);
     const [formData, setFormData] = useState<Record<string, unknown>>(() => {
         const initialData: Record<string, unknown> = {};
-        typeData.forEach((type) => {
+        data?.shape.forEach((type) => {
             initialData[type.name] = defaultValueForType(
                 type.type,
                 type.type === 'select' ? type.choices : undefined,
@@ -126,7 +54,7 @@ const EditData = () => {
         setShowEditor(false);
         setSelectedDataIndex(null);
         setIsNew(false);
-        setContent({ json: '' });
+        setFormData({});
     }, []);
 
     const loadEditor = useCallback(
@@ -136,7 +64,7 @@ const EditData = () => {
                 toast.error('Data not loaded yet');
                 return;
             }
-            setContent({ json: data[dataIndex].data });
+            setFormData(data.data[dataIndex].data);
             setSelectedDataIndex(dataIndex);
             setShowEditor(true);
         },
@@ -146,7 +74,7 @@ const EditData = () => {
     const save = useCallback(() => {
         if (isNew) {
             toast.promise<ServerActionResult, ServerActionError>(
-                newData(name, toJSONContent(content).json),
+                newData(name, formData),
                 {
                     pending: 'Creating...',
                     success: 'Created',
@@ -163,7 +91,7 @@ const EditData = () => {
             setShowEditor(false);
             setSelectedDataIndex(null);
             setIsNew(false);
-            setContent({ json: '' });
+            setFormData({});
             mutate();
             return;
         }
@@ -176,7 +104,7 @@ const EditData = () => {
             return;
         }
         toast.promise<ServerActionResult, ServerActionError>(
-            saveData(data[selectedDataIndex].id, toJSONContent(content).json),
+            saveData(data.data[selectedDataIndex].id, formData),
             {
                 pending: 'Saving...',
                 success: 'Saved',
@@ -192,14 +120,14 @@ const EditData = () => {
         );
         setShowEditor(false);
         setSelectedDataIndex(null);
-        setContent({ json: '' });
+        setFormData({});
         mutate();
-    }, [setShowEditor, selectedDataIndex, data, content]);
+    }, [setShowEditor, selectedDataIndex, data, formData, isNew, mutate, name]);
 
     const setupNew = () => {
         setShowEditor(true);
         setIsNew(true);
-        setContent({ json: '' });
+        setFormData({});
     };
 
     const doDelete = () => {
@@ -212,7 +140,7 @@ const EditData = () => {
             return;
         }
         toast.promise<ServerActionResult, ServerActionError>(
-            deleteData(data[selectedDataIndex].id),
+            deleteData(data.data[selectedDataIndex].id),
             {
                 pending: 'Deleting...',
                 success: 'Deleted',
@@ -228,7 +156,7 @@ const EditData = () => {
         );
         setShowEditor(false);
         setSelectedDataIndex(null);
-        setContent({ json: '' });
+        setFormData({});
         mutate();
     };
 
@@ -267,7 +195,7 @@ const EditData = () => {
                     </Box>
                 </Box>
                 <List>
-                    {data.map((item, index) => (
+                    {data.data.map((item, index) => (
                         <ListItemButton
                             key={item.id}
                             onClick={() => loadEditor(index)}
@@ -282,12 +210,8 @@ const EditData = () => {
                 <Typography variant="h4">Edit</Typography>
                 {showEditor && (
                     <Box sx={{ padding: '1%' }}>
-                        {/* <JSONEditorComponent
-                            content={content}
-                            onChange={setContent}
-                        /> */}
                         <Box sx={{ textAlign: 'left' }}>
-                            {typeData.map((type) => (
+                            {data.shape.map((type) => (
                                 <span key={type.name}>
                                     {fieldForType(
                                         type,
@@ -297,7 +221,6 @@ const EditData = () => {
                                 </span>
                             ))}
                         </Box>
-                        {JSON.stringify(formData)}
                         <Box
                             sx={{
                                 display: 'flex',

@@ -1,4 +1,4 @@
-import { JSONValue } from 'vanilla-jsoneditor';
+import { ShapeElement } from './components/DynamicDataFields';
 
 export type User = {
     username?: string;
@@ -11,7 +11,7 @@ export type User = {
 
 export type DynamicData = {
     id: number;
-    data: JSONValue;
+    data: Record<string, unknown>;
 };
 
 export type DynamicDataTyped<T> = {
@@ -19,9 +19,15 @@ export type DynamicDataTyped<T> = {
     data: T;
 };
 
+export type DynamicDataList = {
+    data: DynamicData[];
+    shape: ShapeElement[];
+};
+
 export type DynamicDataType = {
     id: number;
     name: string;
+    shape: string;
 };
 
 export type DisplayUser = {

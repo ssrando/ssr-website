@@ -338,7 +338,7 @@ const CreateDataTypeDialog = ({ open, handleClose }: DialogProps) => {
             setTypeError('"types" is a reserved name');
             return;
         }
-        newType(newTypeName, JSON.stringify(shape));
+        newType(newTypeName, shape);
         close();
     };
 

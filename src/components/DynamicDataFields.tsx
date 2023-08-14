@@ -179,7 +179,7 @@ const SelectField = ({
             renderInput={(params) => (
                 <TextField {...params} label={type.name} />
             )}
-            value={value}
+            value={value ?? type.choices[0]}
             onChange={(event, newValue) => sync(type.name, newValue ?? '')}
         />
     </Box>
@@ -221,7 +221,7 @@ const ArrayField = ({
                         {createField(entry, index)}
                     </span>
                 ))}
-                <Button onClick={addChild}>Add Item``</Button>
+                <Button onClick={addChild}>Add Item</Button>
             </Box>
         </Box>
     );
