@@ -220,10 +220,13 @@ const EditData = () => {
                 </Box>
                 <List>
                     {data.data.map((item, index) => (
-                        <ListItem component="div" sx={{ display: 'flex' }}>
+                        <ListItem
+                            component="div"
+                            sx={{ display: 'flex' }}
+                            key={item.id}
+                        >
                             <ListItemButton
                                 sx={{ flexGrow: 1 }}
-                                key={item.id}
                                 onClick={() => loadEditor(index)}
                             >
                                 {name} {index} ({item.id})

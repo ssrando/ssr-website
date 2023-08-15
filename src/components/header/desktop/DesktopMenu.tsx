@@ -18,6 +18,7 @@ const DesktopMenu = () => (
                 items={menu.subitems ?? []}
                 to={menu.to}
                 external={menu.external}
+                key={`${menu.itemText}-${menu.external}-${menu.to}`}
             />
         ))}
         <UserMenu />
