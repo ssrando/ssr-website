@@ -2,7 +2,9 @@ import {
     Box,
     Button,
     Divider,
+    IconButton,
     List,
+    ListItem,
     ListItemButton,
     Skeleton,
     Typography,
@@ -10,8 +12,14 @@ import {
 import { useState, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { ArrowDownward, ArrowUpward } from '@mui/icons-material';
 import { DynamicDataList } from '../../../ApiTypes';
-import { deleteData, newData, saveData } from '../../../controller/DynamicData';
+import {
+    changeOrder,
+    deleteData,
+    newData,
+    saveData,
+} from '../../../controller/DynamicData';
 import { useGetApi } from '../../../controller/Hooks';
 import {
     ServerActionError,
@@ -170,6 +178,22 @@ const EditData = () => {
 
     if (!data) return <div />;
 
+    const moveUp = (index: number) => {
+        if (index === 0) return;
+        const order = data?.data.map((item) => item.id);
+        [order[index - 1], order[index]] = [order[index], order[index - 1]];
+        changeOrder(name, order);
+        mutate();
+    };
+
+    const moveDown = (index: number) => {
+        if (index === data.data.length - 1) return;
+        const order = data?.data.map((item) => item.id);
+        [order[index + 1], order[index]] = [order[index], order[index + 1]];
+        changeOrder(name, order);
+        mutate();
+    };
+
     return (
         <Box sx={{ display: 'flex', height: '100%' }}>
             <Box sx={{ flexGrow: 3 }}>
@@ -196,12 +220,27 @@ const EditData = () => {
                 </Box>
                 <List>
                     {data.data.map((item, index) => (
-                        <ListItemButton
-                            key={item.id}
-                            onClick={() => loadEditor(index)}
-                        >
-                            {name} {index}
-                        </ListItemButton>
+                        <ListItem component="div" sx={{ display: 'flex' }}>
+                            <ListItemButton
+                                sx={{ flexGrow: 1 }}
+                                key={item.id}
+                                onClick={() => loadEditor(index)}
+                            >
+                                {name} {index} ({item.id})
+                            </ListItemButton>
+                            <IconButton
+                                disabled={index === 0}
+                                onClick={() => moveUp(index)}
+                            >
+                                <ArrowUpward />
+                            </IconButton>
+                            <IconButton
+                                disabled={index === data.data.length - 1}
+                                onClick={() => moveDown(index)}
+                            >
+                                <ArrowDownward />
+                            </IconButton>
+                        </ListItem>
                     ))}
                 </List>
             </Box>

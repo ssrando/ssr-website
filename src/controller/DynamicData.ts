@@ -110,3 +110,32 @@ export const deleteData = async (id: number): Promise<ServerActionResult> => {
         success: true,
     };
 };
+
+export const changeOrder = async (
+    type: string | undefined,
+    order: number[],
+): Promise<ServerActionResult> => {
+    if (!type) {
+        return {
+            success: false,
+            error: 'No type specified - invalid route configuration',
+        };
+    }
+    const response = await fetch(`/api/dynamicdata/${type}/syncOrder`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ order }),
+    });
+
+    if (!response.ok) {
+        return {
+            success: false,
+            error: `${response.status} - ${response.statusText}`,
+        };
+    }
+    return {
+        success: true,
+    };
+};
