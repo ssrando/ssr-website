@@ -39,6 +39,7 @@ const MobileMenu = () => {
                             to={menu.to}
                             items={menu.subitems ?? []}
                             external={menu.external}
+                            key={`${menu.itemText}-${menu.to}`}
                         />
                     ))}
                     <Box sx={{ display: 'flex' }}>

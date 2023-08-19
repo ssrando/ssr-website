@@ -12,7 +12,10 @@ const MobileMenuItem = ({ menuText, items, to, external }: HeaderMenuProps) => {
     const menuContents = items.map((item) => {
         if (item.subitems) {
             return (
-                <Box sx={{ pl: '1em' }}>
+                <Box
+                    sx={{ pl: '1em' }}
+                    key={`${item.itemText}-${item.to}-submenu-list`}
+                >
                     <MobileMenuItem
                         menuText={item.itemText}
                         to={item.to}
@@ -24,7 +27,7 @@ const MobileMenuItem = ({ menuText, items, to, external }: HeaderMenuProps) => {
         }
         return (
             <Box sx={{ textAlign: 'left', pl: '1em' }}>
-                {to && (
+                {item.to && (
                     <LinkButton
                         to={item.to}
                         target={item.external ? '_blank' : '_self'}
@@ -34,7 +37,7 @@ const MobileMenuItem = ({ menuText, items, to, external }: HeaderMenuProps) => {
                         {item.itemText}
                     </LinkButton>
                 )}
-                {!to && <Button color="inherit">{item.itemText}</Button>}
+                {!item.to && <Button color="inherit">{item.itemText}</Button>}
             </Box>
         );
     });
