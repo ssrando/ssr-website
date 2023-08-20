@@ -1,8 +1,10 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDiscord } from '@fortawesome/free-brands-svg-icons';
 import { Button } from '@mui/material';
+import { useSearchParams } from 'react-router-dom';
 
 const Login = () => {
+    const [searchParams] = useSearchParams();
     const style = {
         paddingTop: '1em',
     };
@@ -16,7 +18,9 @@ const Login = () => {
                 <Button
                     style={{ background: '#5865F2', color: '#FFFFFF' }}
                     component="a"
-                    href="/api/auth/discord/doauth"
+                    href={`/api/auth/discord/doauth?target=${searchParams.get(
+                        'target',
+                    )}`}
                 >
                     <FontAwesomeIcon
                         icon={faDiscord}

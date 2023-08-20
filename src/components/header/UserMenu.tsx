@@ -124,7 +124,11 @@ const UserMenu = () => {
         );
     }
     return (
-        <Button component={Link} to="/login" color="inherit">
+        <Button
+            component={Link}
+            to={`/login?target=${window.location.href}`}
+            color="inherit"
+        >
             Log In
         </Button>
     );
