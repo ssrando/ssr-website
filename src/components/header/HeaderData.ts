@@ -11,6 +11,7 @@ export interface HeaderMenuProps {
     items: HeaderMenuItem[];
     external?: boolean;
 }
+
 export const communityMenu: HeaderMenuItem[] = [
     {
         itemText: 'Races',
@@ -25,11 +26,14 @@ export const communityMenu: HeaderMenuItem[] = [
     },
 ];
 
-export const resourcesMenu: HeaderMenuItem[] = [
+const guideMenu = [
     {
         itemText: 'Setup Guide',
         to: '/resources/setup',
     },
+];
+
+export const resourcesMenu: HeaderMenuItem[] = [
     {
         itemText: 'FAQ',
         to: '/resources/faq',
@@ -75,3 +79,17 @@ export const fullMenu: HeaderMenuItem[] = [
         external: true,
     },
 ];
+
+const loadServerHeaderData = async () => {
+    const guideFiles: string[] = await (
+        await fetch('/api/files/guides')
+    ).json();
+    guideFiles.forEach((guideFile) =>
+        guideMenu.push({
+            itemText: guideFile.split('.')[0],
+            to: `/resources/guides/${guideFile}`,
+        }),
+    );
+    resourcesMenu.push({ itemText: 'Guides', to: '', subitems: guideMenu });
+};
+loadServerHeaderData();

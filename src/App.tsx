@@ -29,6 +29,7 @@ import { ThemeContext, ThemeContextProvider } from './contexts/ThemeContext';
 import SetupGuide from './routes/resources/setup/SetupGuide';
 import FAQ from './routes/resources/FAQ';
 import About from './routes/About';
+import MarkdownPage from './routes/generic/MarkdownPage';
 
 library.add(fab);
 
@@ -79,6 +80,12 @@ function App() {
                     <Route path="/" element={<Home />} />
                     <Route path="/builds" element={<Builds />} />
                     <Route path="/resources" element={<Outlet />}>
+                        <Route path="guides" element={<Outlet />}>
+                            <Route
+                                path=":file"
+                                element={<MarkdownPage pathPrefix="guides" />}
+                            />
+                        </Route>
                         <Route path="setup" element={<SetupGuide />} />
                         <Route path="faq" element={<FAQ />} />
                     </Route>
