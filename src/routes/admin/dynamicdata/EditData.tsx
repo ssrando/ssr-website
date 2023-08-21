@@ -34,7 +34,7 @@ const EditData = () => {
     const { name } = useParams();
 
     const { data, error, isLoading, mutate } = useGetApi<DynamicDataList>(
-        `/api/dynamicdata/${name}`,
+        `/api/dynamicdata/${name}?withShape=true`,
     );
 
     const [showEditor, setShowEditor] = useState(false);
