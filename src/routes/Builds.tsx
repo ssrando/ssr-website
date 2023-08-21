@@ -76,7 +76,7 @@ const Builds = () => {
     }, [showDrafts, prList]);
 
     const buildComponents = _.map(shownPRs, (pr: PR) => (
-        <TableRow>
+        <TableRow key={pr.title}>
             <TableCell component="th" scope="row">
                 <a href={pr.html_url}>{pr.title}</a>
             </TableCell>
