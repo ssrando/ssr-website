@@ -30,6 +30,7 @@ import SetupGuide from './routes/resources/setup/SetupGuide';
 import FAQ from './routes/resources/FAQ';
 import About from './routes/About';
 import MarkdownPage from './routes/generic/MarkdownPage';
+import FileList from './routes/admin/files/FileList';
 
 library.add(fab);
 
@@ -81,10 +82,7 @@ function App() {
                     <Route path="/builds" element={<Builds />} />
                     <Route path="/resources" element={<Outlet />}>
                         <Route path="guides" element={<Outlet />}>
-                            <Route
-                                path=":file"
-                                element={<MarkdownPage pathPrefix="guides" />}
-                            />
+                            <Route path=":file" element={<MarkdownPage />} />
                         </Route>
                         <Route path="setup" element={<SetupGuide />} />
                         <Route path="faq" element={<FAQ />} />
@@ -118,6 +116,15 @@ function App() {
                             element={
                                 <ProtectedRoute
                                     element={<EditData />}
+                                    adminOnly
+                                />
+                            }
+                        />
+                        <Route
+                            path="files"
+                            element={
+                                <ProtectedRoute
+                                    element={<FileList />}
                                     adminOnly
                                 />
                             }

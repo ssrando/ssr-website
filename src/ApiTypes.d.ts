@@ -53,3 +53,9 @@ export type Async = {
     creator: DisplayUser;
     submissions: AsyncSubmission[];
 };
+
+export type File = {
+    id: number;
+    name: string;
+    path: string;
+};

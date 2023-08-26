@@ -1,24 +1,27 @@
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Box, Button, IconButton, Typography } from '@mui/material';
 import MDEditor from '@uiw/react-md-editor';
 import { useState } from 'react';
 import { Delete, Edit } from '@mui/icons-material';
 import { useFileGet } from '../../controller/Hooks';
-
-type MarkdownPageProps = {
-    pathPrefix: string;
-};
+import { deleteFile, editFile } from '../../controller/Files';
+import { loadServerHeaderData } from '../../components/header/HeaderData';
 
 type EditorProps = {
     initialValue: string;
     close: () => void;
+    fileId: string;
 };
 
-const Editor = ({ initialValue, close }: EditorProps) => {
+const Editor = ({ initialValue, close, fileId }: EditorProps) => {
     const [content, setContent] = useState<string | undefined>(initialValue);
 
     const save = () => {
+        if (content) {
+            editFile(fileId, content);
+        }
+
         close();
     };
 
@@ -27,6 +30,7 @@ const Editor = ({ initialValue, close }: EditorProps) => {
     };
 
     const deletePage = () => {
+        deleteFile(fileId);
         close();
     };
 
@@ -43,16 +47,18 @@ const Editor = ({ initialValue, close }: EditorProps) => {
     );
 };
 
-const MarkdownPage = ({ pathPrefix }: MarkdownPageProps) => {
+const MarkdownPage = () => {
     const { file } = useParams();
-    const { data, error } = useFileGet(`/files/${pathPrefix}/${file}`);
+    const { data, error, mutate } = useFileGet(`/files/${file}`);
     const [edit, setEdit] = useState(false);
+    const navigate = useNavigate();
+
     if (error) {
         return (
             <Typography>An error occurred while loading the file.</Typography>
         );
     }
-    if (!data) {
+    if (!data || !file) {
         return <Typography>No file found.</Typography>;
     }
 
@@ -61,6 +67,13 @@ const MarkdownPage = ({ pathPrefix }: MarkdownPageProps) => {
     };
     const closeEditor = () => {
         setEdit(false);
+        mutate();
+    };
+
+    const deletePage = () => {
+        deleteFile(file);
+        loadServerHeaderData();
+        navigate('/');
     };
 
     return (
@@ -68,7 +81,7 @@ const MarkdownPage = ({ pathPrefix }: MarkdownPageProps) => {
             {!edit && (
                 <>
                     <Box sx={{ textAlign: 'right' }}>
-                        <IconButton onClick={launchEditor}>
+                        <IconButton onClick={deletePage}>
                             <Delete />
                         </IconButton>
                         <IconButton onClick={launchEditor}>
@@ -78,7 +91,9 @@ const MarkdownPage = ({ pathPrefix }: MarkdownPageProps) => {
                     <ReactMarkdown>{data}</ReactMarkdown>
                 </>
             )}
-            {edit && <Editor initialValue={data} close={closeEditor} />}
+            {edit && (
+                <Editor initialValue={data} close={closeEditor} fileId={file} />
+            )}
             <Typography variant="subtitle2" sx={{ textAlign: 'right' }}>
                 Last edited by a person on a date
             </Typography>

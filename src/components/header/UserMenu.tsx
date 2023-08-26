@@ -22,7 +22,10 @@ import {
 import { UserContext } from '../../contexts/UserContext';
 import { ThemeContext } from '../../contexts/ThemeContext';
 
-const adminMenu = [{ name: 'Dynamic Data', path: '/admin/dynamicdata' }];
+const adminMenu = [
+    { name: 'Dynamic Data', path: '/admin/dynamicdata' },
+    { name: 'Files', path: '/admin/files' },
+];
 
 const UserMenu = () => {
     const { state, update } = useContext(UserContext);
@@ -47,8 +50,8 @@ const UserMenu = () => {
         if (logoutData.ok) {
             update({ loggedIn: false, user: undefined });
         } else if (logoutData.status === 401) {
-            // if we get a 401 it means we encounted a stale session or stale client data
-            // this could happen for a few reasons, but in all cases it has no negtive consequence on
+            // if we get a 401 it means we encountered a stale session or stale client data
+            // this could happen for a few reasons, but in all cases it has no neagtive consequence on
             // application state, so we can safely update client state to be in sync with server state
             update({ loggedIn: false, user: undefined });
         } else {

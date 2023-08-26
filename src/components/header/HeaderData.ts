@@ -1,3 +1,5 @@
+import { File } from '../../ApiTypes';
+
 export type HeaderMenuItem = {
     itemText: string;
     to: string;
@@ -26,18 +28,21 @@ export const communityMenu: HeaderMenuItem[] = [
     },
 ];
 
-const guideMenu = [
+const staticGuideMenu: HeaderMenuItem[] = [
     {
         itemText: 'Setup Guide',
         to: '/resources/setup',
     },
 ];
 
+const guideMenu = [...staticGuideMenu];
+
 export const resourcesMenu: HeaderMenuItem[] = [
     {
         itemText: 'FAQ',
         to: '/resources/faq',
     },
+    { itemText: 'Guides', to: '', subitems: guideMenu },
     {
         itemText: 'Trackers',
         to: '',
@@ -80,16 +85,18 @@ export const fullMenu: HeaderMenuItem[] = [
     },
 ];
 
-const loadServerHeaderData = async () => {
-    const guideFiles: string[] = await (
-        await fetch('/api/files/guides')
-    ).json();
-    guideFiles.forEach((guideFile) =>
-        guideMenu.push({
-            itemText: guideFile.split('.')[0],
-            to: `/resources/guides/${guideFile}`,
-        }),
-    );
-    resourcesMenu.push({ itemText: 'Guides', to: '', subitems: guideMenu });
+export const loadServerHeaderData = async () => {
+    const res = await fetch('/api/files/guides');
+    if (res.ok) {
+        guideMenu.splice(0, guideMenu.length);
+        guideMenu.push(...staticGuideMenu);
+        const guideFiles: File[] = await res.json();
+        guideFiles.forEach((guideFile) =>
+            guideMenu.push({
+                itemText: guideFile.name,
+                to: `/resources/guides/${guideFile.id}`,
+            }),
+        );
+    }
 };
 loadServerHeaderData();
