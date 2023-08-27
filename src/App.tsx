@@ -31,6 +31,7 @@ import FAQ from './routes/resources/FAQ';
 import About from './routes/About';
 import MarkdownPage from './routes/generic/MarkdownPage';
 import FileList from './routes/admin/files/FileList';
+import Security from './routes/admin/security/Security';
 
 library.add(fab);
 
@@ -125,6 +126,15 @@ function App() {
                             element={
                                 <ProtectedRoute
                                     element={<FileList />}
+                                    adminOnly
+                                />
+                            }
+                        />
+                        <Route
+                            path="security"
+                            element={
+                                <ProtectedRoute
+                                    element={<Security />}
                                     adminOnly
                                 />
                             }

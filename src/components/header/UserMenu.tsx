@@ -23,6 +23,7 @@ import { UserContext } from '../../contexts/UserContext';
 import { ThemeContext } from '../../contexts/ThemeContext';
 
 const adminMenu = [
+    { name: 'Security', path: '/admin/security' },
     { name: 'Dynamic Data', path: '/admin/dynamicdata' },
     { name: 'Files', path: '/admin/files' },
 ];
