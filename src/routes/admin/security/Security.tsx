@@ -170,7 +170,7 @@ const Security = () => {
     } = useGetApi<string[]>('/api/security/roles');
     const [newRole, setNewRole] = useState('');
 
-    if (!error) {
+    if (error) {
         return <Typography>An error occurred.</Typography>;
     }
 
