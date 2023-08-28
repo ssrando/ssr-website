@@ -59,3 +59,21 @@ export type File = {
     name: string;
     path: string;
 };
+
+export type SecurityPoint = {
+    id: number;
+    permission: string;
+    enabled: boolean;
+};
+
+export type SecurityRole = {
+    id: number;
+    roleId: string;
+    enabled: boolean;
+    points: SecurityPoint[];
+};
+
+export type DiscordRole = {
+    id: string;
+    name: string;
+};
