@@ -54,6 +54,11 @@ export type Async = {
     submissions: AsyncSubmission[];
 };
 
+export type DiscordRole = {
+    id: string;
+    name: string;
+};
+
 export type File = {
     id: number;
     name: string;
@@ -68,12 +73,7 @@ export type SecurityPoint = {
 
 export type SecurityRole = {
     id: number;
-    roleId: string;
+    role: DiscordRole;
     enabled: boolean;
     points: SecurityPoint[];
-};
-
-export type DiscordRole = {
-    id: string;
-    name: string;
 };

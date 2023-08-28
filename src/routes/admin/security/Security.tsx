@@ -57,6 +57,7 @@ const SecurityRoleListRow = ({
 
     const deleteSecurity = () => {
         deleteRole(role.id);
+        mutateRoles();
         mutate();
     };
 
@@ -89,16 +90,24 @@ const SecurityRoleListRow = ({
                     {showRoleSelect && (
                         <FormControl fullWidth>
                             <InputLabel>Role</InputLabel>
-                            <Select value={role.roleId} onChange={changeRole}>
+                            <Select value={role.role.id} onChange={changeRole}>
+                                <MenuItem value={role.role.id}>
+                                    {role.role.name}
+                                </MenuItem>
                                 {roles.map((selectRole) => (
-                                    <MenuItem value={selectRole.id}>
+                                    <MenuItem
+                                        value={selectRole.id}
+                                        key={selectRole.id}
+                                    >
                                         {selectRole.name}
                                     </MenuItem>
                                 ))}
                             </Select>
                         </FormControl>
                     )}
-                    {!showRoleSelect && <Typography>{role.roleId}</Typography>}
+                    {!showRoleSelect && (
+                        <Typography>{role.role.name}</Typography>
+                    )}
                 </TableCell>
                 <TableCell>
                     <Switch checked={role.enabled} onChange={changeEnabled} />
@@ -127,7 +136,7 @@ const SecurityRoleListRow = ({
                                 }}
                             >
                                 {role.points.map((point) => (
-                                    <TableRow>
+                                    <TableRow key={point.id}>
                                         <TableCell>
                                             {point.permission}
                                         </TableCell>
@@ -219,6 +228,7 @@ const Security = () => {
                                 mutate={mutate}
                                 roles={roles}
                                 mutateRoles={mutateRoles}
+                                key={role.id}
                             />
                         ))}
                         {showAdd && (
@@ -231,7 +241,10 @@ const Security = () => {
                                             onChange={changeNewRole}
                                         >
                                             {roles.map((selectRole) => (
-                                                <MenuItem value={selectRole.id}>
+                                                <MenuItem
+                                                    value={selectRole.id}
+                                                    key={selectRole.id}
+                                                >
                                                     {selectRole.name}
                                                 </MenuItem>
                                             ))}
