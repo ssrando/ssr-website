@@ -26,8 +26,9 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { KeyedMutator } from 'swr';
 import { useGetApi } from '../../../controller/Hooks';
-import { DiscordRole, SecurityRole } from '../../../ApiTypes';
+import { DiscordRole, SecurityPoint, SecurityRole } from '../../../ApiTypes';
 import {
+    changePointEnabled,
     changeRoleEnabled,
     createRole,
     deleteRole,
@@ -63,6 +64,11 @@ const SecurityRoleListRow = ({
         updateDiscordRole(role.id, event.target.value);
         mutate();
         mutateRoles();
+    };
+
+    const togglePoint = (point: SecurityPoint) => {
+        changePointEnabled(point.id, !point.enabled);
+        mutate();
     };
 
     const showRoleSelect = expanded && roles;
@@ -126,7 +132,12 @@ const SecurityRoleListRow = ({
                                             {point.permission}
                                         </TableCell>
                                         <TableCell>
-                                            <Switch checked={point.enabled} />
+                                            <Switch
+                                                checked={point.enabled}
+                                                onChange={() =>
+                                                    togglePoint(point)
+                                                }
+                                            />
                                         </TableCell>
                                     </TableRow>
                                 ))}
