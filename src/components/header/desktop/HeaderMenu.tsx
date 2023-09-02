@@ -7,10 +7,18 @@ import {
 } from 'material-ui-popup-state/hooks';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from '@mui/icons-material';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import LinkButton from '../../LinkButton';
 import { HeaderMenuProps } from '../HeaderData';
 
-const Submenu = ({ menuText, items, to, external }: HeaderMenuProps) => {
+const Submenu = ({
+    menuText,
+    items,
+    to,
+    external,
+    icon,
+    iconColor,
+}: HeaderMenuProps) => {
     const menu = usePopupState({
         variant: 'popover',
         popupId: `menu-${menuText}-${to}-${items.length}`,
@@ -49,6 +57,13 @@ const Submenu = ({ menuText, items, to, external }: HeaderMenuProps) => {
                         target={item.external ? '_blank' : '_self'}
                         rel="noopener noreferrer"
                     >
+                        {item.icon && (
+                            <FontAwesomeIcon
+                                icon={item.icon}
+                                color={item.iconColor}
+                                style={{ paddingRight: '0.5em' }}
+                            />
+                        )}
                         {item.itemText}
                     </MenuItem>
                 );
@@ -67,6 +82,7 @@ const Submenu = ({ menuText, items, to, external }: HeaderMenuProps) => {
                     rel="noopener noreferrer"
                     sx={{ display: 'flex', alignItems: 'center' }}
                 >
+                    {icon && <FontAwesomeIcon icon={icon} color={iconColor} />}
                     {menuText}
                     <ArrowRight fontSize="small" />
                     {items.length > 0 && menuComponent}
@@ -78,6 +94,13 @@ const Submenu = ({ menuText, items, to, external }: HeaderMenuProps) => {
                         color="inherit"
                         sx={{ display: 'flex', alignItems: 'center' }}
                     >
+                        {icon && (
+                            <FontAwesomeIcon
+                                icon={icon}
+                                color={iconColor}
+                                style={{ paddingRight: '0.5em' }}
+                            />
+                        )}
                         {menuText}
                         <ArrowRight fontSize="small" />
                     </Typography>
@@ -102,6 +125,8 @@ const HeaderMenu = ({ menuText, items, to, external }: HeaderMenuProps) => {
                     items={item.subitems}
                     to={item.to}
                     external={item.external}
+                    icon={item.icon}
+                    iconColor={item.iconColor}
                     key={item.itemText + item.to}
                 />
             );
@@ -114,6 +139,13 @@ const HeaderMenu = ({ menuText, items, to, external }: HeaderMenuProps) => {
                 target={external ? '_blank' : '_self'}
                 rel="noopener noreferrer"
             >
+                {item.icon && (
+                    <FontAwesomeIcon
+                        icon={item.icon}
+                        color={item.iconColor}
+                        style={{ paddingRight: '0.5em' }}
+                    />
+                )}
                 {item.itemText}
             </MenuItem>
         );

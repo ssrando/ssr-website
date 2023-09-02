@@ -7,6 +7,7 @@ export type User = {
     id?: string;
     internalId: number;
     isAdmin: boolean;
+    grants: string[];
 };
 
 export type DynamicData = {

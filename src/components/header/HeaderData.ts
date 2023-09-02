@@ -1,3 +1,5 @@
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { faAdd } from '@fortawesome/free-solid-svg-icons';
 import { File } from '../../ApiTypes';
 
 export type HeaderMenuItem = {
@@ -5,6 +7,8 @@ export type HeaderMenuItem = {
     to: string;
     subitems?: HeaderMenuItem[];
     external?: boolean;
+    icon?: IconProp;
+    iconColor?: string;
 };
 
 export interface HeaderMenuProps {
@@ -12,6 +16,8 @@ export interface HeaderMenuProps {
     to: string;
     items: HeaderMenuItem[];
     external?: boolean;
+    icon?: IconProp;
+    iconColor?: string;
 }
 
 export const communityMenu: HeaderMenuItem[] = [
@@ -97,6 +103,12 @@ export const loadServerHeaderData = async () => {
                 to: `/resources/guides/${guideFile.id}`,
             }),
         );
+        guideMenu.push({
+            itemText: 'New Guide',
+            to: 'newFile/guides',
+            icon: faAdd,
+            iconColor: 'green',
+        });
     }
 };
 loadServerHeaderData();

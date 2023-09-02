@@ -2,11 +2,12 @@ import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Box, Button, IconButton, Typography } from '@mui/material';
 import MDEditor from '@uiw/react-md-editor';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Delete, Edit } from '@mui/icons-material';
 import { useFileGet } from '../../controller/Hooks';
 import { deleteFile, editFile } from '../../controller/Files';
 import { loadServerHeaderData } from '../../components/header/HeaderData';
+import { UserContext } from '../../contexts/UserContext';
 
 type EditorProps = {
     initialValue: string;
@@ -14,7 +15,7 @@ type EditorProps = {
     fileId: string;
 };
 
-const Editor = ({ initialValue, close, fileId }: EditorProps) => {
+export const Editor = ({ initialValue, close, fileId }: EditorProps) => {
     const [content, setContent] = useState<string | undefined>(initialValue);
 
     const save = () => {
@@ -52,25 +53,33 @@ const MarkdownPage = () => {
     const { data, error, mutate } = useFileGet(`/files/${file}`);
     const [edit, setEdit] = useState(false);
     const navigate = useNavigate();
+    const { user, loggedIn } = useContext(UserContext).state;
+
+    const editPermission =
+        loggedIn &&
+        (user?.isAdmin || user?.grants.includes('Manage Content Pages'));
 
     if (error) {
         return (
             <Typography>An error occurred while loading the file.</Typography>
         );
     }
-    if (!data || !file) {
+    if (data === undefined || !file) {
         return <Typography>No file found.</Typography>;
     }
 
     const launchEditor = () => {
+        if (!editPermission) return;
         setEdit(true);
     };
     const closeEditor = () => {
+        if (!editPermission) return;
         setEdit(false);
         mutate();
     };
 
     const deletePage = () => {
+        if (!editPermission) return;
         deleteFile(file);
         loadServerHeaderData();
         navigate('/');
@@ -80,23 +89,25 @@ const MarkdownPage = () => {
         <Box sx={{ textAlign: 'left', pl: '2em', pr: '2em' }}>
             {!edit && (
                 <>
-                    <Box sx={{ textAlign: 'right' }}>
-                        <IconButton onClick={deletePage}>
-                            <Delete />
-                        </IconButton>
-                        <IconButton onClick={launchEditor}>
-                            <Edit />
-                        </IconButton>
-                    </Box>
+                    {editPermission && (
+                        <Box sx={{ textAlign: 'right' }}>
+                            <IconButton onClick={deletePage}>
+                                <Delete />
+                            </IconButton>
+                            <IconButton onClick={launchEditor}>
+                                <Edit />
+                            </IconButton>
+                        </Box>
+                    )}
                     <ReactMarkdown>{data}</ReactMarkdown>
                 </>
             )}
             {edit && (
                 <Editor initialValue={data} close={closeEditor} fileId={file} />
             )}
-            <Typography variant="subtitle2" sx={{ textAlign: 'right' }}>
+            {/* <Typography variant="subtitle2" sx={{ textAlign: 'right' }}>
                 Last edited by a person on a date
-            </Typography>
+            </Typography> */}
         </Box>
     );
 };

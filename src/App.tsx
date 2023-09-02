@@ -32,6 +32,7 @@ import About from './routes/About';
 import MarkdownPage from './routes/generic/MarkdownPage';
 import FileList from './routes/admin/files/FileList';
 import Security from './routes/admin/security/Security';
+import NewMarkdownPage from './routes/generic/NewMarkdownPage';
 
 library.add(fab);
 
@@ -140,6 +141,16 @@ function App() {
                             }
                         />
                     </Route>
+                    <Route
+                        path="newFile/:path"
+                        element={
+                            <ProtectedRoute
+                                element={<NewMarkdownPage />}
+                                adminOnly
+                            />
+                        }
+                    />
+                    <Route path="/files/:file" element={<MarkdownPage />} />
                     <Route element={<Rules />} />
                 </Routes>
             </div>

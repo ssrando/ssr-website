@@ -1,25 +1,28 @@
-import { ServerActionResult } from './ServerAction';
+import { ServerActionDataResult, ServerActionResult } from './ServerAction';
 
 export const createFile = async (
     name: string,
     path: string,
-): Promise<ServerActionResult> => {
+    content?: string,
+): Promise<ServerActionDataResult<number>> => {
     const response = await fetch(`/api/files/${path}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name }),
+        body: JSON.stringify({ name, content }),
     });
 
     if (!response.ok) {
         return {
             success: false,
-            error: `${response.status} - ${response.statusText}`,
+            error: await response.text(),
         };
     }
+    const { id } = await response.json();
     return {
         success: true,
+        data: id,
     };
 };
 
