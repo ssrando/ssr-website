@@ -50,7 +50,7 @@ export const editFile = async (
 };
 
 export const deleteFile = async (
-    fileId: string,
+    fileId: string | number,
 ): Promise<ServerActionResult> => {
     const response = await fetch(`/api/files/${fileId}/`, {
         method: 'DELETE',

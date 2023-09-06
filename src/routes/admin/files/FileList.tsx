@@ -9,8 +9,11 @@ import {
     Typography,
 } from '@mui/material';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 import { useGetApi } from '../../../controller/Hooks';
 import CreateFileDialog from '../../../components/dialogs/CreateFileDialog';
+import { File } from '../../../ApiTypes';
+import { deleteFile } from '../../../controller/Files';
 
 const FileList = () => {
     const { data, error, mutate } = useGetApi<File[]>('/api/files');
@@ -23,6 +26,14 @@ const FileList = () => {
 
     const handleClose = () => {
         setDialogOpen(false);
+        mutate();
+    };
+
+    const handleDeleteFile = async (id: number) => {
+        const result = await deleteFile(id);
+        if (!result.success) {
+            toast.error('An error ocurred while deleting the file.');
+        }
         mutate();
     };
 
@@ -62,8 +73,18 @@ const FileList = () => {
                 <Table>
                     <TableBody>
                         {data.map((file) => (
-                            <TableRow>
+                            <TableRow key={file.id}>
                                 <TableCell>{file.name}</TableCell>
+                                <TableCell>
+                                    <Button
+                                        variant="contained"
+                                        onClick={() =>
+                                            handleDeleteFile(file.id)
+                                        }
+                                    >
+                                        Delete
+                                    </Button>
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
