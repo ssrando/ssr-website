@@ -4,7 +4,8 @@ import { UserContext } from '../contexts/UserContext';
 
 interface ProtectedRouteProps {
     element: JSX.Element;
-    adminOnly: boolean;
+    adminOnly?: boolean;
+    requiredGrant?: string;
 }
 
 const NotLoggedIn = () => (
@@ -24,13 +25,24 @@ const NotAuthorized = () => (
 );
 
 const ProtectedRoute = (props: ProtectedRouteProps) => {
-    const { element, adminOnly } = props;
+    const { element, adminOnly, requiredGrant } = props;
 
     const { state } = useContext(UserContext);
     const { user, loggedIn } = state;
 
     if (!loggedIn) {
         return <NotLoggedIn />;
+    }
+
+    console.log(requiredGrant);
+    console.log(adminOnly);
+    if (requiredGrant) {
+        console.log('required grant');
+        if (!user || !user.grants.includes(requiredGrant)) {
+            console.log(requiredGrant);
+            console.log(user?.grants);
+            return <NotAuthorized />;
+        }
     }
 
     if (adminOnly) {

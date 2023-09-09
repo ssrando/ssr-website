@@ -33,6 +33,7 @@ import MarkdownPage from './routes/generic/MarkdownPage';
 import FileList from './routes/admin/files/FileList';
 import Security from './routes/admin/security/Security';
 import NewMarkdownPage from './routes/generic/NewMarkdownPage';
+import { useGlobalInterceptors } from './controller/Hooks';
 
 library.add(fab);
 
@@ -61,6 +62,7 @@ const Home = () => (
 function App() {
     const { update } = useContext(UserContext);
     const { theme } = useContext(ThemeContext);
+    useGlobalInterceptors();
 
     useEffect(() => {
         const checkSession = async () => {
@@ -98,18 +100,13 @@ function App() {
                     </Route>
                     <Route path="/login" element={<Login />} />
                     <Route path="/about" element={<About />} />
-                    <Route
-                        path="/admin"
-                        element={
-                            <ProtectedRoute element={<Outlet />} adminOnly />
-                        }
-                    >
+                    <Route path="/admin" element={<Outlet />}>
                         <Route
                             path="dynamicdata"
                             element={
                                 <ProtectedRoute
                                     element={<TypeList />}
-                                    adminOnly
+                                    requiredGrant="Manage Dynamic Data"
                                 />
                             }
                         />
@@ -118,7 +115,7 @@ function App() {
                             element={
                                 <ProtectedRoute
                                     element={<EditData />}
-                                    adminOnly
+                                    requiredGrant="Manage Dynamic Data"
                                 />
                             }
                         />
