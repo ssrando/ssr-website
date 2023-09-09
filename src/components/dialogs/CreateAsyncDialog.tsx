@@ -20,7 +20,7 @@ const CreateAsyncDialog = ({ open, handleClose }: DialogProps) => {
     const { loggedIn, user } = state;
 
     const [makeSubmission, setMakeSubmission] = useState<boolean>(
-        user ? hasGrant(user, asyncGrant) : true,
+        user ? !hasGrant(user, asyncGrant) : true,
     );
     const [name, setName] = useState<string>('');
     const [permalink, setPermalink] = useState<string>('');

@@ -17,6 +17,7 @@ import { deleteSubmission } from '../../controller/Async';
 import { durationSort } from '../../util/Sort';
 import SpoilerBlock from '../SpoilerBlock';
 import { hasSubmittedToAsync } from '../../util/AsyncUtils';
+import { asyncGrant, hasGrant } from '../../util/SecurityUtils';
 
 const StyledTableRow = styled(TableRow)`
     &:nth-of-type(odd) {
@@ -46,6 +47,8 @@ const AsyncStandings = ({ async }: AsyncStandingsProps) => {
     }
 
     const showSpoilers = hasSubmittedToAsync(async, user);
+
+    const canDelete = user && hasGrant(user, asyncGrant);
 
     return (
         <Table size="small">
@@ -84,20 +87,20 @@ const AsyncStandings = ({ async }: AsyncStandingsProps) => {
                                     }
                                 />
                             </TableCell>
-                            {(user?.isAdmin ||
-                                user?.id === submission.user.discordId) && (
-                                <TableCell>
-                                    <Button
-                                        variant="contained"
-                                        color="error"
-                                        onClick={() =>
-                                            deleteHandler(submission.id)
-                                        }
-                                    >
-                                        Delete
-                                    </Button>
-                                </TableCell>
-                            )}
+                            {canDelete ||
+                                (user?.id === submission.user.discordId && (
+                                    <TableCell>
+                                        <Button
+                                            variant="contained"
+                                            color="error"
+                                            onClick={() =>
+                                                deleteHandler(submission.id)
+                                            }
+                                        >
+                                            Delete
+                                        </Button>
+                                    </TableCell>
+                                ))}
                         </StyledTableRow>
                     ))}
             </TableBody>
