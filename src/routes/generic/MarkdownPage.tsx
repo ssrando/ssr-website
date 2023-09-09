@@ -8,6 +8,7 @@ import { useFileGet } from '../../controller/Hooks';
 import { deleteFile, editFile } from '../../controller/Files';
 import { loadServerHeaderData } from '../../components/header/HeaderData';
 import { UserContext } from '../../contexts/UserContext';
+import { contentGrant, hasGrant } from '../../util/SecurityUtils';
 
 type EditorProps = {
     initialValue: string;
@@ -55,9 +56,7 @@ const MarkdownPage = () => {
     const navigate = useNavigate();
     const { user, loggedIn } = useContext(UserContext).state;
 
-    const editPermission =
-        loggedIn &&
-        (user?.isAdmin || user?.grants.includes('Manage Content Pages'));
+    const editPermission = loggedIn && user && hasGrant(user, contentGrant);
 
     if (error) {
         return (

@@ -27,6 +27,7 @@ import { useGetApi } from '../../../../controller/Hooks';
 import AsyncStandings from '../../../../components/asyncs/AsyncStandings';
 import SpoilerBlock from '../../../../components/SpoilerBlock';
 import { hasSubmittedToAsync } from '../../../../util/AsyncUtils';
+import { asyncGrant, hasGrant } from '../../../../util/SecurityUtils';
 
 const StyledTableRow = styled(TableRow)`
     &:nth-child(4n + 1) {
@@ -49,6 +50,8 @@ const AsyncListRow = ({
     const { loggedIn, user } = state;
 
     const [expanded, setExpanded] = useState<boolean>(false);
+
+    const asyncPermissions = loggedIn && user && hasGrant(user, asyncGrant);
 
     const copySettings = (settings: string) => {
         navigator.clipboard.writeText(settings);
@@ -143,7 +146,7 @@ const AsyncListRow = ({
                                                 Submit
                                             </Button>
                                         )}
-                                        {user?.isAdmin && (
+                                        {asyncPermissions && (
                                             <Button
                                                 color="error"
                                                 onClick={() =>

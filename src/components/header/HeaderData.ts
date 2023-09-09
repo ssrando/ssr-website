@@ -93,6 +93,8 @@ export const fullMenu: HeaderMenuItem[] = [
 
 export const loadServerHeaderData = async () => {
     const res = await fetch('/api/files/guides');
+    const permissionRes = await fetch('/api/files/permissionCheck');
+    const hasEditGrant = permissionRes.ok;
     if (res.ok) {
         guideMenu.splice(0, guideMenu.length);
         guideMenu.push(...staticGuideMenu);
@@ -103,12 +105,14 @@ export const loadServerHeaderData = async () => {
                 to: `/resources/guides/${guideFile.id}`,
             }),
         );
-        guideMenu.push({
-            itemText: 'New Guide',
-            to: 'newFile/guides',
-            icon: faAdd,
-            iconColor: 'green',
-        });
+        if (hasEditGrant) {
+            guideMenu.push({
+                itemText: 'New Guide',
+                to: 'newFile/guides',
+                icon: faAdd,
+                iconColor: 'green',
+            });
+        }
     }
 };
 loadServerHeaderData();

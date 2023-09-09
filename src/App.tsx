@@ -34,6 +34,7 @@ import FileList from './routes/admin/files/FileList';
 import Security from './routes/admin/security/Security';
 import NewMarkdownPage from './routes/generic/NewMarkdownPage';
 import { useGlobalInterceptors } from './controller/Hooks';
+import { contentGrant, dataGrant } from './util/SecurityUtils';
 
 library.add(fab);
 
@@ -106,7 +107,7 @@ function App() {
                             element={
                                 <ProtectedRoute
                                     element={<TypeList />}
-                                    requiredGrant="Manage Dynamic Data"
+                                    requiredGrant={dataGrant}
                                 />
                             }
                         />
@@ -115,7 +116,7 @@ function App() {
                             element={
                                 <ProtectedRoute
                                     element={<EditData />}
-                                    requiredGrant="Manage Dynamic Data"
+                                    requiredGrant={dataGrant}
                                 />
                             }
                         />
@@ -124,7 +125,7 @@ function App() {
                             element={
                                 <ProtectedRoute
                                     element={<FileList />}
-                                    adminOnly
+                                    requiredGrant={contentGrant}
                                 />
                             }
                         />
@@ -143,7 +144,7 @@ function App() {
                         element={
                             <ProtectedRoute
                                 element={<NewMarkdownPage />}
-                                adminOnly
+                                requiredGrant={contentGrant}
                             />
                         }
                     />

@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import { Link } from '@mui/material';
 import { UserContext } from '../contexts/UserContext';
+import { hasGrant } from '../util/SecurityUtils';
 
 interface ProtectedRouteProps {
     element: JSX.Element;
@@ -33,22 +34,15 @@ const ProtectedRoute = (props: ProtectedRouteProps) => {
     if (!loggedIn) {
         return <NotLoggedIn />;
     }
-
-    console.log(requiredGrant);
-    console.log(adminOnly);
-    if (requiredGrant) {
-        console.log('required grant');
-        if (!user || !user.grants.includes(requiredGrant)) {
-            console.log(requiredGrant);
-            console.log(user?.grants);
-            return <NotAuthorized />;
-        }
+    if (!user) {
+        return <NotAuthorized />;
+    }
+    if (requiredGrant && !hasGrant(user, requiredGrant)) {
+        return <NotAuthorized />;
     }
 
-    if (adminOnly) {
-        if (!user || !user.isAdmin) {
-            return <NotAuthorized />;
-        }
+    if (adminOnly && !user.isAdmin) {
+        return <NotAuthorized />;
     }
 
     return element;

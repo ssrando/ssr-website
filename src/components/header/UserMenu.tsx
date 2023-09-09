@@ -21,6 +21,7 @@ import {
 } from 'material-ui-popup-state/hooks';
 import { UserContext } from '../../contexts/UserContext';
 import { ThemeContext } from '../../contexts/ThemeContext';
+import { loadServerHeaderData } from './HeaderData';
 
 const adminMenu = [
     { name: 'Security', path: '/admin/security' },
@@ -61,6 +62,7 @@ const UserMenu = () => {
             );
         }
         menuState.close();
+        loadServerHeaderData();
         navigate('/');
     };
 

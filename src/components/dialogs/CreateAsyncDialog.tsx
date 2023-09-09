@@ -13,13 +13,14 @@ import { useContext, useState } from 'react';
 import { createAsync } from '../../controller/Async';
 import DialogProps from './DialogProps';
 import { UserContext } from '../../contexts/UserContext';
+import { asyncGrant, hasGrant } from '../../util/SecurityUtils';
 
 const CreateAsyncDialog = ({ open, handleClose }: DialogProps) => {
     const { state } = useContext(UserContext);
     const { loggedIn, user } = state;
 
     const [makeSubmission, setMakeSubmission] = useState<boolean>(
-        user ? !user.isAdmin : true,
+        user ? hasGrant(user, asyncGrant) : true,
     );
     const [name, setName] = useState<string>('');
     const [permalink, setPermalink] = useState<string>('');
@@ -44,7 +45,7 @@ const CreateAsyncDialog = ({ open, handleClose }: DialogProps) => {
         handleClose();
     };
 
-    if (!loggedIn) {
+    if (!loggedIn || !user) {
         return (
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Create Async</DialogTitle>
@@ -59,7 +60,7 @@ const CreateAsyncDialog = ({ open, handleClose }: DialogProps) => {
         <Dialog open={open} onClose={handleClose}>
             <DialogTitle>Create Async</DialogTitle>
             <DialogContent>
-                {user?.isAdmin && (
+                {hasGrant(user, asyncGrant) && (
                     <FormGroup>
                         <FormControlLabel
                             control={
