@@ -33,13 +33,25 @@ export type SelectElement = {
     choices: string[];
 };
 
-export type ArrayElement = {
+export type ObjectArray = {
     name: string;
     type: 'array';
-    elementType: 'string' | 'number' | 'boolean' | 'array' | 'object';
+    elementType: 'object';
+    // eslint-disable-next-line no-use-before-define
+    children: ShapeElement[];
     minSize?: number;
     maxSize?: number;
 };
+
+export type ArrayElement =
+    | {
+          name: string;
+          type: 'array';
+          elementType: 'string' | 'number' | 'boolean' | 'array';
+          minSize?: number;
+          maxSize?: number;
+      }
+    | ObjectArray;
 
 export type ObjectElement = {
     name: string;
@@ -201,9 +213,21 @@ const ArrayField = ({
         sync(type.name, updated);
     };
 
-    const createField = (entry: unknown, index: number) =>
+    const createField = (entry: unknown, index: number) => {
+        if (type.elementType === 'object') {
+            // eslint-disable-next-line no-use-before-define
+            return fieldForType(
+                {
+                    name: `${index}`,
+                    type: type.elementType,
+                    children: type.children,
+                } as ObjectElement, // this cast is only to satisfy ts, it's functionally meaningless
+                entry,
+                syncChild,
+            );
+        }
         // eslint-disable-next-line no-use-before-define
-        fieldForType(
+        return fieldForType(
             {
                 name: `${index}`,
                 type: type.elementType,
@@ -211,6 +235,7 @@ const ArrayField = ({
             entry,
             syncChild,
         );
+    };
     return (
         <Box>
             {type.name}

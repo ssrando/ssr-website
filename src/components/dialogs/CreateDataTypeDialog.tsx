@@ -16,6 +16,7 @@ import DialogProps from './DialogProps';
 import { newType } from '../../controller/DynamicData';
 import {
     ArrayElement,
+    ObjectArray,
     ObjectElement,
     SelectElement,
     ShapeElement,
@@ -68,6 +69,9 @@ const ShapeEditor = ({ shape, update }: ShapeEditorProps) => {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         (newShape[index] as ArrayElement).elementType = type;
+        if ((newShape[index] as ArrayElement).elementType === 'object') {
+            (newShape[index] as ObjectArray).children = [];
+        }
         update(newShape);
     };
 
@@ -122,7 +126,7 @@ const ShapeEditor = ({ shape, update }: ShapeEditorProps) => {
         <>
             {shape.map((element, index) => (
                 // eslint-disable-next-line react/no-array-index-key
-                <Box sx={{ pb: '30px' }} key={index}>
+                <Box sx={{ pb: '30px', display: 'block' }} key={index}>
                     <Box sx={{ display: 'flex', gap: '15px', pb: '15px' }}>
                         <TextField
                             autoFocus
@@ -246,56 +250,70 @@ const ShapeEditor = ({ shape, update }: ShapeEditorProps) => {
                             </Box>
                         )}
                         {element.type === 'array' && (
-                            <>
-                                <Autocomplete
-                                    disableClearable
-                                    options={arrayTypeNames}
-                                    sx={{ width: 300 }}
-                                    renderInput={(params) => (
-                                        <TextField
-                                            {...params}
-                                            label="Data Type"
+                            <Box>
+                                <Box sx={{ display: 'flex' }}>
+                                    <Autocomplete
+                                        disableClearable
+                                        options={arrayTypeNames}
+                                        sx={{ width: 300 }}
+                                        renderInput={(params) => (
+                                            <TextField
+                                                {...params}
+                                                label="Data Type"
+                                            />
+                                        )}
+                                        value={element.elementType}
+                                        onChange={(event, newValue) =>
+                                            updateArrayType(index, newValue)
+                                        }
+                                    />
+                                    <NumberEntryField
+                                        label="Minimum Size"
+                                        value={element.minSize ?? 2}
+                                        min={2}
+                                        max={
+                                            element.maxSize
+                                                ? element.maxSize
+                                                : undefined
+                                        }
+                                        onChange={(newValue) =>
+                                            updateShapeExtra(
+                                                index,
+                                                'minSize',
+                                                newValue,
+                                            )
+                                        }
+                                    />
+                                    <NumberEntryField
+                                        label="Maximum Size"
+                                        min={
+                                            element.minSize
+                                                ? element.minSize + 1
+                                                : undefined
+                                        }
+                                        value={element.maxSize ?? 0}
+                                        onChange={(newValue) =>
+                                            updateShapeExtra(
+                                                index,
+                                                'maxSize',
+                                                newValue,
+                                            )
+                                        }
+                                    />
+                                </Box>
+                                {element.elementType === 'object' && (
+                                    <Box sx={{ display: 'block' }}>
+                                        <ShapeEditor
+                                            shape={element.children}
+                                            // eslint-disable-next-line react/jsx-no-bind
+                                            update={updateObjectChildTypes.bind(
+                                                this,
+                                                index,
+                                            )}
                                         />
-                                    )}
-                                    value={element.elementType}
-                                    onChange={(event, newValue) =>
-                                        updateArrayType(index, newValue)
-                                    }
-                                />
-                                <NumberEntryField
-                                    label="Minimum Size"
-                                    value={element.minSize ?? 2}
-                                    min={2}
-                                    max={
-                                        element.maxSize
-                                            ? element.maxSize
-                                            : undefined
-                                    }
-                                    onChange={(newValue) =>
-                                        updateShapeExtra(
-                                            index,
-                                            'minSize',
-                                            newValue,
-                                        )
-                                    }
-                                />
-                                <NumberEntryField
-                                    label="Maximum Size"
-                                    min={
-                                        element.minSize
-                                            ? element.minSize + 1
-                                            : undefined
-                                    }
-                                    value={element.maxSize ?? 0}
-                                    onChange={(newValue) =>
-                                        updateShapeExtra(
-                                            index,
-                                            'maxSize',
-                                            newValue,
-                                        )
-                                    }
-                                />
-                            </>
+                                    </Box>
+                                )}
+                            </Box>
                         )}
                         {element.type === 'object' && (
                             <Box sx={{ display: 'block' }}>
@@ -366,6 +384,7 @@ const CreateDataTypeDialog = ({ open, handleClose }: DialogProps) => {
                 <Box sx={{ mt: '2em' }} />
                 <Typography>Data Shape</Typography>
                 <ShapeEditor shape={shape} update={update} />
+                {JSON.stringify(shape)}
             </DialogContent>
             <DialogActions>
                 <Button onClick={close}>Cancel</Button>
