@@ -384,7 +384,6 @@ const CreateDataTypeDialog = ({ open, handleClose }: DialogProps) => {
                 <Box sx={{ mt: '2em' }} />
                 <Typography>Data Shape</Typography>
                 <ShapeEditor shape={shape} update={update} />
-                {JSON.stringify(shape)}
             </DialogContent>
             <DialogActions>
                 <Button onClick={close}>Cancel</Button>
