@@ -3,6 +3,7 @@ import { Box, Tab, Typography } from '@mui/material';
 import { useState } from 'react';
 import DiscordServers from './tabs/DiscordServers';
 import Admins from './tabs/Admins';
+import Actions from './tabs/Actions';
 
 const ServerDashboard = () => {
     const [tabValue, setTabValue] = useState('1');
@@ -26,6 +27,7 @@ const ServerDashboard = () => {
                             <Tab label="Discord Servers" value="1" />
                             <Tab label="Admins" value="2" />
                             <Tab label="Users" value="3" />
+                            <Tab label="Actions" value="4" />
                         </TabList>
                     </Box>
                     <TabPanel value="1">
@@ -35,6 +37,9 @@ const ServerDashboard = () => {
                         <Admins />
                     </TabPanel>
                     <TabPanel value="3">Item Three</TabPanel>
+                    <TabPanel value="4">
+                        <Actions />
+                    </TabPanel>
                 </TabContext>
             </Box>
         </>
