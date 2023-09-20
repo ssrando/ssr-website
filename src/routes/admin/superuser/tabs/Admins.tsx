@@ -1,6 +1,5 @@
 import {
     Avatar,
-    Box,
     Table,
     TableBody,
     TableCell,
@@ -11,7 +10,26 @@ import {
 import InlineAvatar from '../../../../components/InlineAvatar';
 
 const Admins = () => {
-    const x = 7;
+    const admins = [
+        {
+            username: 'cjs07',
+            source: 'superuser',
+        },
+        {
+            username: 'alkalineace',
+            source: {
+                server: 'Racing',
+                role: 'Staff',
+            },
+        },
+        {
+            username: 'mario_runner',
+            source: {
+                server: 'Racing',
+                role: 'Staff',
+            },
+        },
+    ];
     return (
         <>
             <Typography>Admins</Typography>
@@ -24,31 +42,25 @@ const Admins = () => {
             >
                 <Table>
                     <TableBody>
-                        <TableRow>
-                            <TableCell>
-                                <Avatar />
-                            </TableCell>
-                            <TableCell>cjs07</TableCell>
-                            <TableCell>superuser</TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell>
-                                <Avatar />
-                            </TableCell>
-                            <TableCell>alkalineace</TableCell>
-                            <TableCell>
-                                <InlineAvatar />
-                            </TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell>
-                                <Avatar />
-                            </TableCell>
-                            <TableCell>mario_runner</TableCell>
-                            <TableCell>
-                                <InlineAvatar />
-                            </TableCell>
-                        </TableRow>
+                        {admins.map((admin) => (
+                            <TableRow key={admin.username}>
+                                <TableCell>
+                                    <Avatar />
+                                </TableCell>
+                                <TableCell>{admin.username}</TableCell>
+                                <TableCell>
+                                    {typeof admin.source === 'string' ? (
+                                        admin.source
+                                    ) : (
+                                        <InlineAvatar
+                                            src=""
+                                            alt="avatar image"
+                                            caption={admin.source.role}
+                                        />
+                                    )}
+                                </TableCell>
+                            </TableRow>
+                        ))}
                     </TableBody>
                 </Table>
             </TableContainer>
