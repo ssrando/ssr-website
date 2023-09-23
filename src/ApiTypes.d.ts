@@ -78,3 +78,18 @@ export type SecurityRole = {
     enabled: boolean;
     points: SecurityPoint[];
 };
+
+export type DiscordConnection = {
+    id: string;
+    name: string;
+    icon: string;
+    botConnected: boolean;
+    enabled: boolean;
+    adminRole?: string;
+};
+
+export type UserGuild = {
+    id: string;
+    name: string;
+    icon: string;
+};
