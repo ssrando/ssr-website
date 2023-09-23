@@ -7,29 +7,28 @@ import {
     TableRow,
     Typography,
 } from '@mui/material';
-import InlineAvatar from '../../../../components/InlineAvatar';
+import { useGetApi } from '../../../../controller/Hooks';
+import { User } from '../../../../ApiTypes';
+
+type RowProps = {
+    user: User;
+};
+const Row = ({ user }: RowProps) => (
+    <TableRow>
+        <TableCell>
+            <Avatar />
+        </TableCell>
+        <TableCell>{user.displayName}</TableCell>
+    </TableRow>
+);
 
 const Admins = () => {
-    const admins = [
-        {
-            username: 'cjs07',
-            source: 'superuser',
-        },
-        {
-            username: 'alkalineace',
-            source: {
-                server: 'Racing',
-                role: 'Staff',
-            },
-        },
-        {
-            username: 'mario_runner',
-            source: {
-                server: 'Racing',
-                role: 'Staff',
-            },
-        },
-    ];
+    const { data } = useGetApi<{ admins: User[]; superusers: User[] }>(
+        '/api/superuser/admins/list',
+    );
+    if (!data) {
+        return <div />;
+    }
     return (
         <>
             <Typography>Admins</Typography>
@@ -42,24 +41,11 @@ const Admins = () => {
             >
                 <Table>
                     <TableBody>
-                        {admins.map((admin) => (
-                            <TableRow key={admin.username}>
-                                <TableCell>
-                                    <Avatar />
-                                </TableCell>
-                                <TableCell>{admin.username}</TableCell>
-                                <TableCell>
-                                    {typeof admin.source === 'string' ? (
-                                        admin.source
-                                    ) : (
-                                        <InlineAvatar
-                                            src=""
-                                            alt="avatar image"
-                                            caption={admin.source.role}
-                                        />
-                                    )}
-                                </TableCell>
-                            </TableRow>
+                        {data.superusers.map((user) => (
+                            <Row user={user} key={user.internalId} />
+                        ))}
+                        {data.admins.map((user) => (
+                            <Row user={user} key={user.internalId} />
                         ))}
                     </TableBody>
                 </Table>
