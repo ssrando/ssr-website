@@ -119,6 +119,7 @@ const ServerRow = ({ server, mutate, mutateServers }: ServerRowProps) => {
                         color="warning"
                         component="a"
                         href={botInviteLink.link}
+                        target="_blank"
                         clickable
                     />
                 );
