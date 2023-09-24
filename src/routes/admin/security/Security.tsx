@@ -1,9 +1,12 @@
 import {
+    Avatar,
     Button,
     Collapse,
     FormControl,
     IconButton,
     InputLabel,
+    ListItemAvatar,
+    ListItemText,
     MenuItem,
     Select,
     SelectChangeEvent,
@@ -26,7 +29,12 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { KeyedMutator } from 'swr';
 import { useGetApi } from '../../../controller/Hooks';
-import { DiscordRole, SecurityPoint, SecurityRole } from '../../../ApiTypes';
+import {
+    DiscordRole,
+    DiscordRoleWithGuild,
+    SecurityPoint,
+    SecurityRole,
+} from '../../../ApiTypes';
 import {
     changePointEnabled,
     changeRoleEnabled,
@@ -34,12 +42,13 @@ import {
     deleteRole,
     updateDiscordRole,
 } from '../../../controller/Security';
+import InlineAvatar from '../../../components/InlineAvatar';
 
 type SecurityRoleListRowProps = {
     role: SecurityRole;
     mutate: KeyedMutator<SecurityRole[]>;
     roles?: DiscordRole[];
-    mutateRoles: KeyedMutator<DiscordRole[]>;
+    mutateRoles: KeyedMutator<DiscordRoleWithGuild[]>;
 };
 
 const SecurityRoleListRow = ({
@@ -165,8 +174,8 @@ const Security = () => {
         data: roles,
         error: rolesError,
         mutate: mutateRoles,
-    } = useGetApi<DiscordRole[]>('/api/security/roles');
-    const [newRole, setNewRole] = useState('');
+    } = useGetApi<DiscordRoleWithGuild[]>('/api/security/roles');
+    const [newRole, setNewRole] = useState(0);
 
     if (error) {
         return <Typography>An error occurred.</Typography>;
@@ -190,13 +199,13 @@ const Security = () => {
     }
 
     const create = () => {
-        createRole(newRole);
+        createRole(roles[newRole].id);
         mutate();
         mutateRoles();
     };
 
-    const changeNewRole = (event: SelectChangeEvent) => {
-        setNewRole(event.target.value);
+    const changeNewRole = (event: SelectChangeEvent<number>) => {
+        setNewRole(event.target.value as number);
     };
 
     const showAdd = roles && roles.length > 0 && !rolesError;
@@ -239,13 +248,37 @@ const Security = () => {
                                         <Select
                                             value={newRole}
                                             onChange={changeNewRole}
+                                            renderValue={(value) => (
+                                                <InlineAvatar
+                                                    src={`https://cdn.discordapp.com/icons/${roles[value].guildId}/${roles[value].guildIcon}.png`}
+                                                    alt={roles[value].guildName}
+                                                    caption={roles[value].name}
+                                                    fullSize
+                                                />
+                                            )}
                                         >
-                                            {roles.map((selectRole) => (
+                                            {roles.map((selectRole, index) => (
                                                 <MenuItem
-                                                    value={selectRole.id}
-                                                    key={selectRole.id}
+                                                    value={index}
+                                                    key={selectRole.guildName}
                                                 >
-                                                    {selectRole.name}
+                                                    <ListItemAvatar>
+                                                        <Avatar
+                                                            src={`https://cdn.discordapp.com/icons/${selectRole.guildId}/${selectRole.guildIcon}.png`}
+                                                            alt={
+                                                                selectRole.guildName
+                                                            }
+                                                        />
+                                                    </ListItemAvatar>
+                                                    <ListItemText
+                                                        sx={{
+                                                            color: `#${selectRole.color.toString(
+                                                                16,
+                                                            )}`,
+                                                        }}
+                                                    >
+                                                        {selectRole.name}
+                                                    </ListItemText>
                                                 </MenuItem>
                                             ))}
                                         </Select>

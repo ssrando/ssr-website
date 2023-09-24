@@ -94,3 +94,12 @@ export type UserGuild = {
     name: string;
     icon: string;
 };
+
+export type DiscordRoleWithGuild = {
+    id: string;
+    name: string;
+    color: number;
+    guildId: string;
+    guildIcon: string;
+    guildName: string;
+};
