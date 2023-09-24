@@ -16,7 +16,10 @@ type RowProps = {
 const Row = ({ user }: RowProps) => (
     <TableRow>
         <TableCell>
-            <Avatar />
+            <Avatar
+                src={`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`}
+                alt={user.username}
+            />
         </TableCell>
         <TableCell>{user.displayName}</TableCell>
     </TableRow>
