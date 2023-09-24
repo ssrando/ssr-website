@@ -65,11 +65,29 @@ export const setAdminRole = async (server: string, role: string) => {
 
 export const clearAdminRole = async (server: string, role: string) => {
     const response = await fetch(`/api/superuser/admins/roles/${server}`, {
-        method: 'POST',
+        method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({ role }),
+    });
+    if (!response.ok) {
+        return {
+            success: false,
+            error: `${response.status} - ${response.statusText}`,
+        };
+    }
+    return {
+        success: true,
+    };
+};
+
+export const clearSessions = async () => {
+    const response = await fetch(`/api/superuser/clearSessions`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
     });
     if (!response.ok) {
         return {
