@@ -155,7 +155,10 @@ const ServerRow = ({ server, mutate, mutateServers }: ServerRowProps) => {
                     <AdminRoleSelect server={server.id} done={stopEditing} />
                 )}
                 {!editingRole && (
-                    <IconButton onClick={startEditing}>
+                    <IconButton
+                        onClick={startEditing}
+                        disabled={!server.enabled || !server.botConnected}
+                    >
                         <Edit />
                     </IconButton>
                 )}
