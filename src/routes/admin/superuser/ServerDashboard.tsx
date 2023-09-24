@@ -22,7 +22,7 @@ const ServerDashboard = () => {
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                         <TabList
                             onChange={handleTabChange}
-                            aria-label="lab API tabs example"
+                            aria-label="Superuser Tab Strip"
                         >
                             <Tab label="Discord Servers" value="1" />
                             <Tab label="Admins" value="2" />
