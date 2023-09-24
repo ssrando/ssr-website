@@ -88,6 +88,9 @@ type ServerRowProps = {
 
 const ServerRow = ({ server, mutate, mutateServers }: ServerRowProps) => {
     const [editingRole, setEditingRole] = useState(false);
+    const { data: botInviteLink } = useGetApi<{ link: string }>(
+        '/api/superuser/discord/link',
+    );
 
     const startEditing = () => {
         setEditingRole(true);
@@ -109,6 +112,17 @@ const ServerRow = ({ server, mutate, mutateServers }: ServerRowProps) => {
             return <Chip label="Disabled" color="error" />;
         }
         if (!server.botConnected) {
+            if (botInviteLink) {
+                return (
+                    <Chip
+                        label="Bot Unconnected"
+                        color="warning"
+                        component="a"
+                        href={botInviteLink.link}
+                        clickable
+                    />
+                );
+            }
             return <Chip label="Bot Unconnected" color="warning" />;
         }
         return <Chip label="Active" color="success" />;
