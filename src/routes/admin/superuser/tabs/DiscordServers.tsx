@@ -3,6 +3,7 @@ import {
     Avatar,
     Box,
     Button,
+    Chip,
     FormControl,
     IconButton,
     InputLabel,
@@ -103,6 +104,16 @@ const ServerRow = ({ server, mutate, mutateServers }: ServerRowProps) => {
         mutateServers();
     };
 
+    const statusChip = () => {
+        if (!server.enabled) {
+            return <Chip label="Disabled" color="error" />;
+        }
+        if (!server.botConnected) {
+            return <Chip label="Bot Unconnected" color="warning" />;
+        }
+        return <Chip label="Active" color="success" />;
+    };
+
     return (
         <TableRow>
             <TableCell>
@@ -112,6 +123,7 @@ const ServerRow = ({ server, mutate, mutateServers }: ServerRowProps) => {
                 />
             </TableCell>
             <TableCell>{server.name}</TableCell>
+            <TableCell>{statusChip()}</TableCell>
             <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
                 {server.adminRole && !editingRole && (
                     <Typography
@@ -191,6 +203,7 @@ const DiscordServers = () => {
                         <TableRow>
                             <TableCell />
                             <TableCell>Server</TableCell>
+                            <TableCell>Status</TableCell>
                             <TableCell>Admin Role</TableCell>
                             <TableCell />
                         </TableRow>
@@ -206,7 +219,7 @@ const DiscordServers = () => {
                         ))}
                         {canAdd && (
                             <TableRow>
-                                <TableCell colSpan={4}>
+                                <TableCell colSpan={3} sx={{ border: 'none' }}>
                                     {!adding && (
                                         <Button
                                             startIcon={<Add />}
