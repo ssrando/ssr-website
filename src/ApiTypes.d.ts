@@ -58,6 +58,7 @@ export type Async = {
 export type DiscordRole = {
     id: string;
     name: string;
+    color: number;
 };
 
 export type File = {
@@ -85,7 +86,7 @@ export type DiscordConnection = {
     icon: string;
     botConnected: boolean;
     enabled: boolean;
-    adminRole?: string;
+    adminRole?: DiscordRole;
 };
 
 export type UserGuild = {

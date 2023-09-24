@@ -1,4 +1,4 @@
-import { Add, Delete } from '@mui/icons-material';
+import { Add, Delete, Edit } from '@mui/icons-material';
 import {
     Avatar,
     Box,
@@ -14,18 +14,139 @@ import {
     TableBody,
     TableCell,
     TableContainer,
+    TableHead,
     TableRow,
     Typography,
 } from '@mui/material';
 import { useState } from 'react';
+import { KeyedMutator } from 'swr';
 import { useGetApi } from '../../../../controller/Hooks';
-import { DiscordConnection, UserGuild } from '../../../../ApiTypes';
-import { addServer, deleteServer } from '../../../../controller/Superuser';
+import {
+    DiscordConnection,
+    DiscordRole,
+    UserGuild,
+} from '../../../../ApiTypes';
+import {
+    addServer,
+    deleteServer,
+    setAdminRole,
+} from '../../../../controller/Superuser';
 import InlineAvatar from '../../../../components/InlineAvatar';
+
+type AdminRoleSelectProps = {
+    server: string;
+    current?: number;
+    done: () => void;
+};
+
+const AdminRoleSelect = ({ server, current, done }: AdminRoleSelectProps) => {
+    const [selected, setSelected] = useState(current ?? 0);
+    const { data: roles } = useGetApi<DiscordRole[]>(
+        `/api/superuser/admins/roles/${server}`,
+    );
+    if (!roles) {
+        return <div />;
+    }
+
+    const setRole = async () => {
+        await setAdminRole(server, roles[selected].id);
+        done();
+    };
+
+    return (
+        <Box sx={{ display: 'flex' }}>
+            <FormControl>
+                <InputLabel id={`role-select-label-${server}`}>Role</InputLabel>
+                <Select
+                    labelId={`role-select-label-${server}`}
+                    label="Role"
+                    value={selected}
+                    onChange={(event) =>
+                        setSelected(event.target.value as number)
+                    }
+                >
+                    {roles.map((role, index) => (
+                        <MenuItem value={index} key={role.id}>
+                            <ListItemText sx={{ color: role.color }}>
+                                {role.name}
+                            </ListItemText>
+                        </MenuItem>
+                    ))}
+                </Select>
+            </FormControl>
+            <Button onClick={setRole}>Confirm</Button>
+        </Box>
+    );
+};
+
+type ServerRowProps = {
+    server: DiscordConnection;
+    mutate: KeyedMutator<DiscordConnection[]>;
+    mutateServers: KeyedMutator<UserGuild[]>;
+};
+
+const ServerRow = ({ server, mutate, mutateServers }: ServerRowProps) => {
+    const [editingRole, setEditingRole] = useState(false);
+
+    const startEditing = () => {
+        setEditingRole(true);
+    };
+
+    const stopEditing = () => {
+        setEditingRole(false);
+        mutate();
+    };
+
+    const removeServer = async () => {
+        await deleteServer(server.id);
+        mutate();
+        mutateServers();
+    };
+
+    return (
+        <TableRow>
+            <TableCell>
+                <Avatar
+                    src={`https://cdn.discordapp.com/icons/${server.id}/${server.icon}.png`}
+                    alt="server icon"
+                />
+            </TableCell>
+            <TableCell>{server.name}</TableCell>
+            <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
+                {server.adminRole && !editingRole && (
+                    <Typography
+                        sx={{
+                            color: `#${server.adminRole.color.toString(16)}`,
+                        }}
+                    >
+                        {server.adminRole.name}
+                    </Typography>
+                )}
+                {!server.adminRole && !editingRole && (
+                    <Typography>--</Typography>
+                )}
+                {editingRole && (
+                    <AdminRoleSelect server={server.id} done={stopEditing} />
+                )}
+                {!editingRole && (
+                    <IconButton onClick={startEditing}>
+                        <Edit />
+                    </IconButton>
+                )}
+            </TableCell>
+            <TableCell>
+                <IconButton size="small" onClick={removeServer}>
+                    <Delete />
+                </IconButton>
+            </TableCell>
+        </TableRow>
+    );
+};
 
 const DiscordServers = () => {
     const [adding, setAdding] = useState(false);
     const [toAdd, setToAdd] = useState(0);
+
     const { data: servers, mutate } = useGetApi<DiscordConnection[]>(
         '/api/superuser/discord/servers',
     );
@@ -33,17 +154,6 @@ const DiscordServers = () => {
         '/api/superuser/discord/userServers',
         true,
     );
-
-    // const [userServers, setUserServers] = useState<UserGuild[]>([]);
-
-    // useEffect(() => {
-    //     const loadServers = async () => {
-    //         const res = await fetch('/api/superuser/discord/userServers');
-    //         const vals = await res.json();
-    //         setUserServers(vals);
-    //     };
-    //     loadServers();
-    // }, []);
 
     if (!servers) {
         return <div />;
@@ -53,12 +163,6 @@ const DiscordServers = () => {
     if (!userServers || userServers.length === 0) {
         canAdd = false;
     }
-
-    const removeServer = async (server: string) => {
-        await deleteServer(server);
-        mutate();
-        mutateServers();
-    };
 
     const startAddServer = () => {
         setAdding(true);
@@ -83,29 +187,26 @@ const DiscordServers = () => {
                 }}
             >
                 <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell />
+                            <TableCell>Server</TableCell>
+                            <TableCell>Admin Role</TableCell>
+                            <TableCell />
+                        </TableRow>
+                    </TableHead>
                     <TableBody>
                         {servers.map((server) => (
-                            <TableRow key={server.id}>
-                                <TableCell>
-                                    <Avatar
-                                        src={`https://cdn.discordapp.com/icons/${server.id}/${server.icon}.png`}
-                                        alt="server icon"
-                                    />
-                                </TableCell>
-                                <TableCell>{server.name}</TableCell>
-                                <TableCell>
-                                    <IconButton
-                                        size="small"
-                                        onClick={() => removeServer(server.id)}
-                                    >
-                                        <Delete />
-                                    </IconButton>
-                                </TableCell>
-                            </TableRow>
+                            <ServerRow
+                                server={server}
+                                mutate={mutate}
+                                mutateServers={mutateServers}
+                                key={server.id}
+                            />
                         ))}
                         {canAdd && (
                             <TableRow>
-                                <TableCell colSpan={3}>
+                                <TableCell colSpan={4}>
                                     {!adding && (
                                         <Button
                                             startIcon={<Add />}
@@ -130,13 +231,6 @@ const DiscordServers = () => {
                                                                 .value as number,
                                                         )
                                                     }
-                                                    inputProps={{
-                                                        style: {
-                                                            display: 'flex',
-                                                            background:
-                                                                'purple',
-                                                        },
-                                                    }}
                                                     renderValue={(value) => (
                                                         <InlineAvatar
                                                             src={`https://cdn.discordapp.com/icons/${userServers[value].id}/${userServers[value].icon}.png`}
