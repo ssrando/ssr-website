@@ -26,7 +26,7 @@ const ServerDashboard = () => {
                         >
                             <Tab label="Discord Servers" value="1" />
                             <Tab label="Admins" value="2" />
-                            <Tab label="Users" value="3" />
+                            {/* <Tab label="Users" value="3" /> */}
                             <Tab label="Actions" value="4" />
                         </TabList>
                     </Box>
