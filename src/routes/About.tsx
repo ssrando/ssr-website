@@ -5,17 +5,6 @@ import { useEffect, useState } from 'react';
 import { useGetApi } from '../controller/Hooks';
 import { DynamicDataTyped } from '../ApiTypes';
 
-// const randoDevs = [
-//     'lepelog',
-//     'cjs07',
-//     'CovenEsme',
-//     'Muzugalium',
-//     'YourAverageLink',
-//     'peppernicus',
-//     'azer67',
-//     'NULL',
-// ];
-
 type SocialLink = {
     name: string;
     link: string;
@@ -99,7 +88,7 @@ const About = () => {
                 <Box sx={{ flexGrow: 1 }} />
             </Box>
             <Typography sx={{ fontWeight: 'bold', pt: '1em' }}>
-                Rando Developers
+                Randomizer Development
             </Typography>
             <Box
                 sx={{
