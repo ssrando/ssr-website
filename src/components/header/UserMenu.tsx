@@ -27,6 +27,7 @@ const adminMenu = [
     { name: 'Security', path: '/admin/security' },
     { name: 'Dynamic Data', path: '/admin/dynamicdata' },
     { name: 'Files', path: '/admin/files' },
+    { name: 'Server Configuration', path: '/admin/superuser' },
 ];
 
 const UserMenu = () => {

@@ -35,6 +35,7 @@ import Security from './routes/admin/security/Security';
 import NewMarkdownPage from './routes/generic/NewMarkdownPage';
 import { useGlobalInterceptors } from './controller/Hooks';
 import { contentGrant, dataGrant } from './util/SecurityUtils';
+import ServerDashboard from './routes/admin/superuser/ServerDashboard';
 
 library.add(fab);
 
@@ -134,6 +135,15 @@ function App() {
                             element={
                                 <ProtectedRoute
                                     element={<Security />}
+                                    adminOnly
+                                />
+                            }
+                        />
+                        <Route
+                            path="superuser"
+                            element={
+                                <ProtectedRoute
+                                    element={<ServerDashboard />}
                                     adminOnly
                                 />
                             }
