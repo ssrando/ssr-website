@@ -144,7 +144,7 @@ function App() {
                             element={
                                 <ProtectedRoute
                                     element={<ServerDashboard />}
-                                    adminOnly
+                                    superuserOnly
                                 />
                             }
                         />
