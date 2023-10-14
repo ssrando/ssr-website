@@ -8,6 +8,7 @@ export type User = {
     internalId: number;
     isAdmin: boolean;
     grants: string[];
+    isSuperuser: boolean;
 };
 
 export type DynamicData = {

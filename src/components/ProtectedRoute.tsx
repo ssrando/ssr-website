@@ -6,6 +6,7 @@ import { hasGrant } from '../util/SecurityUtils';
 interface ProtectedRouteProps {
     element: JSX.Element;
     adminOnly?: boolean;
+    superuserOnly?: boolean;
     requiredGrant?: string;
 }
 
@@ -26,7 +27,7 @@ const NotAuthorized = () => (
 );
 
 const ProtectedRoute = (props: ProtectedRouteProps) => {
-    const { element, adminOnly, requiredGrant } = props;
+    const { element, adminOnly, requiredGrant, superuserOnly } = props;
 
     const { state } = useContext(UserContext);
     const { user, loggedIn } = state;
@@ -45,6 +46,9 @@ const ProtectedRoute = (props: ProtectedRouteProps) => {
         return <NotAuthorized />;
     }
 
+    if (superuserOnly && !user.isSuperuser) {
+        return <NotAuthorized />;
+    }
     return element;
 };
 

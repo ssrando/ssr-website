@@ -27,7 +27,6 @@ const adminMenu = [
     { name: 'Security', path: '/admin/security' },
     { name: 'Dynamic Data', path: '/admin/dynamicdata' },
     { name: 'Files', path: '/admin/files' },
-    { name: 'Server Configuration', path: '/admin/superuser' },
 ];
 
 const UserMenu = () => {
@@ -47,6 +46,13 @@ const UserMenu = () => {
         name: item.name,
         onClick: () => navigate(item.path),
     }));
+
+    if (user?.isSuperuser) {
+        adminMenuItems.push({
+            name: 'Server Configuration',
+            onClick: () => navigate('/admin/superuser'),
+        });
+    }
 
     const logout = async () => {
         const logoutData = await fetch('/api/logout');
