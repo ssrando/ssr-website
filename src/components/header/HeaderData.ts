@@ -86,8 +86,21 @@ export const fullMenu: HeaderMenuItem[] = [
     },
     {
         itemText: 'Discord',
-        to: 'https://discord.ssrando.com',
-        external: true,
+        to: '',
+        subitems: [
+            {
+                itemText: 'Community Discord',
+                to: 'discord.ssrando.com',
+                external: true,
+            },
+            {
+                itemText: 'Racing Discord',
+                to: 'https://discord.gg/cWE892y8WB',
+                external: true,
+            },
+        ],
+        // to: 'https://discord.ssrando.com',
+        // external: true,
     },
 ];
 
