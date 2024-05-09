@@ -31,8 +31,9 @@ const CreateAsyncDialog = ({ open, handleClose }: DialogProps) => {
     const [comment, setComment] = useState<string>('');
 
     const submit = () => {
-        const timeSubmit = time === '' ? undefined : time;
-        const commentSubmit = comment === '' ? undefined : comment;
+        const timeSubmit = !makeSubmission || time === '' ? undefined : time;
+        const commentSubmit =
+            !makeSubmission || comment === '' ? undefined : comment;
         createAsync(
             name,
             permalink,
@@ -65,6 +66,7 @@ const CreateAsyncDialog = ({ open, handleClose }: DialogProps) => {
                         <FormControlLabel
                             control={
                                 <Switch
+                                    checked={makeSubmission}
                                     onChange={(event) =>
                                         setMakeSubmission(event.target.checked)
                                     }
@@ -126,7 +128,7 @@ const CreateAsyncDialog = ({ open, handleClose }: DialogProps) => {
                     fullWidth
                     variant="standard"
                     required
-                    value={version}
+                    value={versionLink}
                     onChange={(event) => setVersionLink(event.target.value)}
                 />
                 {makeSubmission && (
