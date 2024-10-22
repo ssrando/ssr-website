@@ -50,20 +50,23 @@ export const resourcesMenu: HeaderMenuItem[] = [
     },
     { itemText: 'Guides', to: '', subitems: guideMenu },
     {
-        itemText: 'Trackers',
-        to: '',
-        subitems: [
-            {
-                itemText: 'Web Tracker Main Instance',
-                to: 'https://tracker.ssrando.com',
-                external: true,
-            },
-            {
-                itemText: 'Web Tracker Dev Instance',
-                to: 'https://devtracker.ssrando.com',
-                external: true,
-            },
-        ],
+        // itemText: 'Trackers',
+        // to: '',
+        // subitems: [
+        //     {
+        //         itemText: 'Web Tracker Main Instance',
+        //         to: 'https://tracker.ssrando.com',
+        //         external: true,
+        //     },
+        //     {
+        //         itemText: 'Web Tracker Dev Instance',
+        //         to: 'https://devtracker.ssrando.com',
+        //         external: true,
+        //     },
+        // ],
+        itemText: 'Tracker',
+        to: 'https://robojumper.github.io/SS-Randomizer-Tracker/',
+        external: true,
     },
 ];
 
